@@ -67,4 +67,4 @@ jobs:
           "
 
       - name: Validate install script
-        run: node bin/superpowers-zh.js --help
+        run: node bin/superpowers-ja.js --help
