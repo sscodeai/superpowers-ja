@@ -1,0 +1,63 @@
+{
+  "name": "superpowers-ja",
+  "version": "1.4.0",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "description": "Superpowers 日本語・日本 IT 開発版。AI coding agents に計画、TDD、デバッグ、レビュー、検証、日本の開発現場向けワークフローを追加します。",
+  "type": "module",
+  "main": ".opencode/plugins/superpowers.js",
+  "bin": {
+    "superpowers-ja": "bin/superpowers-ja.js"
+  },
+  "scripts": {
+    "version": "node scripts/sync-plugin-version.js && git add .claude-plugin/plugin.json .claude-plugin/marketplace.json .cursor-plugin/plugin.json .codex-plugin/plugin.json gemini-extension.json"
+  },
+  "files": [
+    "bin/",
+    "skills/",
+    "hooks/",
+    "assets/",
+    ".claude-plugin/",
+    ".cursor-plugin/",
+    ".codex/INSTALL.md",
+    ".codex-plugin/",
+    ".opencode/INSTALL.md",
+    ".opencode/plugins/",
+    "CLAUDE.md",
+    "GEMINI.md",
+    "RELEASE-NOTES.md",
+    "gemini-extension.json",
+    "docs/",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "superpowers",
+    "claude-code",
+    "cursor",
+    "codex",
+    "gemini",
+    "kiro",
+    "windsurf",
+    "aider",
+    "opencode",
+    "vscode",
+    "copilot",
+    "ai-coding",
+    "skills",
+    "japanese",
+    "日本語",
+    "japan",
+    "tdd",
+    "debugging",
+    "code-review"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/superpowers-ja.git"
+  },
+  "homepage": "https://github.com/your-org/superpowers-ja",
+  "author": "superpowers-ja contributors",
+  "license": "MIT"
+}

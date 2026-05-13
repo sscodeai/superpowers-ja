@@ -1,0 +1,16 @@
+{
+  "name": "superpowers-ja",
+  "displayName": "Superpowers JA",
+  "description": "Superpowers 日本語・日本 IT 開発版。20 個の skills で計画、TDD、デバッグ、レビュー、検証を支援します。",
+  "version": "1.4.0",
+  "author": {
+    "name": "superpowers-ja contributors",
+    "url": "https://github.com/your-org/superpowers-ja"
+  },
+  "homepage": "https://github.com/your-org/superpowers-ja",
+  "repository": "https://github.com/your-org/superpowers-ja",
+  "license": "MIT",
+  "keywords": ["skills", "tdd", "debugging", "japanese", "日本語", "japan", "workflows"],
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks-cursor.json"
+}
