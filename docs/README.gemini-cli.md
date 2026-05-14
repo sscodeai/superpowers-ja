@@ -1,24 +1,24 @@
-# Superpowers 日本語版 — Gemini CLI 安装指南
+# Superpowers-JA — Gemini CLI インストールガイド
 
-在 [Gemini CLI](https://github.com/google-gemini/gemini-cli) 中使用 superpowers-ja 的完整指南。
+[Gemini CLI](https://github.com/google-gemini/gemini-cli) で superpowers-ja を使うための完全ガイドです。
 
-## 自动安装
+## 自動インストール
 
 ```bash
 cd /your/project
 npx superpowers-ja
 ```
 
-安装脚本会自动检测 `.gemini/` 目录并将 skills 复制到 `.gemini/skills/` 目录。
+インストールスクリプトが `.gemini/` を自動検出し、skills を `.gemini/skills/` にコピーします。
 
-## 手动安装
+## 手動インストール
 
 ```bash
-git clone https://github.com/jnMetaCode/superpowers-ja.git
+git clone https://github.com/sscodeai/superpowers-ja.git
 cp -r superpowers-ja/skills /your/project/.gemini/skills
 ```
 
-或作为 Gemini 扩展安装（全局）：
+または Gemini 拡張として（グローバル）インストール：
 
 ```bash
 mkdir -p ~/.gemini/extensions/superpowers-ja/skills
@@ -26,40 +26,40 @@ cp -r superpowers-ja/skills/* ~/.gemini/extensions/superpowers-ja/skills/
 cp superpowers-ja/gemini-extension.json ~/.gemini/extensions/superpowers-ja/
 ```
 
-## 通过 GEMINI.md 引用
+## GEMINI.md から参照する
 
-在项目根目录的 `GEMINI.md` 中引用 skills：
+プロジェクトルートの `GEMINI.md` で skills を参照します：
 
 ```markdown
-# 工作方法论
+# 作業手法
 
-请参考 .gemini/skills/ 目录中的 SKILL.md 文件。
-遇到新功能开发时，先使用 brainstorming skill。
-编写代码时，遵循 test-driven-development skill。
+.gemini/skills/ 配下の SKILL.md を参照してください。
+新機能開発時はまず brainstorming skill を使ってください。
+コード実装時は test-driven-development skill に従ってください。
 ```
 
-## Skill 加载优先级
+## Skill 読み込み優先度
 
-| 位置 | 优先级 | 说明 |
-|------|--------|------|
-| `.gemini/skills/` | 最高 | 项目级，仅当前项目 |
-| `~/.gemini/extensions/*/skills/` | 中 | 扩展级，所有项目共享 |
+| 配置場所 | 優先度 | 説明 |
+|---------|--------|------|
+| `.gemini/skills/` | 最高 | プロジェクト単位、当該プロジェクトのみ |
+| `~/.gemini/extensions/*/skills/` | 中 | 拡張単位、全プロジェクト共通 |
 
-## 故障排查
+## トラブルシューティング
 
-### Skills 未生效
+### Skills が認識されない場合
 
-1. 确认 `.gemini/skills/` 目录存在且包含 skill 文件夹
-2. 每个 skill 需要包含有效 YAML frontmatter 的 `SKILL.md` 文件
-3. 重启 Gemini CLI
+1. `.gemini/skills/` ディレクトリが存在し、skill フォルダが含まれていることを確認
+2. 各 skill に有効な YAML frontmatter を持つ `SKILL.md` があることを確認
+3. Gemini CLI を再起動
 
-### 扩展模式未加载
+### 拡張モードで読み込まれない場合
 
-1. 检查 `gemini-extension.json` 是否正确放在扩展目录中
-2. 确认扩展目录结构：`~/.gemini/extensions/superpowers-ja/`
+1. `gemini-extension.json` が拡張ディレクトリに正しく配置されていることを確認
+2. ディレクトリ構造が `~/.gemini/extensions/superpowers-ja/` になっていることを確認
 
-## 获取帮助
+## サポート
 
-- 提交 Issue：https://github.com/jnMetaCode/superpowers-ja/issues
-- 项目主页：https://github.com/jnMetaCode/superpowers-ja
-- Gemini CLI 文档：https://github.com/google-gemini/gemini-cli
+- Issue: https://github.com/sscodeai/superpowers-ja/issues
+- プロジェクトホーム: https://github.com/sscodeai/superpowers-ja
+- Gemini CLI 公式ドキュメント: https://github.com/google-gemini/gemini-cli

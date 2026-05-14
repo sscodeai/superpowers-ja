@@ -1,61 +1,61 @@
-# Superpowers 日本語版 — Qwen Code 安装指南
+# Superpowers-JA — Qwen Code インストールガイド
 
-在 [Qwen Code](https://tongyi.aliyun.com/qianwen) (通义灵码) 中使用 superpowers-ja 的完整指南。
+[Qwen Code](https://tongyi.aliyun.com/qianwen)（通義霊碼）で superpowers-ja を使うための完全ガイドです。
 
-## 自动安装
+## 自動インストール
 
 ```bash
 cd /your/project
 npx superpowers-ja
 ```
 
-安装脚本会自动检测 `.qwen/` 目录并将 skills 复制到 `.qwen/skills/` 目录。
+インストールスクリプトが `.qwen/` を自動検出し、skills を `.qwen/skills/` にコピーします。
 
-## 手动安装
+## 手動インストール
 
 ```bash
-git clone https://github.com/jnMetaCode/superpowers-ja.git
+git clone https://github.com/sscodeai/superpowers-ja.git
 cp -r superpowers-ja/skills /your/project/.qwen/skills
 ```
 
-或全局安装：
+または、グローバルインストール：
 
 ```bash
 mkdir -p ~/.qwen/skills
 cp -r superpowers-ja/skills/* ~/.qwen/skills/
 ```
 
-## Skill 加载优先级
+## Skill 読み込み優先度
 
-| 位置 | 优先级 | 说明 |
-|------|--------|------|
-| `.qwen/skills/` | 最高 | 项目级，仅当前项目 |
-| `~/.qwen/skills/` | 中 | 用户级，所有项目共享 |
+| 配置場所 | 優先度 | 説明 |
+|---------|--------|------|
+| `.qwen/skills/` | 最高 | プロジェクト単位、当該プロジェクトのみ |
+| `~/.qwen/skills/` | 中 | ユーザー単位、全プロジェクト共通 |
 
-## 使用
+## 使い方
 
-安装完成后重启 Qwen Code，skills 会自动生效。
+インストール完了後 Qwen Code を再起動すると、skills が自動的に有効になります。
 
-在 Qwen Code 中可以通过以下方式调用 skills：
-
-```
-请使用 brainstorming skill 来分析这个需求
-```
+Qwen Code では以下のように skills を呼び出せます：
 
 ```
-按照 test-driven-development skill 的方法来实现这个功能
+brainstorming skill でこの要件を分析してください
 ```
 
-## 故障排查
+```
+test-driven-development skill の手順でこの機能を実装してください
+```
 
-### Skills 未生效
+## トラブルシューティング
 
-1. 确认 `.qwen/skills/` 目录存在且包含 skill 文件夹
-2. 每个 skill 需要包含有效 YAML frontmatter 的 `SKILL.md` 文件
-3. 重启 Qwen Code 或刷新会话
+### Skills が認識されない場合
 
-## 获取帮助
+1. `.qwen/skills/` ディレクトリが存在し、skill フォルダが含まれていることを確認
+2. 各 skill に有効な YAML frontmatter を持つ `SKILL.md` があることを確認
+3. Qwen Code を再起動するか、セッションをリフレッシュ
 
-- 提交 Issue：https://github.com/jnMetaCode/superpowers-ja/issues
-- 项目主页：https://github.com/jnMetaCode/superpowers-ja
-- 通义灵码文档：https://tongyi.aliyun.com/lingma
+## サポート
+
+- Issue: https://github.com/sscodeai/superpowers-ja/issues
+- プロジェクトホーム: https://github.com/sscodeai/superpowers-ja
+- 通義霊碼公式ドキュメント: https://tongyi.aliyun.com/lingma

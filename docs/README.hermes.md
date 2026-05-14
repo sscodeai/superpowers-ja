@@ -1,40 +1,40 @@
-# Superpowers 日本語版 — Hermes Agent 安装指南
+# Superpowers-JA — Hermes Agent インストールガイド
 
-在 [Hermes Agent](https://github.com/NousResearch/hermes-agent) 中使用 superpowers-ja 的完整指南。
+[Hermes Agent](https://github.com/NousResearch/hermes-agent) で superpowers-ja を使うための完全ガイドです。
 
-## 自动安装
+## 自動インストール
 
 ```bash
 cd /your/project
 npx superpowers-ja --tool hermes
 ```
 
-安装脚本会将 20 个 skills 复制到 `.hermes/skills/` 目录，并自动生成 `HERMES.md` 引导文件（含工具映射表和 skills 列表）。
+インストールスクリプトが 20 個の skills を `.hermes/skills/` にコピーし、`HERMES.md` ブートストラップファイル（ツールマッピングと skills 一覧を含む）を自動生成します。
 
-如果项目中已存在 `.hermes` 目录或 `HERMES.md` 文件，也会被自动检测到：
+プロジェクトにすでに `.hermes` ディレクトリまたは `HERMES.md` がある場合は自動検出されます：
 
 ```bash
-npx superpowers-ja   # 自动检测
+npx superpowers-ja   # 自動検出
 ```
 
-## 手动安装
+## 手動インストール
 
 ```bash
-git clone https://github.com/jnMetaCode/superpowers-ja.git
+git clone https://github.com/sscodeai/superpowers-ja.git
 cp -r superpowers-ja/skills /your/project/.hermes/skills
 ```
 
-## 通过 HERMES.md 引导
+## HERMES.md による起動時読み込み
 
-Hermes Agent 在会话开始时自动加载项目根目录下的 `HERMES.md`（或 `.hermes.md`）作为上下文。安装器会自动生成此文件，内容包括：
+Hermes Agent はセッション開始時に、プロジェクトルートの `HERMES.md`（または `.hermes.md`）を context として自動ロードします。インストーラがこのファイルを自動生成し、以下の内容を含みます：
 
-- 工具映射表（Claude Code → Hermes Agent 工具名称）
-- 所有可用 skills 的列表和描述
-- 核心规则和使用说明
+- ツールマッピング表（Claude Code → Hermes Agent のツール名対応）
+- 利用可能な skills の一覧と description
+- 基本ルールと使い方の説明
 
-## 通过 config.yaml 配置外部 skills 目录
+## config.yaml で外部 skills ディレクトリを設定
 
-如果希望全局使用 superpowers-ja skills，可以在 `~/.hermes/config.yaml` 中配置：
+superpowers-ja skills をグローバルに使う場合、`~/.hermes/config.yaml` で設定できます：
 
 ```yaml
 skills:
@@ -42,9 +42,9 @@ skills:
     - /path/to/superpowers-ja/skills
 ```
 
-## 工具映射
+## ツールマッピング
 
-Skills 中引用的 Claude Code 工具名称对应 Hermes Agent 的等价工具：
+Skills 内で参照される Claude Code ツール名は、Hermes Agent の同等ツールに対応します：
 
 | Claude Code | Hermes Agent |
 |-------------|-------------|
@@ -54,43 +54,43 @@ Skills 中引用的 Claude Code 工具名称对应 Hermes Agent 的等价工具�
 | `Bash` | `terminal` |
 | `Grep` / `Glob` | `search_files` |
 | `Skill` | `skill_view` |
-| `Task`（子智能体） | `delegate_task` |
+| `Task`（サブエージェント） | `delegate_task` |
 | `WebSearch` | `web_search` |
 | `WebFetch` | `web_extract` |
 | `TodoWrite` | `todo` |
 
-完整映射参见 `skills/using-superpowers/references/hermes-tools.md`。
+完全なマッピングは `skills/using-superpowers/references/hermes-tools.md` を参照してください。
 
-## 使用技能
+## Skill の使い方
 
-Hermes Agent 支持三级渐进式加载：
+Hermes Agent は 3 段階の漸進ロードに対応しています：
 
 ```
-# 浏览所有可用技能
+# 利用可能な skill 一覧を取得
 skills_list
 
-# 加载某个技能的完整内容
+# 特定 skill の本体をロード
 skill_view("brainstorming")
 
-# 查看技能的引用文件
+# Skill が参照するファイルを表示
 skill_view("using-superpowers", "references/hermes-tools.md")
 ```
 
-## 故障排查
+## トラブルシューティング
 
-### Skills 未发现
+### Skills が発見されない場合
 
-1. 确认 `.hermes/skills/` 目录存在且包含 skill 文件夹
-2. 每个 skill 目录下需要有 `SKILL.md` 文件
-3. 使用 `skills_list` 查看已发现的技能
+1. `.hermes/skills/` が存在し、skill フォルダが含まれていることを確認
+2. 各 skill ディレクトリに `SKILL.md` があることを確認
+3. `skills_list` で発見された skill を確認
 
-### HERMES.md 未加载
+### HERMES.md がロードされない場合
 
-1. 确认文件在项目根目录（与 `.hermes/` 同级）
-2. 文件名可以是 `HERMES.md` 或 `.hermes.md`
+1. ファイルがプロジェクトルート（`.hermes/` と同階層）にあることを確認
+2. ファイル名は `HERMES.md` または `.hermes.md` のいずれか
 
-## 获取帮助
+## サポート
 
-- 提交 Issue：https://github.com/jnMetaCode/superpowers-ja/issues
-- 项目主页：https://github.com/jnMetaCode/superpowers-ja
-- Hermes Agent 文档：https://hermes-agent.nousresearch.com/docs/
+- Issue: https://github.com/sscodeai/superpowers-ja/issues
+- プロジェクトホーム: https://github.com/sscodeai/superpowers-ja
+- Hermes Agent 公式ドキュメント: https://hermes-agent.nousresearch.com/docs/

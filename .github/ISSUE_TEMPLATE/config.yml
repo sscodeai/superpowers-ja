@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 问题与帮助
+  - name: 質問・ヘルプ
     url: https://github.com/sscodeai/superpowers-ja/discussions
-    about: 使用问题、故障排除和一般讨论，请访问 Discussions 而不是开 issue。
+    about: 利用方法、トラブルシューティング、一般的な議論は Issue ではなく Discussions をご利用ください。

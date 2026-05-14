@@ -9,7 +9,7 @@ Use Codex native skill discovery by cloning this repository and linking its `ski
 ## Install
 
 ```bash
-git clone https://github.com/your-org/superpowers-ja.git ~/.codex/superpowers-ja
+git clone https://github.com/sscodeai/superpowers-ja.git ~/.codex/superpowers-ja
 mkdir -p ~/.agents/skills
 ln -s ~/.codex/superpowers-ja/skills ~/.agents/skills/superpowers-ja
 ```

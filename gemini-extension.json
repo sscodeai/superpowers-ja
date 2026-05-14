@@ -1,6 +1,6 @@
 {
   "name": "superpowers-ja",
   "description": "Superpowers 日本語・日本 IT 開発版。TDD、デバッグ、コードレビュー、検証などの開発ワークフローを提供します。",
-  "version": "1.4.0",
+  "version": "0.1.0",
   "contextFileName": "GEMINI.md"
 }

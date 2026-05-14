@@ -1,108 +1,108 @@
-# Superpowers 日本語版 — OpenCode 安装指南
+# Superpowers-JA — OpenCode インストールガイド
 
-在 [OpenCode.ai](https://opencode.ai) 中使用 superpowers-ja 的完整指南。
+[OpenCode.ai](https://opencode.ai) で superpowers-ja を使うための完全ガイドです。
 
-## 安装
+## インストール
 
-在 `opencode.json`（全局或项目级）的 `plugin` 数组中添加：
+`opencode.json`（グローバルまたはプロジェクト単位）の `plugin` 配列に追加します：
 
 ```json
 {
-  "plugin": ["superpowers@git+https://github.com/jnMetaCode/superpowers-ja.git"]
+  "plugin": ["superpowers@git+https://github.com/sscodeai/superpowers-ja.git"]
 }
 ```
 
-重启 OpenCode。插件通过 Bun 自动安装并注册所有 skills。
+OpenCode を再起動します。プラグインが Bun 経由で自動インストールされ、すべての skills が登録されます。
 
-验证方式：问 "告诉我你有哪些 superpowers"
+確認方法：「どんな superpowers を持っていますか?」と質問します。
 
-## 使用
+## 使い方
 
-### 查找 Skills
+### Skills を探す
 
-使用 OpenCode 原生的 `skill` 工具列出所有可用 skills：
+OpenCode の `skill` ツールで利用可能な skills を一覧表示できます：
 
 ```
 use skill tool to list skills
 ```
 
-### 加载 Skill
+### Skill をロード
 
 ```
 use skill tool to load superpowers/brainstorming
 ```
 
-### 个人 Skills
+### 個人 Skills
 
-在 `~/.config/opencode/skills/` 中创建你自己的 skills：
+`~/.config/opencode/skills/` 配下に自分の skill を作成できます：
 
 ```bash
 mkdir -p ~/.config/opencode/skills/my-skill
 ```
 
-创建 `~/.config/opencode/skills/my-skill/SKILL.md`：
+`~/.config/opencode/skills/my-skill/SKILL.md` を作成：
 
 ```markdown
 ---
 name: my-skill
-description: 当 [条件] 时使用 - [功能描述]
+description: [条件] のときに使う - [機能の説明]
 ---
 
-# 我的 Skill
+# My Skill
 
-[你的 skill 内容]
+[skill の本文]
 ```
 
-### 项目 Skills
+### プロジェクト Skills
 
-在项目的 `.opencode/skills/` 目录中创建项目级 skills。
+プロジェクトの `.opencode/skills/` 配下にプロジェクト単位の skill を配置できます。
 
-**Skill 优先级：** 项目 skills > 个人 skills > Superpowers skills
+**優先度**: プロジェクト skills > 個人 skills > Superpowers skills
 
-## 更新
+## アップデート
 
-重启 OpenCode 时自动更新。插件每次启动都从 git 仓库重新安装。
+OpenCode を再起動するたびに自動更新されます。プラグインは起動時に git リポジトリから再インストールされます。
 
-锁定特定版本：
+特定バージョンに固定する場合：
 
 ```json
 {
-  "plugin": ["superpowers@git+https://github.com/jnMetaCode/superpowers-ja.git#v1.0.0"]
+  "plugin": ["superpowers@git+https://github.com/sscodeai/superpowers-ja.git#v0.1.0"]
 }
 ```
 
-## 工作原理
+## 仕組み
 
-插件做两件事：
+プラグインは 2 つのことを行います：
 
-1. **注入引导上下文** — 通过 `experimental.chat.system.transform` hook，为每次对话添加 superpowers 意识
-2. **注册 skills 目录** — 通过 `config` hook，让 OpenCode 发现所有 skills，无需符号链接或手动配置
+1. **ブートストラップ context の注入** — `experimental.chat.system.transform` hook で、各対話に superpowers の利用ルールを注入
+2. **skills ディレクトリの登録** — `config` hook で OpenCode にすべての skills を発見させる（シンボリックリンクや手動設定は不要）
 
-### 工具映射
+### ツールマッピング
 
-为 Claude Code 编写的 skills 自动适配 OpenCode：
+Claude Code 向けに書かれた skills は OpenCode 用に自動適応されます：
 
 - `TodoWrite` → `todowrite`
-- `Task`（子代理）→ OpenCode 的 `@mention` 系统
-- `Skill` 工具 → OpenCode 原生 `skill` 工具
-- 文件操作 → OpenCode 原生工具
+- `Task`（サブエージェント） → OpenCode の `@mention` システム
+- `Skill` ツール → OpenCode の `skill` ツール
+- ファイル操作 → OpenCode のネイティブツール
 
-## 故障排查
+## トラブルシューティング
 
-### 插件未加载
+### プラグインが読み込まれない場合
 
-1. 检查 OpenCode 日志：`opencode run --print-logs "hello" 2>&1 | grep -i superpowers`
-2. 确认 `opencode.json` 中的插件配置正确
-3. 确保运行的是最新版本的 OpenCode
+1. OpenCode のログを確認：`opencode run --print-logs "hello" 2>&1 | grep -i superpowers`
+2. `opencode.json` のプラグイン設定が正しいか確認
+3. OpenCode が最新版か確認
 
-### Skills 未找到
+### Skills が見つからない場合
 
-1. 使用 `skill` 工具列出可用 skills
-2. 检查插件是否正确加载（见上）
-3. 每个 skill 需要包含有效 YAML frontmatter 的 `SKILL.md` 文件
+1. `skill` ツールで利用可能な skill 一覧を確認
+2. プラグインが正しくロードされているか確認（上記参照）
+3. 各 skill に有効な YAML frontmatter を持つ `SKILL.md` があるか確認
 
-## 获取帮助
+## サポート
 
-- 提交 Issue：https://github.com/jnMetaCode/superpowers-ja/issues
-- 项目主页：https://github.com/jnMetaCode/superpowers-ja
-- OpenCode 文档：https://opencode.ai/docs/
+- Issue: https://github.com/sscodeai/superpowers-ja/issues
+- プロジェクトホーム: https://github.com/sscodeai/superpowers-ja
+- OpenCode 公式ドキュメント: https://opencode.ai/docs/

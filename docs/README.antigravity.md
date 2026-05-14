@@ -1,60 +1,60 @@
-# Superpowers 日本語版 — Antigravity 安装指南
+# Superpowers-JA — Antigravity インストールガイド
 
-在 [Google Antigravity](https://antigravity.google)（Google AI IDE）中使用 superpowers-ja 的完整指南。
+[Google Antigravity](https://antigravity.google)（Google AI IDE）で superpowers-ja を使うための完全ガイドです。
 
-## 快速安装
+## クイックインストール
 
 ```bash
 cd /your/project
 npx superpowers-ja
 ```
 
-安装脚本会自动检测 `.antigravity/` 目录并将 skills 复制到该目录。
+インストールスクリプトが `.antigravity/` を自動検出し、skills を該当ディレクトリにコピーします。
 
-## 手动安装
+## 手動インストール
 
 ```bash
-git clone https://github.com/jnMetaCode/superpowers-ja.git
+git clone https://github.com/sscodeai/superpowers-ja.git
 mkdir -p /your/project/.antigravity/skills
 cp -r superpowers-ja/skills/* /your/project/.antigravity/skills/
 ```
 
-## 工作原理
+## 仕組み
 
-Antigravity 支持多种规则文件格式：
+Antigravity は複数のルールファイル形式に対応しています：
 
-| 文件 | 优先级 | 说明 |
-|------|--------|------|
-| `GEMINI.md` | 最高 | Antigravity 专属规则 |
-| `AGENTS.md` | 中 | 通用规则（Antigravity、Cursor、Claude Code 共享） |
-| `.antigravity/rules.md` | 中 | 项目级规则目录 |
-| `CLAUDE.md` | 低 | 也会被自动读取 |
+| ファイル | 優先度 | 説明 |
+|---------|--------|------|
+| `GEMINI.md` | 最高 | Antigravity 専用ルール |
+| `AGENTS.md` | 中 | 汎用ルール（Antigravity、Cursor、Claude Code 共通） |
+| `.antigravity/rules.md` | 中 | プロジェクト単位のルールディレクトリ |
+| `CLAUDE.md` | 低 | 自動読み込みされる |
 
-### 推荐配置方式
+### 推奨設定方法
 
-**方式一**：在项目根目录创建 `GEMINI.md`：
+**方法 1**：プロジェクトルートに `GEMINI.md` を配置：
 
 ```markdown
 # GEMINI.md
 
-使用 .antigravity/ 目录下的 superpowers skills 来指导工作流程。
-优先使用 brainstorming（头脑风暴）开始新任务。
+.antigravity/ 配下の superpowers skills をワークフロー指針として利用してください。
+新しいタスクは brainstorming skill から始めることを推奨します。
 
-Skills 列表参见 .antigravity/ 目录。
+Skills 一覧は .antigravity/ ディレクトリを参照。
 ```
 
-**方式二**：在 `AGENTS.md` 中引用（多工具共享）：
+**方法 2**：`AGENTS.md` から参照（複数ツール共通）：
 
 ```markdown
 # AGENTS.md
 
-本项目使用 superpowers-ja skills 框架。
-Skills 位于 .antigravity/（Antigravity）或 .claude/skills/（Claude Code）目录下。
+本プロジェクトは superpowers-ja skills framework を採用しています。
+Skills は .antigravity/（Antigravity）または .claude/skills/（Claude Code）配下にあります。
 ```
 
-### 工具映射
+### ツール名マッピング
 
-Antigravity 使用 Gemini 模型，工具名称与 Claude Code 不同：
+Antigravity は Gemini モデルを使用し、ツール名は Claude Code と異なります：
 
 | Claude Code | Antigravity (Gemini) |
 |-------------|---------------------|
@@ -64,30 +64,30 @@ Antigravity 使用 Gemini 模型，工具名称与 Claude Code 不同：
 | `Bash` | `run_shell_command` |
 | `Skill` | `activate_skill` |
 
-Skills 中的 Claude Code 工具名称会被 Antigravity 自动适配。
+Skills 内の Claude Code ツール名は Antigravity 側で自動マッピングされます。
 
-## 使用
+## 使い方
 
-Antigravity 支持 Agent Manager 并行执行多个 agent：
-- 与 superpowers-ja 的「派遣并行 Agent」skill 理念一致
-- 可以同时调度多个 skill 处理不同任务
+Antigravity は Agent Manager による複数 agent の並列実行に対応しています：
+- superpowers-ja の「並列 agent 派遣」skill のコンセプトと一致
+- 複数の skill を同時にディスパッチして異なるタスクを処理可能
 
-## 全局规则
+## グローバルルール
 
-个人级别的全局规则放在：
+個人レベルのグローバルルールは以下に配置します：
 ```
 ~/.gemini/GEMINI.md
 ~/.gemini/AGENTS.md
 ```
 
-## 更新
+## アップデート
 
 ```bash
 cd /your/project
 npx superpowers-ja
 ```
 
-## 获取帮助
+## サポート
 
-- 提交 Issue：https://github.com/jnMetaCode/superpowers-ja/issues
-- Antigravity 文档：https://antigravity.google/docs/rules-workflows
+- Issue: https://github.com/sscodeai/superpowers-ja/issues
+- Antigravity 公式ドキュメント: https://antigravity.google/docs/rules-workflows

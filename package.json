@@ -1,6 +1,6 @@
 {
   "name": "superpowers-ja",
-  "version": "1.4.0",
+  "version": "0.1.0",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -55,9 +55,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/superpowers-ja.git"
+    "url": "https://github.com/sscodeai/superpowers-ja.git"
   },
-  "homepage": "https://github.com/your-org/superpowers-ja",
-  "author": "superpowers-ja contributors",
+  "homepage": "https://github.com/sscodeai/superpowers-ja",
+  "author": "sscodeai",
   "license": "MIT"
 }

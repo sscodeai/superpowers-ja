@@ -10,7 +10,7 @@ Add superpowers-ja to the `plugin` array in your global or project `opencode.jso
 
 ```json
 {
-  "plugin": ["superpowers@git+https://github.com/your-org/superpowers-ja.git"]
+  "plugin": ["superpowers@git+https://github.com/sscodeai/superpowers-ja.git"]
 }
 ```
 
@@ -29,7 +29,7 @@ use skill tool to load superpowers/brainstorming
 
 ```json
 {
-  "plugin": ["superpowers@git+https://github.com/your-org/superpowers-ja.git#v1.4.0"]
+  "plugin": ["superpowers@git+https://github.com/sscodeai/superpowers-ja.git#v1.4.0"]
 }
 ```
 
@@ -44,5 +44,5 @@ When skills reference Claude Code tools, use OpenCode equivalents:
 
 ## Help
 
-- Issues: https://github.com/your-org/superpowers-ja/issues
-- Docs: https://github.com/your-org/superpowers-ja
+- Issues: https://github.com/sscodeai/superpowers-ja/issues
+- Docs: https://github.com/sscodeai/superpowers-ja

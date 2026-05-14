@@ -1,13 +1,13 @@
 {
   "name": "superpowers-ja",
-  "version": "1.4.0",
+  "version": "0.1.0",
   "description": "Superpowers 日本語・日本 IT 開発版。計画、TDD、デバッグ、コードレビュー、検証、日本向け開発ワークフローを提供します。",
   "author": {
-    "name": "superpowers-ja contributors",
-    "url": "https://github.com/your-org/superpowers-ja"
+    "name": "sscodeai",
+    "url": "https://github.com/sscodeai/superpowers-ja"
   },
-  "homepage": "https://github.com/your-org/superpowers-ja",
-  "repository": "https://github.com/your-org/superpowers-ja",
+  "homepage": "https://github.com/sscodeai/superpowers-ja",
+  "repository": "https://github.com/sscodeai/superpowers-ja",
   "license": "MIT",
   "keywords": [
     "brainstorming",
@@ -26,7 +26,7 @@
     "displayName": "Superpowers JA",
     "shortDescription": "AI coding agents のための日本語・日本 IT 開発ワークフロー",
     "longDescription": "Superpowers JA は、brainstorming、実装計画、TDD、体系的デバッグ、並列実行、コードレビュー、ブランチ完了を agent に守らせる skill セットです。日本の開発現場向けにレビュー表現、Git 運用、ドキュメント、commit 規約を追加しています。",
-    "developerName": "superpowers-ja contributors",
+    "developerName": "sscodeai",
     "category": "Coding",
     "capabilities": [
       "Interactive",
@@ -37,7 +37,7 @@
       "作りたい機能があります。",
       "このプロジェクトに機能を追加してください。"
     ],
-    "websiteURL": "https://github.com/your-org/superpowers-ja",
+    "websiteURL": "https://github.com/sscodeai/superpowers-ja",
     "privacyPolicyURL": "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement",
     "termsOfServiceURL": "https://docs.github.com/en/site-policy/github-terms/github-terms-of-service",
     "brandColor": "#D33F49",

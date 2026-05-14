@@ -1,98 +1,99 @@
-# Superpowers 日本語版 — VS Code (Copilot) 安装指南
+# Superpowers-JA — VS Code (Copilot) インストールガイド
 
-在 VS Code + GitHub Copilot 中使用 superpowers-ja 的完整指南。
+VS Code + GitHub Copilot で superpowers-ja を使うための完全ガイドです。
 
-## 前置条件
+## 前提条件
 
-- VS Code（最新版本）
-- GitHub Copilot 扩展（免费版或付费版均可）
+- VS Code（最新版）
+- GitHub Copilot 拡張機能（無料版 / 有料版いずれも可）
 
-## 快速安装
+## クイックインストール
 
 ```bash
 cd /your/project
 npx superpowers-ja
 ```
 
-安装脚本会自动检测 `.github/` 目录并将 skills 复制到该目录。
+インストールスクリプトが `.github/` を自動検出し、skills を該当ディレクトリにコピーします。
 
-## 手动安装
+## 手動インストール
 
 ```bash
-git clone https://github.com/jnMetaCode/superpowers-ja.git
+git clone https://github.com/sscodeai/superpowers-ja.git
 mkdir -p /your/project/.github/superpowers
 cp -r superpowers-ja/skills/* /your/project/.github/superpowers/
 ```
 
-## 工作原理
+## 仕組み
 
-VS Code Copilot 使用 `.github/copilot-instructions.md` 作为项目级自定义指令：
+VS Code Copilot は `.github/copilot-instructions.md` をプロジェクト単位のカスタム指示として使用します：
 
-- **位置**：项目根目录 `.github/copilot-instructions.md`
-- **格式**：Markdown
-- **生效范围**：该工作区内的所有 Copilot Chat 和内联补全
-- **自动加载**：保存文件后立即生效，无需重启
+- **配置場所**: プロジェクトルートの `.github/copilot-instructions.md`
+- **フォーマット**: Markdown
+- **適用範囲**: ワークスペース内のすべての Copilot Chat とインライン補完
+- **自動ロード**: 保存後に即時反映、再起動不要
 
-### 推荐配置
+### 推奨設定
 
-由于 Copilot 主要通过单个指令文件工作，建议创建 `.github/copilot-instructions.md` 引用 skills：
+Copilot は主に単一の指示ファイルで動作するため、`.github/copilot-instructions.md` から skills を参照する設定を推奨します：
 
 ```markdown
-# Copilot 自定义指令
+# Copilot カスタム指示
 
-## 工作流方法论
+## ワークフロー手法
 
-本项目使用 superpowers-ja skills 框架。开始新任务前，请参考以下方法论：
+本プロジェクトは superpowers-ja skills framework を採用しています。
+新しいタスクを開始する前に、以下の手法を参考にしてください：
 
-- 新需求 → 先头脑风暴（.github/superpowers/brainstorming/SKILL.md）
-- 写代码 → TDD 驱动（.github/superpowers/test-driven-development/SKILL.md）
-- 修 Bug → 系统化调试（.github/superpowers/systematic-debugging/SKILL.md）
-- 审查代码 → 日本語代码审查（.github/superpowers/japanese-code-review/SKILL.md）
+- 新規要件 → まずブレインストーミング（.github/superpowers/brainstorming/SKILL.md）
+- 実装 → TDD（.github/superpowers/test-driven-development/SKILL.md）
+- バグ調査 → systematic-debugging（.github/superpowers/systematic-debugging/SKILL.md）
+- コードレビュー → 日本語コードレビュー（.github/superpowers/japanese-code-review/SKILL.md）
 
-## 日本語项目规范
+## 日本語プロジェクト規約
 
-- 代码注释和文档使用日本語
-- Git commit 遵循日本語提交规范
-- 技术术语保留英文原文
+- コードコメントとドキュメントは日本語
+- Git commit は日本語の commit 規約に従う
+- 技術用語は英語表記を保持
 ```
 
-### 使用 .instructions.md 文件（推荐）
+### `.instructions.md` ファイルの利用（推奨）
 
-VS Code 还支持更细粒度的 `.instructions.md` 文件：
+VS Code は粒度の細かい `.instructions.md` ファイルもサポートします：
 
 ```
 .github/
-  copilot-instructions.md          # 全局指令
+  copilot-instructions.md          # グローバル指示
   .instructions/
-    typescript.instructions.md     # TypeScript 文件专用
-    testing.instructions.md        # 测试相关
+    typescript.instructions.md     # TypeScript ファイル専用
+    testing.instructions.md        # テスト関連
 ```
 
-## 使用
+## 使い方
 
-在 VS Code 中：
-- **Copilot Chat**（`Ctrl+Shift+I`）：直接引用 skill 名称
-- **内联补全**：自动遵循 copilot-instructions.md 中的规则
-- **`/init`**：在 Chat 中输入，自动生成项目配置
+VS Code 内で：
+- **Copilot Chat**（`Ctrl+Shift+I`）: skill 名を直接参照
+- **インライン補完**: copilot-instructions.md のルールに自動的に従う
+- **`/init`**: Chat に入力するとプロジェクト設定を自動生成
 
-## 局限性
+## 制限事項
 
-VS Code Copilot 不像 Claude Code 那样支持 `Skill` 工具或子 Agent 派遣。以下 skills 需要手动参考而非自动执行：
+VS Code Copilot は Claude Code のような `Skill` ツールやサブエージェント派遣には対応していません。以下の skills は手動で参照する形になり、自動実行はできません：
 
-- 派遣并行 Agent（需要 Agent 框架支持）
-- 子 Agent 驱动开发（需要 Agent 框架支持）
-- Git Worktree 使用（需要终端操作）
+- 並列 agent 派遣（Agent framework が必要）
+- サブエージェント駆動開発（Agent framework が必要）
+- Git Worktree 利用（ターミナル操作が必要）
 
-其他方法论类 skills（头脑风暴、TDD、调试、代码审查等）完全兼容。
+その他の手法系 skills（ブレインストーミング、TDD、デバッグ、コードレビューなど）は完全互換です。
 
-## 更新
+## アップデート
 
 ```bash
 cd /your/project
 npx superpowers-ja
 ```
 
-## 获取帮助
+## サポート
 
-- 提交 Issue：https://github.com/jnMetaCode/superpowers-ja/issues
-- VS Code Copilot 文档：https://code.visualstudio.com/docs/copilot/customization/custom-instructions
+- Issue: https://github.com/sscodeai/superpowers-ja/issues
+- VS Code Copilot 公式ドキュメント: https://code.visualstudio.com/docs/copilot/customization/custom-instructions

@@ -1,86 +1,86 @@
-# Superpowers 日本語版 — OpenClaw 安装指南
+# Superpowers-JA — OpenClaw インストールガイド
 
-在 [OpenClaw](https://github.com/anthropics/openclaw) 中使用 superpowers-ja 的完整指南。
+[OpenClaw](https://github.com/anthropics/openclaw) で superpowers-ja を使うための完全ガイドです。
 
-## 快速安装
+## クイックインストール
 
 ```bash
 cd /your/project
 npx superpowers-ja
 ```
 
-安装脚本会自动检测 `.openclaw/` 目录并将 skills 复制到 `skills/` 目录。
+インストールスクリプトが `.openclaw/` を自動検出し、skills を `skills/` にコピーします。
 
-## 手动安装
+## 手動インストール
 
 ```bash
-git clone https://github.com/jnMetaCode/superpowers-ja.git
+git clone https://github.com/sscodeai/superpowers-ja.git
 cp -r superpowers-ja/skills/* /your/project/skills/
 ```
 
-或安装到全局（所有项目共享）：
+または、全プロジェクト共通（グローバル）にインストール：
 
 ```bash
 cp -r superpowers-ja/skills/* ~/.openclaw/skills/
 ```
 
-## 工作原理
+## 仕組み
 
-OpenClaw 按以下优先级加载 skills：
+OpenClaw は以下の優先度で skills をロードします：
 
-| 位置 | 优先级 | 说明 |
-|------|--------|------|
-| `<workspace>/skills/` | 最高 | 工作区级，当前项目专用 |
-| `~/.openclaw/skills/` | 中 | 用户级，所有项目共享 |
-| 内置 skills | 最低 | OpenClaw 自带 |
+| 配置場所 | 優先度 | 説明 |
+|---------|--------|------|
+| `<workspace>/skills/` | 最高 | ワークスペース単位、現プロジェクト専用 |
+| `~/.openclaw/skills/` | 中 | ユーザー単位、全プロジェクト共通 |
+| 内蔵 skills | 最低 | OpenClaw 標準同梱 |
 
-每个 skill 是一个 `skills/{name}/SKILL.md` 文件，包含 YAML frontmatter 和指令内容。OpenClaw 会自动发现并加载。
+各 skill は `skills/{name}/SKILL.md` で、YAML frontmatter と指示本体を含みます。OpenClaw が自動発見・ロードします。
 
-### 推荐配置方式
+### 推奨設定方法
 
-在项目根目录的 `CLAUDE.md` 或 `AGENTS.md` 中引用：
+プロジェクトルートの `CLAUDE.md` または `AGENTS.md` で参照します：
 
 ```markdown
 # CLAUDE.md
 
-本项目使用 superpowers-ja skills 框架。
-优先使用 brainstorming（头脑风暴）开始新任务。
-Skills 位于 skills/ 目录下。
+本プロジェクトは superpowers-ja skills framework を採用しています。
+新しいタスクは brainstorming skill から始めることを推奨します。
+Skills は skills/ 配下にあります。
 ```
 
-### 工具映射
+### ツールマッピング
 
-OpenClaw 与 Claude Code 使用相同的工具名称，skills 无需额外适配：
+OpenClaw は Claude Code と同じツール名を使うため、skills の追加適応は不要です：
 
-| 工具 | OpenClaw | Claude Code |
+| 用途 | OpenClaw | Claude Code |
 |------|----------|-------------|
-| 读文件 | `Read` | `Read` |
-| 写文件 | `Write` | `Write` |
-| 编辑 | `Edit` | `Edit` |
-| 终端 | `Bash` | `Bash` |
+| ファイル読み込み | `Read` | `Read` |
+| ファイル書き込み | `Write` | `Write` |
+| 編集 | `Edit` | `Edit` |
+| ターミナル | `Bash` | `Bash` |
 | Skills | `Skill` | `Skill` |
 
-## 使用
+## 使い方
 
-安装完成后重启 OpenClaw，所有 skills 会自动生效。AI 会按任务上下文自动调用对应 skill：
+インストール完了後 OpenClaw を再起動すると、すべての skills が有効になります。AI はタスクの context に応じて自動的に skill を呼び出します：
 
-- 新任务 / 新功能 → `brainstorming`（头脑风暴）
-- 写 commit message → `japanese-commit-conventions`（日本語 commit 规范）
-- 调试问题 → `systematic-debugging`
-- 完成任务后 → `requesting-code-review`（请求代码审查）
+- 新しいタスク / 新機能 → `brainstorming`
+- commit message を書く → `japanese-commit-conventions`
+- バグ調査 → `systematic-debugging`
+- タスク完了後 → `requesting-code-review`
 
-无需手动 slash command 触发 —— AI 通过 skill frontmatter 的 `description` 字段自主选择匹配的 skill。如果想强制触发某个 skill，直接在指令里点名："用 brainstorming 帮我想一下 X 怎么做"。
+手動の slash command は不要です。AI は skill frontmatter の `description` から自律的に skill を選択します。明示的に skill を呼び出したい場合は指示文で名指ししてください：「brainstorming で X の進め方を整理してほしい」
 
-## 全局 Skills
+## グローバル Skills
 
-如果你想让所有项目都能使用 superpowers-ja：
+全プロジェクトで superpowers-ja を使いたい場合：
 
 ```bash
 mkdir -p ~/.openclaw/skills
 cp -r superpowers-ja/skills/* ~/.openclaw/skills/
 ```
 
-也可以通过 `~/.openclaw/openclaw.json` 配置额外 skills 目录：
+`~/.openclaw/openclaw.json` で追加 skills ディレクトリを指定することもできます：
 
 ```json
 {
@@ -92,14 +92,14 @@ cp -r superpowers-ja/skills/* ~/.openclaw/skills/
 }
 ```
 
-## 更新
+## アップデート
 
 ```bash
 cd /your/project
 npx superpowers-ja
 ```
 
-## 获取帮助
+## サポート
 
-- 提交 Issue：https://github.com/jnMetaCode/superpowers-ja/issues
-- QQ 群：833585047
+- Issue: https://github.com/sscodeai/superpowers-ja/issues
+- プロジェクトホーム: https://github.com/sscodeai/superpowers-ja

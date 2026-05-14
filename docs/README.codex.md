@@ -1,38 +1,38 @@
-# Superpowers 日本語版 — Codex CLI 安装指南
+# Superpowers-JA — Codex CLI インストールガイド
 
-在 Codex 中使用 superpowers-ja 的完整指南。
+Codex で superpowers-ja を使うための完全ガイドです。
 
-## 快速安装
+## クイックインストール
 
-告诉 Codex：
+Codex に以下を伝えるだけです：
 
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/jnMetaCode/superpowers-ja/refs/heads/main/.codex/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/sscodeai/superpowers-ja/refs/heads/main/.codex/INSTALL.md
 ```
 
-## 手动安装
+## 手動インストール
 
-### 前置条件
+### 前提条件
 
 - OpenAI Codex CLI
 - Git
 
-### 步骤
+### 手順
 
-1. 克隆仓库：
+1. リポジトリをクローン：
    ```bash
-   git clone https://github.com/jnMetaCode/superpowers-ja.git ~/.codex/superpowers-ja
+   git clone https://github.com/sscodeai/superpowers-ja.git ~/.codex/superpowers-ja
    ```
 
-2. 创建 skills 符号链接：
+2. skills のシンボリックリンクを作成：
    ```bash
    mkdir -p ~/.agents/skills
    ln -s ~/.codex/superpowers-ja/skills ~/.agents/skills/superpowers
    ```
 
-3. 重启 Codex。
+3. Codex を再起動
 
-4. **子代理 skills（可选）：** `dispatching-parallel-agents` 和 `subagent-driven-development` 需要 Codex 的多代理功能。在 Codex 配置中添加：
+4. **サブエージェント skill（任意）：** `dispatching-parallel-agents` と `subagent-driven-development` は Codex のマルチエージェント機能が必要です。Codex の設定に以下を追加してください：
    ```toml
    [features]
    multi_agent = true
@@ -40,39 +40,39 @@ Fetch and follow instructions from https://raw.githubusercontent.com/jnMetaCode/
 
 ### Windows
 
-使用 junction 代替符号链接（无需开发者模式）：
+シンボリックリンクの代わりに junction を使います（開発者モード不要）：
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.agents\skills"
 cmd /c mklink /J "$env:USERPROFILE\.agents\skills\superpowers" "$env:USERPROFILE\.codex\superpowers-ja\skills"
 ```
 
-## 工作原理
+## 仕組み
 
-Codex 原生支持 skill 发现——启动时扫描 `~/.agents/skills/` 目录，解析 SKILL.md 的 frontmatter，按需加载 skills。通过一个符号链接即可注册所有 skills：
+Codex は skill discovery をネイティブにサポートしています。起動時に `~/.agents/skills/` を走査して SKILL.md の frontmatter を解析し、必要に応じて skill をロードします。1 つのシンボリックリンクですべての skills を登録できます：
 
 ```
 ~/.agents/skills/superpowers/ → ~/.codex/superpowers-ja/skills/
 ```
 
-`using-superpowers` skill 会自动被发现并强制执行 skill 使用纪律——无需额外配置。
+`using-superpowers` skill が自動的に発見され、skill 利用ルールを強制します。追加設定は不要です。
 
-## 使用
+## 使い方
 
-Skills 自动发现。Codex 在以下情况激活 skills：
-- 你提到 skill 名称（如 "use brainstorming"）
-- 任务匹配 skill 的描述
-- `using-superpowers` skill 指示 Codex 使用某个 skill
+Skills は自動発見されます。Codex は以下の場合に skill を起動します：
+- skill 名を指示したとき（例：「use brainstorming」）
+- タスクが skill description に合致したとき
+- `using-superpowers` skill が他の skill を呼ぶよう指示したとき
 
-## 更新
+## アップデート
 
 ```bash
 cd ~/.codex/superpowers-ja && git pull
 ```
 
-Skills 通过符号链接即时更新。
+シンボリックリンク経由なので、skills は即座に反映されます。
 
-## 卸载
+## アンインストール
 
 ```bash
 rm ~/.agents/skills/superpowers
@@ -83,9 +83,9 @@ rm ~/.agents/skills/superpowers
 Remove-Item "$env:USERPROFILE\.agents\skills\superpowers"
 ```
 
-可选：删除克隆的仓库 `rm -rf ~/.codex/superpowers-ja`
+クローンしたリポジトリも削除する場合：`rm -rf ~/.codex/superpowers-ja`
 
-## 获取帮助
+## サポート
 
-- 提交 Issue：https://github.com/jnMetaCode/superpowers-ja/issues
-- 项目主页：https://github.com/jnMetaCode/superpowers-ja
+- Issue: https://github.com/sscodeai/superpowers-ja/issues
+- プロジェクトホーム: https://github.com/sscodeai/superpowers-ja

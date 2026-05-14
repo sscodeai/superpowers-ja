@@ -1,65 +1,65 @@
-# Superpowers 日本語版 — DeerFlow 2.0 安装指南
+# Superpowers-JA — DeerFlow 2.0 インストールガイド
 
-在 [DeerFlow 2.0](https://github.com/bytedance/deer-flow)（字节跳动开源 SuperAgent）中使用 superpowers-ja 的完整指南。
+[DeerFlow 2.0](https://github.com/bytedance/deer-flow)（ByteDance OSS SuperAgent）で superpowers-ja を使うための完全ガイドです。
 
-## 快速安装
+## クイックインストール
 
 ```bash
 cd /your/deerflow-project
 npx superpowers-ja
 ```
 
-安装脚本会自动检测 `deer_flow/` 目录并将 skills 复制到 `skills/custom/`。
+インストールスクリプトが `deer_flow/` を自動検出し、skills を `skills/custom/` にコピーします。
 
-## 手动安装
+## 手動インストール
 
 ```bash
-git clone https://github.com/jnMetaCode/superpowers-ja.git
+git clone https://github.com/sscodeai/superpowers-ja.git
 mkdir -p /your/deerflow-project/skills/custom
 cp -r superpowers-ja/skills/* /your/deerflow-project/skills/custom/
 ```
 
-## 工作原理
+## 仕組み
 
-DeerFlow 2.0 使用 **Custom Skills** 机制扩展 Agent 能力：
+DeerFlow 2.0 は **Custom Skills** 機構で Agent 能力を拡張します：
 
-- **目录**：`skills/custom/`
-- **格式**：每个 skill 是一个目录，包含 `SKILL.md` 文件（Markdown + YAML frontmatter）
-- **加载方式**：DeerFlow 自动扫描 `skills/custom/` 下的所有目录，通过 `description` 字段匹配 skill
+- **ディレクトリ**: `skills/custom/`
+- **フォーマット**: 各 skill は 1 ディレクトリで、`SKILL.md`（Markdown + YAML frontmatter）を含む
+- **読み込み**: DeerFlow は `skills/custom/` 配下を自動走査し、`description` フィールドで skill をマッチング
 
-### Skills 格式兼容
+### Skills フォーマット互換性
 
-superpowers-ja 的 SKILL.md 文件格式与 DeerFlow 自定义 skills 完全兼容。安装后，DeerFlow 会自动发现并加载所有 skills。
+superpowers-ja の SKILL.md は DeerFlow の custom skills フォーマットと完全互換です。インストール後、DeerFlow が自動的にすべての skills を発見・読み込みます。
 
-### 环境变量
+### 環境変数
 
-如果你的 DeerFlow 项目不在当前目录，可以手动指定安装路径：
+DeerFlow プロジェクトがカレントディレクトリにない場合、インストールパスを手動指定できます：
 
 ```bash
 export DEERFLOW_SKILLS_DIR=/path/to/deerflow/skills/custom
 cp -r superpowers-ja/skills/* $DEERFLOW_SKILLS_DIR/
 ```
 
-## 使用
+## 使い方
 
-安装后，在 DeerFlow 对话中引用 skill 名称即可：
+インストール後、DeerFlow との対話で skill 名を指示するだけです：
 
-- 「使用头脑风暴来分析这个需求」
-- 「用测试驱动开发来实现这个功能」
-- 「按系统化调试流程排查这个 bug」
+- 「ブレインストーミングでこの要件を分析してください」
+- 「TDD でこの機能を実装してください」
+- 「systematic-debugging の流れでこのバグを調査してください」
 
-DeerFlow 会根据 skill 的 `description` 自动匹配并加载。
+DeerFlow が skill の `description` に基づいて自動マッチングし、ロードします。
 
-## 更新
+## アップデート
 
 ```bash
 cd /your/deerflow-project
 npx superpowers-ja
 ```
 
-重新运行安装命令即可更新到最新版本。
+インストールコマンドを再実行するだけで最新版に更新できます。
 
-## 获取帮助
+## サポート
 
-- 提交 Issue：https://github.com/jnMetaCode/superpowers-ja/issues
-- DeerFlow 文档：https://github.com/bytedance/deer-flow
+- Issue: https://github.com/sscodeai/superpowers-ja/issues
+- DeerFlow 公式リポジトリ: https://github.com/bytedance/deer-flow

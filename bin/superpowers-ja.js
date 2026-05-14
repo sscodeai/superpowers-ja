@@ -341,7 +341,7 @@ function showHelp() {
     誤ってホームディレクトリへ入れた場合:
       cd ~ && npx superpowers-ja --uninstall
 
-  Project: https://github.com/your-org/superpowers-ja
+  Project: https://github.com/sscodeai/superpowers-ja
 `);
 }
 
@@ -357,7 +357,7 @@ function installForTarget(target) {
       `\n  This is usually caused by npx cache or path permission issues. Try:\n` +
       `    1. npm cache clean --force && npx superpowers-ja\n` +
       `    2. npm i -g superpowers-ja && superpowers-ja\n` +
-      `    3. Clone manually and copy skills: https://github.com/your-org/superpowers-ja`
+      `    3. Clone manually and copy skills: https://github.com/sscodeai/superpowers-ja`
     );
   }
   console.log(`  ✅ ${target.name}: ${srcCount} skills -> ${dest}`);

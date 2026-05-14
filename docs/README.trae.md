@@ -1,73 +1,73 @@
-# Superpowers 日本語版 — Trae 安装指南
+# Superpowers-JA — Trae インストールガイド
 
-在 [Trae](https://www.trae.ai)（字节跳动 AI IDE）中使用 superpowers-ja 的完整指南。
+[Trae](https://www.trae.ai)（ByteDance AI IDE）で superpowers-ja を使うための完全ガイドです。
 
-## 快速安装
+## クイックインストール
 
 ```bash
 cd /your/project
 npx superpowers-ja
 ```
 
-安装脚本会自动检测 `.trae/` 目录并将 skills 复制到 `.trae/rules/`。
+インストールスクリプトが `.trae/` を自動検出し、skills を `.trae/rules/` にコピーします。
 
-## 手动安装
+## 手動インストール
 
 ```bash
-git clone https://github.com/jnMetaCode/superpowers-ja.git
+git clone https://github.com/sscodeai/superpowers-ja.git
 mkdir -p /your/project/.trae/rules
 cp -r superpowers-ja/skills/* /your/project/.trae/rules/
 ```
 
-## 工作原理
+## 仕組み
 
-Trae 使用 `.rules` 机制管理 AI 行为：
+Trae は `.rules` 機構で AI の振る舞いを管理します：
 
-- **目录**：`.trae/rules/`
-- **格式**：Markdown + metadata（description、globs、alwaysApply、priority）
-- **规则类型**：
-  - **项目规则**（Project Rules）— 仅作用于当前项目
-  - **个人规则**（Personal Rules）— 用户级别，可被项目规则覆盖
-- **优先级**：1-4，数值越高优先级越高
+- **ディレクトリ**: `.trae/rules/`
+- **フォーマット**: Markdown + metadata（description、globs、alwaysApply、priority）
+- **ルール種別**:
+  - **プロジェクトルール**（Project Rules）— 当該プロジェクトにのみ適用
+  - **個人ルール**（Personal Rules）— ユーザー単位、プロジェクトルールにより上書き可能
+- **優先度**: 1〜4（数値が大きいほど優先）
 
-### Skills 适配
+### Skills の適合
 
-superpowers-ja 的 SKILL.md 文件可以直接作为 Trae 的 rules 使用。Trae 会在初始化时加载 `.trae/rules/` 下的所有规则文件。
+superpowers-ja の SKILL.md は Trae の rules としてそのまま利用できます。Trae は初期化時に `.trae/rules/` 配下のすべてのルールファイルをロードします。
 
-### 推荐配置
+### 推奨設定
 
-安装完成后，在 Trae 的 Builder Mode 或 Chat 中提到 skill 名称即可激活：
+インストール完了後、Trae の Builder Mode またはチャットで skill 名を指示すると起動します：
 
 ```
-使用头脑风暴 skill 来分析这个需求
+brainstorming skill でこの要件を分析してください
 ```
 
-## 日本語支持
+## 日本語サポート
 
-Trae 原生支持日本語，与 superpowers-ja 完美配合：
-- 所有 skills 均为日本語
-- 日本語代码审查、日本語 Git 工作流等日本特色 skills 开箱即用
-- 支持 MCP 协议扩展
+Trae は日本語をネイティブサポートしており、superpowers-ja と相性が良いです：
+- すべての skills が日本語
+- 日本語コードレビュー、日本語 Git ワークフローなど日本向け skills がそのまま使える
+- MCP プロトコル拡張に対応
 
-## 更新
+## アップデート
 
 ```bash
 cd /your/project
 npx superpowers-ja
 ```
 
-## 卸载 / 误装清理
+## アンインストール / 誤インストールの清掃
 
-如果不小心在主目录（`~`）误跑了 `npx superpowers-ja`，会把 skills 和 `.trae/rules/superpowers-ja.md` 写到你的 home。v1.2.1 起会主动拒绝，但老版本可能已经污染过。清理：
+ホームディレクトリ（`~`）で誤って `npx superpowers-ja` を実行すると、skills と `.trae/rules/superpowers-ja.md` がホームに書き込まれることがあります。v0.1.0 では能動的に拒否しますが、古いバージョンで汚染されている可能性があります。清掃方法：
 
 ```bash
-cd ~                                    # 或具体的项目目录
+cd ~                                    # または対象プロジェクトディレクトリ
 npx superpowers-ja@latest --uninstall
 ```
 
-会删除 `.trae/skills/` 下装过的 skill、`.trae/rules/superpowers-ja.md`，并清理 `CLAUDE.md` 等文件里的 superpowers-ja 段（保留你自己写的内容）。
+`.trae/skills/` にインストールされた skill、`.trae/rules/superpowers-ja.md`、および `CLAUDE.md` などのファイル内 superpowers-ja セクションが削除されます（自分で書いた内容は保持されます）。
 
-## 获取帮助
+## サポート
 
-- 提交 Issue：https://github.com/jnMetaCode/superpowers-ja/issues
-- Trae 文档：https://docs.trae.ai/ide/rules
+- Issue: https://github.com/sscodeai/superpowers-ja/issues
+- Trae 公式ドキュメント: https://docs.trae.ai/ide/rules

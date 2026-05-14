@@ -1,43 +1,44 @@
-# Superpowers 日本語版 — Aider 安装指南
+# Superpowers-JA — Aider インストールガイド
 
-在 [Aider](https://aider.chat) 中使用 superpowers-ja 的完整指南。
+[Aider](https://aider.chat) で superpowers-ja を使うための完全ガイドです。
 
-## 自动安装
+## 自動インストール
 
 ```bash
 cd /your/project
 npx superpowers-ja
 ```
 
-安装脚本会自动检测 `.aider.conf.yml` 文件并将 skills 复制到 `.aider/skills/` 目录。
+インストールスクリプトが `.aider.conf.yml` を自動検出し、skills を `.aider/skills/` 配下にコピーします。
 
-## 手动安装
+## 手動インストール
 
 ```bash
-git clone https://github.com/jnMetaCode/superpowers-ja.git
+git clone https://github.com/sscodeai/superpowers-ja.git
 cp -r superpowers-ja/skills /your/project/.aider/skills
 ```
 
-## 通过 CONVENTIONS.md 引用
+## CONVENTIONS.md から参照する
 
-Aider 原生支持 `CONVENTIONS.md` 文件。在其中引用 skills：
+Aider は `CONVENTIONS.md` をネイティブにサポートしています。以下のように skills を参照します：
 
 ```markdown
-# 项目约定
+# プロジェクト規約
 
-## 工作方法论
+## 作業手法
 
-本项目使用 superpowers-ja skills 作为工作方法论。
-Skills 位于 `.aider/skills/` 目录，每个子目录的 SKILL.md 定义一个工作流。
+本プロジェクトは superpowers-ja skills を作業手法として採用しています。
+Skills は `.aider/skills/` 配下にあり、各サブディレクトリの SKILL.md が
+1 つのワークフローを定義します。
 
-- 新功能开发：先使用 brainstorming skill
-- 编写代码：遵循 test-driven-development skill
-- 调试问题：使用 systematic-debugging skill
+- 新機能開発：まず brainstorming skill を使う
+- コード実装：test-driven-development skill に従う
+- 問題調査：systematic-debugging skill を使う
 ```
 
-## 通过 .aider.conf.yml 配置
+## .aider.conf.yml で読み込む
 
-在 `.aider.conf.yml` 中添加 read 配置来加载 skills：
+`.aider.conf.yml` に `read` 設定を追加して skills を読み込みます：
 
 ```yaml
 read:
@@ -46,16 +47,16 @@ read:
   - .aider/skills/systematic-debugging/SKILL.md
 ```
 
-## 故障排查
+## トラブルシューティング
 
-### Skills 未生效
+### Skills が認識されない場合
 
-1. 确认 `.aider/skills/` 目录存在且包含 skill 文件夹
-2. 确保在 `CONVENTIONS.md` 或 `.aider.conf.yml` 中引用了 skills
-3. Aider 会自动读取 `CONVENTIONS.md`，无需额外配置
+1. `.aider/skills/` ディレクトリが存在し、skill フォルダが含まれていることを確認
+2. `CONVENTIONS.md` または `.aider.conf.yml` で skills を参照していることを確認
+3. Aider は `CONVENTIONS.md` を自動読み込みするため、追加設定は不要です
 
-## 获取帮助
+## サポート
 
-- 提交 Issue：https://github.com/jnMetaCode/superpowers-ja/issues
-- 项目主页：https://github.com/jnMetaCode/superpowers-ja
-- Aider 文档：https://aider.chat/docs/
+- Issue: https://github.com/sscodeai/superpowers-ja/issues
+- プロジェクトホーム: https://github.com/sscodeai/superpowers-ja
+- Aider 公式ドキュメント: https://aider.chat/docs/

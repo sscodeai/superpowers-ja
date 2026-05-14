@@ -1,56 +1,56 @@
-# Superpowers 日本語版 — Windsurf 安装指南
+# Superpowers-JA — Windsurf インストールガイド
 
-在 [Windsurf](https://codeium.com/windsurf) 中使用 superpowers-ja 的完整指南。
+[Windsurf](https://codeium.com/windsurf) で superpowers-ja を使うための完全ガイドです。
 
-## 自动安装
+## 自動インストール
 
 ```bash
 cd /your/project
 npx superpowers-ja
 ```
 
-安装脚本会自动检测 `.windsurf/` 目录并将 skills 复制到 `.windsurf/skills/` 目录。
+インストールスクリプトが `.windsurf/` を自動検出し、skills を `.windsurf/skills/` にコピーします。
 
-## 手动安装
+## 手動インストール
 
 ```bash
-git clone https://github.com/jnMetaCode/superpowers-ja.git
+git clone https://github.com/sscodeai/superpowers-ja.git
 cp -r superpowers-ja/skills /your/project/.windsurf/skills
 ```
 
-或全局安装：
+または、グローバルインストール：
 
 ```bash
 cp -r superpowers-ja/skills ~/.windsurf/skills
 ```
 
-## Skill 加载优先级
+## Skill 読み込み優先度
 
-| 位置 | 优先级 | 说明 |
-|------|--------|------|
-| `.windsurf/skills/` | 最高 | 项目级，仅当前项目 |
-| `~/.windsurf/skills/` | 中 | 用户级，所有项目共享 |
+| 配置場所 | 優先度 | 説明 |
+|---------|--------|------|
+| `.windsurf/skills/` | 最高 | プロジェクト単位、当該プロジェクトのみ |
+| `~/.windsurf/skills/` | 中 | ユーザー単位、全プロジェクト共通 |
 
-## 使用
+## 使い方
 
-安装完成后重启 Windsurf，skills 会自动生效。
+インストール完了後 Windsurf を再起動すると、skills が自動的に有効になります。
 
-也可以在 `.windsurfrules` 文件中引用 skills 目录：
+`.windsurfrules` から skills ディレクトリを参照することもできます：
 
 ```
-请参考 .windsurf/skills/ 目录中的 SKILL.md 文件作为工作方法论。
+.windsurf/skills/ 配下の SKILL.md を作業手法として参照してください。
 ```
 
-## 故障排查
+## トラブルシューティング
 
-### Skills 未生效
+### Skills が認識されない場合
 
-1. 确认 `.windsurf/skills/` 目录存在且包含 skill 文件夹
-2. 每个 skill 需要包含有效 YAML frontmatter 的 `SKILL.md` 文件
-3. 重启 Windsurf
+1. `.windsurf/skills/` ディレクトリが存在し、skill フォルダが含まれていることを確認
+2. 各 skill に有効な YAML frontmatter を持つ `SKILL.md` があることを確認
+3. Windsurf を再起動
 
-## 获取帮助
+## サポート
 
-- 提交 Issue：https://github.com/jnMetaCode/superpowers-ja/issues
-- 项目主页：https://github.com/jnMetaCode/superpowers-ja
-- Windsurf 文档：https://docs.codeium.com/windsurf
+- Issue: https://github.com/sscodeai/superpowers-ja/issues
+- プロジェクトホーム: https://github.com/sscodeai/superpowers-ja
+- Windsurf 公式ドキュメント: https://docs.codeium.com/windsurf

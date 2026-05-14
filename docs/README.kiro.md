@@ -1,69 +1,69 @@
-# Superpowers 日本語版 — Kiro 安装指南
+# Superpowers-JA — Kiro インストールガイド
 
-在 [Kiro](https://kiro.dev)（Amazon AI IDE）中使用 superpowers-ja 的完整指南。
+[Kiro](https://kiro.dev)（Amazon AI IDE）で superpowers-ja を使うための完全ガイドです。
 
-## 快速安装
+## クイックインストール
 
 ```bash
 cd /your/project
 npx superpowers-ja
 ```
 
-安装脚本会自动检测 `.kiro/` 目录并将 skills 复制到 `.kiro/steering/`。
+インストールスクリプトが `.kiro/` を自動検出し、skills を `.kiro/steering/` にコピーします。
 
-## 手动安装
+## 手動インストール
 
 ```bash
-git clone https://github.com/jnMetaCode/superpowers-ja.git
+git clone https://github.com/sscodeai/superpowers-ja.git
 cp -r superpowers-ja/skills/* /your/project/.kiro/steering/
 ```
 
-## 工作原理
+## 仕組み
 
-Kiro 使用 **Steering** 机制管理 AI 行为规则：
+Kiro は **Steering** で AI の振る舞いルールを管理します：
 
-- **目录**：`.kiro/steering/`
-- **格式**：Markdown + YAML frontmatter
-- **加载模式**：
-  - `alwaysApply: true` — 每次对话自动加载
-  - `globs: "*.ts"` — 匹配特定文件时加载
-  - 手动引用 — 在聊天中输入 `#steering-file-name`
+- **ディレクトリ**: `.kiro/steering/`
+- **フォーマット**: Markdown + YAML frontmatter
+- **読み込みモード**:
+  - `alwaysApply: true` — 全対話で自動ロード
+  - `globs: "*.ts"` — 特定ファイルに合致したときロード
+  - 手動参照 — チャットに `#steering-file-name` と入力
 
-### Skills 与 Steering 的对应
+### Skills と Steering の対応
 
-superpowers-ja 的 SKILL.md 文件格式与 Kiro Steering 文件兼容（都是 Markdown + YAML frontmatter）。安装后，Kiro 会自动识别并加载 skills。
+superpowers-ja の SKILL.md フォーマットは Kiro Steering と互換（どちらも Markdown + YAML frontmatter）です。インストール後、Kiro が自動的に skills を認識・ロードします。
 
-### 推荐配置
+### 推奨設定
 
-在 `.kiro/steering/` 中创建 `superpowers.md`：
+`.kiro/steering/` に `superpowers.md` を作成：
 
 ```markdown
 ---
-description: 加载 superpowers skills 框架
+description: superpowers skills framework をロードする
 alwaysApply: true
 ---
 
-使用 .kiro/steering/ 目录下的 superpowers skills 来指导工作流程。
-优先使用 brainstorming（头脑风暴）开始新任务。
+.kiro/steering/ 配下の superpowers skills をワークフロー指針として利用してください。
+新しいタスクは brainstorming skill から始めることを推奨します。
 ```
 
-## 使用
+## 使い方
 
-在 Kiro 中，你可以：
-- 直接提到 skill 名称：「使用头脑风暴来分析这个需求」
-- 手动引用：在聊天中输入 `#brainstorming`
-- Skills 会根据任务类型自动激活
+Kiro では以下のように skills を利用できます：
+- skill 名を直接指示：「ブレインストーミングでこの要件を分析してください」
+- 手動参照：チャットで `#brainstorming` と入力
+- タスクの内容に応じて skills が自動的にアクティベートされる
 
-## 更新
+## アップデート
 
 ```bash
 cd /your/project
 npx superpowers-ja
 ```
 
-重新运行安装命令即可更新到最新版本。
+インストールコマンドを再実行するだけで最新版に更新できます。
 
-## 获取帮助
+## サポート
 
-- 提交 Issue：https://github.com/jnMetaCode/superpowers-ja/issues
-- Kiro 文档：https://kiro.dev/docs/steering/
+- Issue: https://github.com/sscodeai/superpowers-ja/issues
+- Kiro 公式ドキュメント: https://kiro.dev/docs/steering/

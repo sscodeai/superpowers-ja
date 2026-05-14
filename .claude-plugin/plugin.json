@@ -1,13 +1,13 @@
 {
   "name": "superpowers-ja",
   "description": "Superpowers 日本語・日本 IT 開発版。計画、TDD、デバッグ、コードレビュー、検証、日本向け開発ワークフローを AI coding agents に追加します。",
-  "version": "1.4.0",
+  "version": "0.1.0",
   "author": {
-    "name": "superpowers-ja contributors",
-    "url": "https://github.com/your-org/superpowers-ja"
+    "name": "sscodeai",
+    "url": "https://github.com/sscodeai/superpowers-ja"
   },
-  "homepage": "https://github.com/your-org/superpowers-ja",
-  "repository": "https://github.com/your-org/superpowers-ja",
+  "homepage": "https://github.com/sscodeai/superpowers-ja",
+  "repository": "https://github.com/sscodeai/superpowers-ja",
   "license": "MIT",
   "keywords": ["skills", "tdd", "debugging", "japanese", "日本語", "japan", "workflows"]
 }
