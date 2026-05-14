@@ -1,44 +1,44 @@
-# Hermes Agent 工具映射
+# Hermes Agent Tool Mapping
 
-技能使用 Claude Code 的工具名称。当你在技能中遇到这些工具时，使用你平台的等价工具：
+skills は Claude Code の tool 名を使う。skill 内でこれらの tool に出会った場合は、platform equivalent を使う。
 
-| 技能中引用的工具 | Hermes Agent 等价工具 |
-|-----------------|----------------------|
-| `Read`（读取文件） | `read_file` |
-| `Write`（创建文件） | `write_file` |
-| `Edit`（编辑文件） | `patch` |
-| `Bash`（运行命令） | `terminal` |
-| `Grep`（搜索文件内容） | `search_files` |
-| `Glob`（按名称搜索文件） | `search_files` |
-| `Skill` 工具（调用技能） | `skill_view` |
+| Skill 内の tool reference | Hermes Agent equivalent |
+| --- | --- |
+| `Read`（file read） | `read_file` |
+| `Write`（file create） | `write_file` |
+| `Edit`（file edit） | `patch` |
+| `Bash`（command execution） | `terminal` |
+| `Grep`（file content search） | `search_files` |
+| `Glob`（file name search） | `search_files` |
+| `Skill` tool（skill invocation） | `skill_view` |
 | `WebFetch` | `web_extract` |
 | `WebSearch` | `web_search` |
-| `Task` 工具（分派子智能体） | `delegate_task` |
-| 多个 `Task` 调用（并行） | 多个 `delegate_task` 调用 |
-| `TodoWrite`（任务跟踪） | `todo` |
-| `EnterPlanMode` / `ExitPlanMode` | 无等价工具 — 留在主会话中 |
+| `Task` tool（subagent dispatch） | `delegate_task` |
+| 複数の `Task` call（parallel） | 複数の `delegate_task` call |
+| `TodoWrite`（task tracking） | `todo` |
+| `EnterPlanMode` / `ExitPlanMode` | equivalent なし。main session に留まる |
 
-## 技能管理
+## Skill Management
 
-Hermes Agent 使用三级渐进式技能加载：
+Hermes Agent は 3 段階の progressive skill loading を使う。
 
-| 操作 | 工具 |
-|------|------|
-| 列出所有可用技能 | `skills_list` |
-| 查看技能完整内容 | `skill_view(name)` |
-| 查看技能的引用文件 | `skill_view(name, path)` |
-| 管理技能（安装/更新） | `skill_manage` |
+| Operation | Tool |
+| --- | --- |
+| available skills を一覧する | `skills_list` |
+| skill full content を見る | `skill_view(name)` |
+| skill reference file を見る | `skill_view(name, path)` |
+| skill を管理する（install / update） | `skill_manage` |
 
-## 额外的 Hermes Agent 工具
+## Additional Hermes Agent Tools
 
-| 工具 | 用途 |
-|------|---------|
-| `memory` | 持久化知识供未来会话使用 |
-| `session_search` | 搜索历史会话记录 |
-| `execute_code` | 在沙箱中执行代码 |
-| `process` | 后台进程管理 |
-| `vision_analyze` | 图像分析 |
-| `image_generate` | 图像生成 |
-| `clarify` | 向用户提出澄清性问题 |
-| `browser_*` | 浏览器自动化工具集 |
-| `mixture_of_agents` | 多智能体高级推理 |
+| Tool | Purpose |
+| --- | --- |
+| `memory` | knowledge を future session 用に永続化 |
+| `session_search` | historical session record を検索 |
+| `execute_code` | sandbox で code を実行 |
+| `process` | background process management |
+| `vision_analyze` | image analysis |
+| `image_generate` | image generation |
+| `clarify` | ユーザーへ clarifying question を出す |
+| `browser_*` | browser automation toolset |
+| `mixture_of_agents` | multi-agent advanced reasoning |

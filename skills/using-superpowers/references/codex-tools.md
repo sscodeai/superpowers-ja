@@ -1,25 +1,25 @@
-# Codex 工具映射
+# Codex Tool Mapping
 
-Skills 使用 Claude Code 的工具名称。在 Codex 中遇到这些名称时，请使用对应的平台等价工具：
+skills は Claude Code の tool 名を使う。Codex でこれらの名前に出会った場合は、対応する platform equivalent を使う。
 
-| Skill 中的引用 | Codex 等价工具 |
-|---------------|---------------|
-| `Task` 工具（派遣子 agent） | `spawn_agent` |
-| 多个 `Task` 调用（并行） | 多个 `spawn_agent` 调用 |
-| Task 返回结果 | `wait` |
-| Task 自动完成 | `close_agent` 释放槽位 |
-| `TodoWrite`（任务跟踪） | `update_plan` |
-| `Skill` 工具（调用 skill） | Skills 原生加载——直接按说明操作 |
-| `Read`、`Write`、`Edit`（文件） | 使用原生文件工具 |
-| `Bash`（执行命令） | 使用原生 shell 工具 |
+| Skill 内の参照 | Codex equivalent |
+| --- | --- |
+| `Task` tool（subagent dispatch） | `spawn_agent` |
+| 複数の `Task` call（parallel） | 複数の `spawn_agent` call |
+| Task result | `wait` |
+| Task completion cleanup | `close_agent` で slot を解放 |
+| `TodoWrite`（task tracking） | `update_plan` |
+| `Skill` tool（skill 呼び出し） | native skill loading。説明に従って直接進める |
+| `Read`、`Write`、`Edit`（file） | native file tools |
+| `Bash`（command execution） | native shell tool |
 
-## 子 Agent 派遣需要多 Agent 支持
+## Subagent Dispatch Requires Multi-Agent Support
 
-在 Codex 配置文件（`~/.codex/config.toml`）中添加：
+Codex config file（`~/.codex/config.toml`）に次を追加する。
 
 ```toml
 [features]
 multi_agent = true
 ```
 
-启用后可使用 `spawn_agent`、`wait` 和 `close_agent`，支持 `dispatching-parallel-agents` 和 `subagent-driven-development` 等 skills。
+有効化すると `spawn_agent`、`wait`、`close_agent` が使える。`dispatching-parallel-agents`、`subagent-driven-development` などの skills を支える。

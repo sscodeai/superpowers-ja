@@ -3,76 +3,80 @@ name: test-driven-development
 description: 機能実装または bug 修正時、実装コードを書く前に使用する。
 ---
 
-# 测试驱动开发（TDD）
+# Test-Driven Development (TDD)
 
-## 概述
+## Overview
 
-先写测试。看它失败。写最少的代码让它通过。
+先に test を書く。失敗することを見る。通すための最小 code を書く。
 
-**核心原则：** 如果你没有看到测试失败，你就不知道它是否测试了正确的东西。
+**Core principle:** test が失敗するところを見ていなければ、その test が正しいものを検証しているか分からない。
 
-**违反规则的字面意思就是违反规则的精神。**
+**rule の文字通りの違反は、rule の精神にも違反している。**
 
-## 何时使用
+## When To Use
 
-**始终使用：**
-- 新功能
-- Bug 修复
-- 重构
-- 行为变更
+**常に使う:**
 
-**例外（需询问你的人类伙伴）：**
-- 一次性原型
-- 生成的代码
-- 配置文件
+- new feature
+- bug fix
+- refactor
+- behavior change
 
-想着"就这一次跳过 TDD"？停下来。那是在给自己找借口。
+**例外（人間の担当者に確認する）:**
 
-## 铁律
+- disposable prototype
+- generated code
+- configuration file
 
+「今回だけ TDD を skip しよう」と考えたら停止する。それは rationalization である。
+
+## Iron Law
+
+```text
+失敗する test なしに production code を書かない
 ```
-没有失败的测试，就不写生产代码
-```
 
-先写了代码再写测试？删掉它。从头来过。
+先に code を書いてから test を書いたか。削除する。最初からやり直す。
 
-**没有例外：**
-- 不要保留作为"参考"
-- 不要在写测试时"改编"它
-- 不要看它
-- 删除就是删除
+**例外なし:**
 
-从测试出发，重新实现。句号。
+- 「参考」として残さない
+- test を書きながら「改造」しない
+- 見ない
+- 削除は削除
 
-## 红-绿-重构
+test から始めて、もう一度実装する。それだけ。
+
+## Red-Green-Refactor
 
 ```dot
 digraph tdd_cycle {
     rankdir=LR;
-    red [label="红灯\n编写失败的测试", shape=box, style=filled, fillcolor="#ffcccc"];
-    verify_red [label="验证正确失败", shape=diamond];
-    green [label="绿灯\n最少代码", shape=box, style=filled, fillcolor="#ccffcc"];
-    verify_green [label="验证通过\n全部绿灯", shape=diamond];
-    refactor [label="重构\n清理代码", shape=box, style=filled, fillcolor="#ccccff"];
-    next [label="下一个", shape=ellipse];
+    red [label="Red\n失敗する test を書く", shape=box, style=filled, fillcolor="#ffcccc"];
+    verify_red [label="正しく失敗する?", shape=diamond];
+    green [label="Green\n最小 code", shape=box, style=filled, fillcolor="#ccffcc"];
+    verify_green [label="全 test green?", shape=diamond];
+    refactor [label="Refactor\ncode を整える", shape=box, style=filled, fillcolor="#ccccff"];
+    next [label="Next", shape=ellipse];
 
     red -> verify_red;
-    verify_red -> green [label="是"];
-    verify_red -> red [label="错误的\n失败"];
+    verify_red -> green [label="yes"];
+    verify_red -> red [label="wrong\nfailure"];
     green -> verify_green;
-    verify_green -> refactor [label="是"];
-    verify_green -> green [label="否"];
-    refactor -> verify_green [label="保持\n绿灯"];
+    verify_green -> refactor [label="yes"];
+    verify_green -> green [label="no"];
+    refactor -> verify_green [label="keep\ngreen"];
     verify_green -> next;
     next -> red;
 }
 ```
 
-### 红灯 - 编写失败的测试
+### Red - 失敗する test を書く
 
-写一个最小的测试来展示期望行为。
+期待する behavior を示す最小 test を書く。
 
 <Good>
+
 ```typescript
 test('retries failed operations 3 times', async () => {
   let attempts = 0;
@@ -88,10 +92,12 @@ test('retries failed operations 3 times', async () => {
   expect(attempts).toBe(3);
 });
 ```
-名称清晰，测试真实行为，只测一件事
+
+name が明確。real behavior を test している。一つのことだけを test している。
 </Good>
 
 <Bad>
+
 ```typescript
 test('retry works', async () => {
   const mock = jest.fn()
@@ -102,36 +108,40 @@ test('retry works', async () => {
   expect(mock).toHaveBeenCalledTimes(3);
 });
 ```
-名称模糊，测试的是 mock 而非代码
+
+name が曖昧。code ではなく mock を test している。
 </Bad>
 
-**要求：**
-- 一个行为
-- 清晰的名称
-- 使用真实代码（除非不得已才用 mock）
+**Requirements:**
 
-### 验证红灯 - 看它失败
+- one behavior
+- clear name
+- real code を使う（やむを得ない場合だけ mock）
 
-**必须执行。绝不跳过。**
+### Verify Red - 失敗を確認する
+
+**必ず実行する。絶対に skip しない。**
 
 ```bash
 npm test path/to/test.test.ts
 ```
 
-确认：
-- 测试失败（不是报错）
-- 失败信息符合预期
-- 失败原因是功能缺失（不是拼写错误）
+確認すること:
 
-**测试通过了？** 你在测试已有的行为。修改测试。
+- test が失敗する（error ではない）
+- failure message が期待通り
+- failure reason が機能不足（typo ではない）
 
-**测试报错了？** 修复错误，重新运行直到它正确地失败。
+**test が通ったか。** 既存 behavior を test している。test を修正する。
 
-### 绿灯 - 最少代码
+**test が error になったか。** error を修正し、正しく失敗するまで再実行する。
 
-写最简单的代码让测试通过。
+### Green - 最小 code
+
+test を通すための最も simple な code を書く。
 
 <Good>
+
 ```typescript
 async function retryOperation<T>(fn: () => Promise<T>): Promise<T> {
   for (let i = 0; i < 3; i++) {
@@ -144,10 +154,12 @@ async function retryOperation<T>(fn: () => Promise<T>): Promise<T> {
   throw new Error('unreachable');
 }
 ```
-刚好够通过测试
+
+test を通すのに必要十分。
 </Good>
 
 <Bad>
+
 ```typescript
 async function retryOperation<T>(
   fn: () => Promise<T>,
@@ -160,138 +172,146 @@ async function retryOperation<T>(
   // YAGNI
 }
 ```
-过度设计
+
+over-design。
 </Bad>
 
-不要添加功能、重构其他代码或做超出测试要求的"改进"。
+feature 追加、無関係な refactor、test が要求していない「改善」をしない。
 
-### 验证绿灯 - 看它通过
+### Verify Green - 通ることを確認する
 
-**必须执行。**
+**必ず実行する。**
 
 ```bash
 npm test path/to/test.test.ts
 ```
 
-确认：
-- 测试通过
-- 其他测试仍然通过
-- 输出干净（没有错误、警告）
+確認すること:
 
-**测试失败了？** 修改代码，不是测试。
+- 対象 test が通る
+- 他の test も通る
+- output が clean（error、warning なし）
 
-**其他测试失败了？** 立即修复。
+**test が失敗したか。** test ではなく code を修正する。
 
-### 重构 - 清理代码
+**他の test が失敗したか。** すぐに修正する。
 
-只有在绿灯之后才重构：
-- 消除重复
-- 改善命名
-- 提取辅助函数
+### Refactor - code を整える
 
-保持测试绿灯。不要添加行为。
+green の後だけ refactor する。
 
-### 重复
+- duplication を消す
+- naming を改善する
+- helper function を抽出する
 
-为下一个功能写下一个失败的测试。
+test を green のまま保つ。behavior を追加しない。
 
-## 好的测试
+### Repeat
 
-| 特质 | 好的 | 差的 |
-|------|------|------|
-| **最小化** | 只测一件事。名称中有"和"？拆分它。 | `test('validates email and domain and whitespace')` |
-| **清晰** | 名称描述行为 | `test('test1')` |
-| **展示意图** | 展示期望的 API | 掩盖了代码应该做什么 |
+次の behavior に対して、次の failing test を書く。
 
-## 为什么顺序很重要
+## Good Tests
 
-**"我先写完再补测试来验证"**
+| Trait | Good | Bad |
+| --- | --- | --- |
+| **Minimal** | 一つのことだけを test する。name に「and」があるなら分ける。 | `test('validates email and domain and whitespace')` |
+| **Clear** | name が behavior を説明している | `test('test1')` |
+| **Shows intent** | 期待する API を示す | code が何をすべきか隠している |
 
-后写的测试立即通过。立即通过什么也证明不了：
-- 可能测试了错误的东西
-- 可能测试的是实现而非行为
-- 可能遗漏了你忘掉的边界情况
-- 你从未看到它捕获 bug
+## なぜ順序が重要か
 
-先写测试迫使你看到测试失败，证明它确实在测试某些东西。
+**「先に実装してから test で検証する」**
 
-**"我已经手动测试了所有边界情况"**
+後から書いた test はすぐ通る。すぐ通る test は何も証明しない。
 
-手动测试是临时的。你以为你测试了所有情况，但是：
-- 没有测试记录
-- 代码变更后无法重新运行
-- 在压力下容易遗忘
-- "我试过了能跑" 不等于 全面测试
+- wrong thing を test しているかもしれない
+- behavior ではなく implementation を test しているかもしれない
+- 忘れていた edge case を落としているかもしれない
+- bug を捕まえるところを一度も見ていない
 
-自动化测试是系统性的。它们每次以相同方式运行。
+先に test を書くと、test が失敗することを見るしかない。つまり、何かを実際に検証していることを証明できる。
 
-**"删除 X 小时的工作太浪费了"**
+**「edge case は全部 manual test した」**
 
-沉没成本谬误。时间已经花了。你现在的选择：
-- 删除并用 TDD 重写（再花 X 小时，高信心）
-- 保留并后补测试（30 分钟，低信心，可能有 bug）
+manual test は一時的である。全部 test したと思っていても、次の問題が残る。
 
-"浪费"的是保留你无法信任的代码。没有真正测试的可运行代码就是技术债。
+- test record がない
+- code change 後に再実行できない
+- pressure 下では忘れる
+- 「動かしてみた」は comprehensive test ではない
 
-**"TDD 太教条了，务实意味着灵活变通"**
+automated test は systematic である。毎回同じ方法で実行できる。
 
-TDD 就是务实的：
-- 在 commit 前发现 bug（比事后调试快）
-- 防止回归（测试立即发现破坏）
-- 记录行为（测试展示如何使用代码）
-- 支持重构（放心修改，测试捕获破坏）
+**「X 時間分の作業を消すのはもったいない」**
 
-"务实的"捷径 = 在生产环境调试 = 更慢。
+sunk cost fallacy。時間はすでに使った。今の選択肢は二つ。
 
-**"后补测试也能达到相同目的——重要的是精神不是仪式"**
+- 削除して TDD で書き直す（さらに X 時間、高 confidence）
+- 残して後から test を足す（30 分、低 confidence、bug の可能性）
 
-不对。后补测试回答"这段代码做了什么？"先写测试回答"这段代码应该做什么？"
+「もったいない」のは、信頼できない code を残すこと。real test なしに動く code は technical debt である。
 
-后补测试受你实现的偏见影响。你测试的是你构建的东西，而非需求要求的。你验证的是你记得的边界情况，而非发现的。
+**「TDD は教条的すぎる。実務では柔軟さが必要」**
 
-先写测试迫使你在实现前发现边界情况。后补测试验证的是你记住了所有情况（你没有）。
+TDD は実務的である。
 
-30 分钟的后补测试 ≠ TDD。你得到了覆盖率，但失去了测试有效的证明。
+- commit 前に bug を見つける（後から debug するより速い）
+- regression を防ぐ（破壊を test がすぐ示す）
+- behavior を記録する（test が使い方を示す）
+- refactor を支える（test が破壊を捕まえる）
 
-## 常见借口
+「実務的」な shortcut = production で debug = より遅い。
 
-| 借口 | 现实 |
-|------|------|
-| "太简单了不用测" | 简单的代码也会出 bug。测试只需 30 秒。 |
-| "我之后补测试" | 立即通过的测试什么也证明不了。 |
-| "后补测试也能达到相同目的" | 后补测试 = "这做了什么？" 先写测试 = "这应该做什么？" |
-| "已经手动测试过了" | 临时测试 ≠ 系统测试。无记录，无法重现。 |
-| "删除 X 小时的工作太浪费" | 沉没成本谬误。保留未验证的代码就是技术债。 |
-| "留作参考，然后先写测试" | 你会去改编它。那就是后补测试。删除就是删除。 |
-| "需要先探索一下" | 可以。探索完了扔掉，从 TDD 开始。 |
-| "测试难写 = 设计不清楚" | 听测试的。难以测试 = 难以使用。 |
-| "TDD 会拖慢我" | TDD 比调试快。务实 = 先写测试。 |
-| "手动测试更快" | 手动测试无法证明边界情况。每次修改你都得重新测。 |
-| "现有代码没有测试" | 你在改进它。为现有代码补测试。 |
+**「後から test しても目的は同じ。大事なのは精神であって儀式ではない」**
 
-## 危险信号 - 停下来，从头开始
+違う。後から test は「この code は何をしているか」に答える。先に test は「この code は何をすべきか」に答える。
 
-- 先写了代码再写测试
-- 实现完了才补测试
-- 测试立即通过
-- 无法解释测试为什么失败
-- "之后再补"测试
-- 说服自己"就这一次"
-- "我已经手动测试过了"
-- "后补测试也能达到相同目的"
-- "重要的是精神不是仪式"
-- "留作参考"或"改编现有代码"
-- "已经花了 X 小时了，删掉太浪费"
-- "TDD 太教条了，我是在务实"
-- "这次情况不同，因为……"
+後から test は実装 bias を受ける。build したものを test しているのであって、requirement を test していない。覚えていた edge case だけを検証しているのであって、発見していない。
 
-**以上所有情况都意味着：删除代码。用 TDD 从头开始。**
+先に test を書くと、実装前に edge case を見つける。後から test は、すべて覚えていたことを前提にする。実際には覚えていない。
 
-## 示例：Bug 修复
+30 分の後付け test は TDD ではない。coverage は得ても、test が有効である証明を失っている。
 
-**Bug：** 空邮箱被接受了
+## Common Excuses
 
-**红灯**
+| Excuse | Reality |
+| --- | --- |
+| 「簡単すぎて test 不要」 | simple code も bug る。test は 30 秒で書ける。 |
+| 「後で test を足す」 | すぐ通る test は何も証明しない。 |
+| 「後付け test でも同じ」 | 後付け test =「これは何をするか」。先書き test =「これは何をすべきか」。 |
+| 「manual test 済み」 | temporary test は systematic test ではない。記録も再現性もない。 |
+| 「X 時間分を消すのはもったいない」 | sunk cost fallacy。未検証 code を残すことが technical debt。 |
+| 「参考として残し、test を先に書く」 | 必ずそれを改造する。それは後付け test。削除は削除。 |
+| 「先に探索が必要」 | よい。探索が終わったら捨てて、TDD で始める。 |
+| 「test が書きにくい = design が不明瞭」 | test に従う。test しにくい = 使いにくい。 |
+| 「TDD は遅い」 | TDD は debug より速い。実務的 = 先に test。 |
+| 「manual test の方が速い」 | manual test は edge case を証明できない。変更のたびにやり直し。 |
+| 「既存 code に test がない」 | そこを改善する。既存 code に characterization test を足す。 |
+
+## Danger Signals - Stop And Restart
+
+- code を先に書いてから test を書いた
+- 実装完了後に test を足した
+- test が immediately pass した
+- test がなぜ fail したか説明できない
+- 「後で test する」と考えた
+- 「今回だけ」と自分を説得した
+- 「manual test 済み」と考えた
+- 「後付け test でも同じ」と考えた
+- 「大事なのは精神であって儀式ではない」と考えた
+- 「参考として残す」または「既存 code を改造する」と考えた
+- 「もう X 時間かけた。消すのはもったいない」と考えた
+- 「TDD は教条的すぎる。自分は実務的にやっている」と考えた
+- 「今回は事情が違う。なぜなら...」と考えた
+
+**上記はすべて、code を削除して TDD で最初からやり直す合図である。**
+
+## Example: Bug Fix
+
+**Bug:** empty email が受け入れられる。
+
+**Red**
+
 ```typescript
 test('rejects empty email', async () => {
   const result = await submitForm({ email: '' });
@@ -299,13 +319,15 @@ test('rejects empty email', async () => {
 });
 ```
 
-**验证红灯**
+**Verify Red**
+
 ```bash
 $ npm test
 FAIL: expected 'Email required', got undefined
 ```
 
-**绿灯**
+**Green**
+
 ```typescript
 function submitForm(data: FormData) {
   if (!data.email?.trim()) {
@@ -315,57 +337,60 @@ function submitForm(data: FormData) {
 }
 ```
 
-**验证绿灯**
+**Verify Green**
+
 ```bash
 $ npm test
 PASS
 ```
 
-**重构**
-如果需要，提取验证逻辑以支持多个字段。
+**Refactor**
 
-## 验证清单
+必要なら validation logic を抽出し、複数 field に対応できるようにする。
 
-在标记工作完成之前：
+## Verification Checklist
 
-- [ ] 每个新函数/方法都有测试
-- [ ] 在实现之前看到每个测试失败
-- [ ] 每个测试因预期原因失败（功能缺失，不是拼写错误）
-- [ ] 为每个测试编写了最少代码使其通过
-- [ ] 所有测试通过
-- [ ] 输出干净（没有错误、警告）
-- [ ] 测试使用真实代码（只在不可避免时用 mock）
-- [ ] 覆盖了边界情况和错误场景
+作業完了とする前に確認する。
 
-不能全部勾选？你跳过了 TDD。从头开始。
+- [ ] new function / method ごとに test がある
+- [ ] 実装前に各 test が fail することを見た
+- [ ] 各 test は期待した理由で fail した（機能不足であり typo ではない）
+- [ ] 各 test を通すために最小 code を書いた
+- [ ] すべての test が pass している
+- [ ] output が clean（error、warning なし）
+- [ ] test は real code を使っている（mock は不可避な場合のみ）
+- [ ] edge case と error scenario を cover している
 
-## 遇到困难时
+すべて check できないか。TDD を skip した。最初からやり直す。
 
-| 问题 | 解决方案 |
-|------|----------|
-| 不知道怎么测试 | 写出你期望的 API。先写断言。问你的人类伙伴。 |
-| 测试太复杂 | 设计太复杂。简化接口。 |
-| 必须 mock 所有东西 | 代码耦合太紧。使用依赖注入。 |
-| 测试 setup 太庞大 | 提取辅助函数。还是复杂？简化设计。 |
+## When Stuck
 
-## 调试集成
+| Problem | Solution |
+| --- | --- |
+| どう test すればよいか分からない | 期待する API を書く。assertion を先に書く。人間の担当者に確認する。 |
+| test が複雑すぎる | design が複雑すぎる。interface を simple にする。 |
+| すべてを mock しなければならない | code の coupling が強すぎる。dependency injection を使う。 |
+| test setup が巨大 | helper を抽出する。それでも複雑なら design を simple にする。 |
 
-发现 bug？写一个重现 bug 的失败测试。按 TDD 循环走。测试既证明了修复有效，又防止了回归。
+## Debugging Integration
 
-绝不在没有测试的情况下修复 bug。
+bug を見つけたら、その bug を再現する failing test を書く。TDD cycle に従う。test は fix の有効性を証明し、regression も防ぐ。
 
-## 测试反模式
+test なしで bug を直してはいけない。
 
-添加 mock 或测试工具时，阅读 @testing-anti-patterns.md 以避免常见陷阱：
-- 测试 mock 行为而非真实行为
-- 在生产类中添加仅测试用的方法
-- 在不理解依赖的情况下使用 mock
+## Testing Anti-patterns
 
-## 最终规则
+mock や test utility を追加するときは、common pitfall を避けるため `@testing-anti-patterns.md` を読む。
 
+- real behavior ではなく mock behavior を test する
+- production class に test-only method を追加する
+- dependency を理解しないまま mock する
+
+## Final Rule
+
+```text
+production code → test exists and failed first
+otherwise → not TDD
 ```
-生产代码 → 测试存在且先失败
-否则 → 不是 TDD
-```
 
-没有你的人类伙伴的许可，没有例外。
+人間の担当者の許可なしに、例外はない。

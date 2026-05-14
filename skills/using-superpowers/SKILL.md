@@ -4,135 +4,142 @@ description: すべての会話開始時に使用する。skill の探し方と�
 ---
 
 <SUBAGENT-STOP>
-如果你是作为子智能体被分派来执行特定任务的，跳过此技能。
+特定 task のために dispatch された subagent として動作している場合、この skill は skip する。
 </SUBAGENT-STOP>
 
 <EXTREMELY-IMPORTANT>
-如果你认为哪怕只有 1% 的可能性某个技能适用于你正在做的事情，你绝对必须调用该技能。
+現在の作業に適用できる skill が 1% でもありそうなら、その skill を必ず呼び出す。
 
-如果一个技能适用于你的任务，你没有选择。你必须使用它。
+skill が task に適用される場合、選択肢はない。必ず使う。
 
-这不可协商。这不是可选的。你不能通过合理化来逃避。
+これは交渉不可。optional ではない。理由をつけて回避してはいけない。
 </EXTREMELY-IMPORTANT>
 
-## 指令优先级
+## Instruction Priority
 
-Superpowers 技能覆盖默认系统提示行为，但**用户指令始终具有最高优先级**：
+Superpowers skills は default system prompt の振る舞いを上書きする。ただし、**ユーザー指示は常に最優先**。
 
-1. **用户的明确指令**（CLAUDE.md、GEMINI.md、AGENTS.md、直接请求）——最高优先级
-2. **Superpowers 技能** ——在冲突处覆盖默认系统行为
-3. **默认系统提示** ——最低优先级
+1. **ユーザーの明示指示**（CLAUDE.md、GEMINI.md、AGENTS.md、直接依頼）— 最優先
+2. **Superpowers skills** — conflict する箇所で default system behavior を上書き
+3. **Default system prompt** — 最低優先度
 
-如果 CLAUDE.md、GEMINI.md 或 AGENTS.md 说"不要使用 TDD"，而某个技能说"始终使用 TDD"，遵循用户的指令。用户拥有控制权。
+CLAUDE.md、GEMINI.md、AGENTS.md が「TDD を使わない」と指示し、skill が「常に TDD を使う」と言う場合は、ユーザー指示に従う。control はユーザーにある。
 
-## 如何访问技能
+## Skill へのアクセス方法
 
-**在 Claude Code 中：** 使用 `Skill` 工具。当你调用一个技能时，其内容会被加载并呈现给你——直接遵循即可。绝不要用 Read 工具读取技能文件。
+**Claude Code:** `Skill` tool を使う。skill を呼び出すと内容が読み込まれるので、そのまま従う。`Read` tool で skill file を直接読まない。
 
-**在 Copilot CLI 中：** 使用 `skill` 工具。技能从已安装的插件中自动发现。`skill` 工具的工作方式与 Claude Code 的 `Skill` 工具相同。
+**Copilot CLI:** `skill` tool を使う。skill は install 済み plugin から自動発見される。`skill` tool は Claude Code の `Skill` tool と同じ役割を持つ。
 
-**在 Hermes Agent 中：** 使用 `skill_view` 工具加载技能。Hermes 支持三级渐进式加载：`skills_list` 浏览 → `skill_view(name)` 加载完整内容 → `skill_view(name, path)` 查看引用文件。
+**Hermes Agent:** `skill_view` tool で skill を読み込む。Hermes は 3 段階の progressive loading を持つ: `skills_list` で一覧 → `skill_view(name)` で full content → `skill_view(name, path)` で reference file。
 
-**在 Gemini CLI 中：** 技能通过 `activate_skill` 工具激活。Gemini 在会话开始时加载技能元数据，并按需激活完整内容。
+**Gemini CLI:** `activate_skill` tool で skill を有効化する。Gemini は session 開始時に skill metadata を読み込み、必要に応じて full content を activate する。
 
-**在其他环境中：** 查看你的平台文档了解技能的加载方式。
+**その他の環境:** platform documentation を確認し、skill loading の方法に従う。
 
-## 平台适配
+## Platform Adaptation
 
-技能使用 Claude Code 的工具名称。非 CC 平台：查看 `references/copilot-tools.md`（Copilot CLI）、`references/hermes-tools.md`（Hermes Agent）、`references/codex-tools.md`（Codex）了解工具对应关系。Gemini CLI 用户通过 GEMINI.md 自动获得工具映射。
+skills は Claude Code の tool 名を使う。Claude Code 以外の platform では、次の mapping を確認する。
 
-# 使用技能
+- Copilot CLI: `references/copilot-tools.md`
+- Hermes Agent: `references/hermes-tools.md`
+- Codex: `references/codex-tools.md`
+- Gemini CLI: GEMINI.md に tool mapping が自動注入される
 
-## 规则
+# Using Skills
 
-**在任何响应或操作之前调用相关或被请求的技能。** 哪怕只有 1% 的可能性某个技能适用，你都应该调用该技能来检查。如果调用后发现技能不适合当前情况，你不需要使用它。
+## Rules
+
+**response、確認質問、操作の前に、関連する skill または明示的に求められた skill を呼び出す。** 適用可能性が 1% でもあれば、skill を呼び出して確認する。呼び出した結果、現在の状況に合わないと分かった場合は、その skill を使わなくてよい。
 
 ```dot
 digraph skill_flow {
-    "收到用户消息" [shape=doublecircle];
-    "即将进入 EnterPlanMode？" [shape=doublecircle];
-    "已经头脑风暴过？" [shape=diamond];
-    "调用头脑风暴技能" [shape=box];
-    "可能有技能适用？" [shape=diamond];
-    "调用 Skill 工具" [shape=box];
-    "宣布：'使用 [技能] 来 [目的]'" [shape=box];
-    "有检查清单？" [shape=diamond];
-    "为每个条目创建 TodoWrite 待办" [shape=box];
-    "严格遵循技能" [shape=box];
-    "响应（包括澄清）" [shape=doublecircle];
+    "ユーザー message を受け取る" [shape=doublecircle];
+    "EnterPlanMode に入る直前?" [shape=doublecircle];
+    "brainstorming 済み?" [shape=diamond];
+    "brainstorming skill を呼び出す" [shape=box];
+    "適用できそうな skill がある?" [shape=diamond];
+    "Skill tool を呼び出す" [shape=box];
+    "宣言: '[skill] を使って [目的] を進めます'" [shape=box];
+    "checklist がある?" [shape=diamond];
+    "各項目を TodoWrite に登録" [shape=box];
+    "skill に厳密に従う" [shape=box];
+    "response（確認質問を含む）" [shape=doublecircle];
 
-    "即将进入 EnterPlanMode？" -> "已经头脑风暴过？";
-    "已经头脑风暴过？" -> "调用头脑风暴技能" [label="否"];
-    "已经头脑风暴过？" -> "可能有技能适用？" [label="是"];
-    "调用头脑风暴技能" -> "可能有技能适用？";
+    "EnterPlanMode に入る直前?" -> "brainstorming 済み?";
+    "brainstorming 済み?" -> "brainstorming skill を呼び出す" [label="no"];
+    "brainstorming 済み?" -> "適用できそうな skill がある?" [label="yes"];
+    "brainstorming skill を呼び出す" -> "適用できそうな skill がある?";
 
-    "收到用户消息" -> "可能有技能适用？";
-    "可能有技能适用？" -> "调用 Skill 工具" [label="是，哪怕只有 1%"];
-    "可能有技能适用？" -> "响应（包括澄清）" [label="确定不适用"];
-    "调用 Skill 工具" -> "宣布：'使用 [技能] 来 [目的]'";
-    "宣布：'使用 [技能] 来 [目的]'" -> "有检查清单？";
-    "有检查清单？" -> "为每个条目创建 TodoWrite 待办" [label="是"];
-    "有检查清单？" -> "严格遵循技能" [label="否"];
-    "为每个条目创建 TodoWrite 待办" -> "严格遵循技能";
+    "ユーザー message を受け取る" -> "適用できそうな skill がある?";
+    "適用できそうな skill がある?" -> "Skill tool を呼び出す" [label="yes, 1% でも"];
+    "適用できそうな skill がある?" -> "response（確認質問を含む）" [label="確実にない"];
+    "Skill tool を呼び出す" -> "宣言: '[skill] を使って [目的] を進めます'";
+    "宣言: '[skill] を使って [目的] を進めます'" -> "checklist がある?";
+    "checklist がある?" -> "各項目を TodoWrite に登録" [label="yes"];
+    "checklist がある?" -> "skill に厳密に従う" [label="no"];
+    "各項目を TodoWrite に登録" -> "skill に厳密に従う";
 }
 ```
 
-## 红线
+## Red Lines
 
-这些想法意味着停下——你在合理化：
+次の考えが浮かんだら停止する。これは rationalization である。
 
-| 想法 | 现实 |
-|------|------|
-| "这只是一个简单的问题" | 问题就是任务。检查技能。 |
-| "我需要先了解更多上下文" | 技能检查在澄清性问题之前。 |
-| "让我先探索一下代码库" | 技能告诉你如何探索。先检查。 |
-| "我可以快速查一下 git/文件" | 文件缺少对话上下文。检查技能。 |
-| "让我先收集信息" | 技能告诉你如何收集信息。 |
-| "这不需要正式的技能" | 如果技能存在，就使用它。 |
-| "我记得这个技能" | 技能会迭代更新。阅读当前版本。 |
-| "这不算一个任务" | 行动 = 任务。检查技能。 |
-| "技能太小题大做了" | 简单的事会变复杂。使用它。 |
-| "让我先做这一件事" | 在做任何事之前先检查。 |
-| "这样做感觉很高效" | 无纪律的行动浪费时间。技能防止这一点。 |
-| "我知道那是什么意思" | 知道概念 ≠ 使用技能。调用它。 |
+| 思考 | 現実 |
+| --- | --- |
+| 「これはただの簡単な質問」 | 質問も task。skill を確認する。 |
+| 「先にもう少し context が必要」 | clarifying question より先に skill check。 |
+| 「まず codebase を見てから」 | skill が探索方法を教える。先に確認する。 |
+| 「git / file を軽く見るだけ」 | file には会話 context がない。skill を確認する。 |
+| 「先に情報収集だけする」 | skill が情報収集の進め方を教える。 |
+| 「正式な skill は不要」 | skill があるなら使う。 |
+| 「この skill は覚えている」 | skill は更新される。現在版を読む。 |
+| 「これは task ではない」 | action = task。skill を確認する。 |
+| 「skill は大げさ」 | 単純なものほど複雑化しやすい。使う。 |
+| 「これだけ先にやる」 | 何かをする前に確認する。 |
+| 「この方が効率的に感じる」 | discipline のない行動は時間を浪費する。skill がそれを防ぐ。 |
+| 「意味は分かっている」 | concept を知っていることと skill を使うことは違う。呼び出す。 |
 
-## 技能优先级
+## Skill Priority
 
-当多个技能可能适用时，使用此顺序：
+複数の skill が適用できそうな場合は、次の順序で使う。
 
-1. **流程技能优先**（头脑风暴、调试）- 这些决定如何处理任务
-2. **实现技能其次**（前端设计、mcp-builder）- 这些指导执行
+1. **process skill を優先**（brainstorming、debugging）— task の扱い方を決める
+2. **implementation skill を次に使う**（frontend design、mcp-builder）— 実行方法を導く
 
-"让我们构建 X" → 先头脑风暴，再使用实现技能。
-"修复这个 bug" → 先调试，再使用领域特定技能。
+「X を作りましょう」→ 先に brainstorming、その後 implementation skill。
 
-## 日本向け skill ルーティング
+「この bug を直して」→ 先に debugging、その後 domain-specific skill。
 
-以下の場面では、該当する日本向け skill を優先的に確認する：
+## 日本向け Skill Routing
 
-| 场景 | 调用技能 |
-|------|---------|
-| コードレビューで日本語のチームコミュニケーションが必要 | **superpowers:japanese-code-review** |
-| GitHub / GitLab / Bitbucket / Backlog / Redmine / Jira を使う開発フロー | **superpowers:japanese-git-workflow** |
+次の場面では、該当する日本向け skill を優先的に確認する。
+
+| 場面 | 呼び出す skill |
+| --- | --- |
+| code review で日本語の team communication が必要 | **superpowers:japanese-code-review** |
+| GitHub / GitLab / Bitbucket / Backlog / Redmine / Jira を使う開発 flow | **superpowers:japanese-git-workflow** |
 | 日本語の仕様書、設計書、README、API 仕様、運用手順を書く | **superpowers:japanese-documentation** |
-| 日本語プロジェクトの git commit message / changelog を書く | **superpowers:japanese-commit-conventions** |
+| 日本語 project の git commit message / changelog を書く | **superpowers:japanese-commit-conventions** |
 | MCP server / tool を構築する | **superpowers:mcp-builder** |
 
-**判断依据：**
-- プロジェクトに日本語 README、設計書、コメント、Backlog / Redmine / Jira の参照がある → 日本向け skill を確認する
-- commit 履歴や PR/MR が日本語 → japanese-commit-conventions を確認する
+**判断基準:**
+
+- project に日本語 README、設計書、comment、Backlog / Redmine / Jira の参照がある → 日本向け skill を確認する
+- commit 履歴や PR / MR が日本語 → `japanese-commit-conventions` を確認する
 - ユーザーが日本語で依頼している → 出力は日本語を基本にし、日本の開発現場の確認観点を優先する
 
-日本向け skill は翻訳済みの upstream skill と**重ねて使う**。例：レビュー時は requesting-code-review（プロセス）+ japanese-code-review（表現・現場観点）を併用する。
+日本向け skill は翻訳済み upstream skill と**重ねて使う**。例: review 時は `requesting-code-review`（process）と `japanese-code-review`（表現・現場観点）を併用する。
 
-## 技能类型
+## Skill Types
 
-**刚性的**（TDD、调试）：严格遵循。不要偏离纪律。
+**Rigid**（TDD、debugging）: 厳密に従う。discipline から逸脱しない。
 
-**灵活的**（模式）：根据上下文调整原则。
+**Flexible**（pattern）: context に応じて principle を適用する。
 
-技能本身会告诉你它属于哪种。
+skill 自体がどちらの type かを示す。
 
-## 用户指令
+## User Instructions
 
-指令说明做什么，而非怎么做。"添加 X"或"修复 Y"不意味着跳过工作流。
+instruction は「何をするか」を示すものであり、「workflow を skip してよい」という意味ではない。「X を追加して」「Y を修正して」は、workflow を省略する許可ではない。

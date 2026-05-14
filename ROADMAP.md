@@ -11,8 +11,8 @@
 | P0 | `brainstorming` | 新規 feature、仕様確認、設計相談で最初に使われることが多い | Done |
 | P0 | `executing-plans` | 計画を別 session で実行する場面で必ず呼ばれる | Done |
 | P0 | `finishing-a-development-branch` | 実装完了後の merge / PR 判断で常用される | Done |
-| P0 | `using-superpowers` | bootstrap 後に agent が skill 利用方針を理解する入口 | Todo |
-| P1 | `test-driven-development` | 日本企業で重視される品質保証、レビュー、受入条件に直結する | Todo |
+| P0 | `using-superpowers` | bootstrap 後に agent が skill 利用方針を理解する入口 | Done |
+| P1 | `test-driven-development` | 日本企業で重視される品質保証、レビュー、受入条件に直結する | Done |
 | P1 | `systematic-debugging` | 障害調査、不具合修正、再発防止で利用頻度が高い | Todo |
 | P1 | `verification-before-completion` | 完了報告前の検証証跡を強制し、現場運用品質に効く | Todo |
 
