@@ -3,178 +3,180 @@ name: finishing-a-development-branch
 description: 実装完了後、テスト通過後、作業を merge / PR / 保持 / 破棄のどれで終えるか判断する場合に使用する。
 ---
 
-# 完成开发分支
+# 開発ブランチの完了
 
-## 概述
+## 概要
 
-通过提供清晰的选项并执行所选工作流来引导开发工作的收尾。
+開発作業の終わり方を、明確な選択肢として提示し、選ばれた workflow を安全に実行する。
 
-**核心原则：** 验证测试 → 检测环境 → 展示选项 → 执行选择 → 清理。
+**基本原則:** テスト検証 → 環境確認 → 選択肢提示 → 選択内容の実行 → 必要な cleanup。
 
-**开始时宣布：** "我正在使用 finishing-a-development-branch 技能来完成这项工作。"
+**開始時の宣言:** 「finishing-a-development-branch skill を使って、この作業の完了処理を進めます。」
 
-## 流程
+## 手順
 
-### 步骤 1：验证测试
+### Step 1: テストを検証する
 
-**在展示选项之前，验证测试通过：**
+**選択肢を提示する前に、テストが通ることを確認する。**
 
 ```bash
-# 运行项目的测试套件
+# プロジェクトの test suite を実行する
 npm test / cargo test / pytest / go test ./...
 ```
 
-**如果测试失败：**
+**テストが失敗した場合:**
 
+```text
+テストが失敗しています（<N> 件）。先に修正が必要です。
+
+[失敗内容を表示]
+
+テストが通るまで merge / PR 作成には進めません。
 ```
-测试失败（<N> 个失败）。必须先修复才能继续：
 
-[显示失败信息]
+ここで停止する。Step 2 へ進まない。
 
-在测试通过之前无法进行合并/PR。
-```
+**テストが通った場合:** Step 2 へ進む。
 
-停止。不要继续到步骤 2。
+### Step 2: 作業環境を確認する
 
-**如果测试通过：** 继续步骤 2。
-
-### 步骤 2：检测环境
-
-**在展示选项之前，先确定工作区状态：**
+**選択肢を提示する前に、現在の worktree 状態を確認する。**
 
 ```bash
 GIT_DIR=$(cd "$(git rev-parse --git-dir)" 2>/dev/null && pwd -P)
 GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 ```
 
-这决定了展示哪种菜单、以及清理方式：
+この結果で、提示する menu と cleanup 方針が決まる。
 
-| 状态 | 菜单 | 清理 |
-|------|------|------|
-| `GIT_DIR == GIT_COMMON`（普通仓库） | 标准 4 个选项 | 无 worktree 可清理 |
-| `GIT_DIR != GIT_COMMON`，命名分支 | 标准 4 个选项 | 按来源判断（见步骤 6） |
-| `GIT_DIR != GIT_COMMON`，分离 HEAD | 收敛 3 个选项（无合并） | 无清理（由外部管理） |
+| 状態 | Menu | Cleanup |
+| --- | --- | --- |
+| `GIT_DIR == GIT_COMMON`（通常 repository） | 標準の 4 択 | cleanup する worktree なし |
+| `GIT_DIR != GIT_COMMON` かつ named branch | 標準の 4 択 | 作成元を確認して判断 |
+| `GIT_DIR != GIT_COMMON` かつ detached HEAD | merge なしの 3 択 | 外部管理として cleanup しない |
 
-### 步骤 3：确定基础分支
+### Step 3: base branch を特定する
 
 ```bash
-# 尝试常见的基础分支
+# よく使われる base branch を試す
 git merge-base HEAD main 2>/dev/null || git merge-base HEAD master 2>/dev/null
 ```
 
-或者询问："这个分支是从 main 分出来的——对吗？"
+不明な場合は確認する: 「この branch は main から切ったもので合っていますか。」
 
-### 步骤 4：展示选项
+### Step 4: 選択肢を提示する
 
-**普通仓库和命名分支 worktree —— 准确展示以下 4 个选项：**
+**通常 repository または named branch worktree の場合は、正確に次の 4 択を提示する。**
 
-```
-实现已完成。你想怎么做？
+```text
+実装は完了しています。次を選んでください。
 
-1. 在本地合并回 <base-branch>
-2. 推送并创建 Pull Request
-3. 保持分支现状（我稍后处理）
-4. 丢弃这项工作
+1. ローカルで <base-branch> に merge する
+2. push して Pull Request を作成する
+3. branch / worktree をこのまま残す
+4. この作業を破棄する
 
-选哪个？
-```
-
-**分离 HEAD —— 准确展示以下 3 个选项：**
-
-```
-实现已完成。你在分离 HEAD 上（由外部管理的工作区）。
-
-1. 作为新分支推送并创建 Pull Request
-2. 保持现状（我稍后处理）
-3. 丢弃这项工作
-
-选哪个？
+どれにしますか。
 ```
 
-**不要添加解释** —— 保持选项简洁。
+**detached HEAD の場合は、正確に次の 3 択を提示する。**
 
-### 步骤 5：执行选择
+```text
+実装は完了しています。現在は detached HEAD です（外部管理の worktree と判断します）。
 
-#### 选项 1：本地合并
+1. 新しい branch として push し、Pull Request を作成する
+2. 現状をこのまま残す
+3. この作業を破棄する
+
+どれにしますか。
+```
+
+余計な説明を足さず、選択肢を簡潔に保つ。
+
+### Step 5: 選択内容を実行する
+
+#### Option 1: ローカル merge
 
 ```bash
-# 切到主仓库根目录，保证 CWD 安全
+# main repository root へ移動し、CWD を安全にする
 MAIN_ROOT=$(git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel)
 cd "$MAIN_ROOT"
 
-# 先合并 —— 在删除任何东西之前先验证合并成功
+# 先に merge する。何かを削除する前に merge 成功を確認する
 git checkout <base-branch>
 git pull
 git merge <feature-branch>
 
-# 在合并结果上验证测试
+# merge 後の状態で再度 test を検証する
 <test command>
-
-# 合并成功之后再：清理 worktree（步骤 6），然后删除分支
 ```
 
-然后：清理 worktree（步骤 6），再删除分支：
+merge と検証が成功した後、Step 6 の cleanup を行い、branch を削除する。
 
 ```bash
 git branch -d <feature-branch>
 ```
 
-#### 选项 2：推送并创建 PR
+#### Option 2: push して PR を作成
 
 ```bash
-# 推送分支
 git push -u origin <feature-branch>
 
-# 创建 PR
 gh pr create --title "<title>" --body "$(cat <<'EOF'
-## 摘要
-<2-3 条变更要点>
+## Summary
+- <変更点 1>
+- <変更点 2>
 
-## 测试计划
-- [ ] <验证步骤>
+## Test Plan
+- [ ] <検証手順>
 EOF
 )"
 ```
 
-**不要清理 worktree** —— 用户在 PR 反馈迭代时还需要它存活。
+PR feedback への対応で worktree が必要になるため、cleanup しない。
 
-#### 选项 3：保持现状
+#### Option 3: 現状を残す
 
-报告："保留分支 <name>。工作树保留在 <path>。"
+次のように報告する。
 
-**不要清理工作树。**
-
-#### 选项 4：丢弃
-
-**先确认：**
-
-```
-这将永久删除：
-- 分支 <name>
-- 所有提交：<commit-list>
-- 工作树 <path>
-
-输入 'discard' 确认。
+```text
+branch <name> を残しました。worktree は <path> に残っています。
 ```
 
-等待精确的确认。
+worktree は cleanup しない。
 
-确认后：
+#### Option 4: 破棄
+
+**先に確認する。**
+
+```text
+次の内容を完全に削除します。
+
+- branch: <name>
+- commits: <commit-list>
+- worktree: <path>
+
+破棄する場合は `discard` と入力してください。
+```
+
+正確に `discard` と入力されるまで実行しない。
+
+確認後:
 
 ```bash
 MAIN_ROOT=$(git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel)
 cd "$MAIN_ROOT"
 ```
 
-然后：清理 worktree（步骤 6），再强制删除分支：
+Step 6 の cleanup を行い、branch を強制削除する。
 
 ```bash
 git branch -D <feature-branch>
 ```
 
-### 步骤 6：清理工作区
+### Step 6: worktree を cleanup する
 
-**只对选项 1 和 4 执行。** 选项 2 和 3 始终保留 worktree。
+**Option 1 と Option 4 の場合だけ実行する。** Option 2 と Option 3 では常に worktree を残す。
 
 ```bash
 GIT_DIR=$(cd "$(git rev-parse --git-dir)" 2>/dev/null && pwd -P)
@@ -182,94 +184,94 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 WORKTREE_PATH=$(git rev-parse --show-toplevel)
 ```
 
-**如果 `GIT_DIR == GIT_COMMON`：** 普通仓库，无 worktree 可清理。结束。
+**`GIT_DIR == GIT_COMMON` の場合:** 通常 repository なので cleanup する worktree はない。終了する。
 
-**如果 worktree 路径在 `.worktrees/`、`worktrees/` 或 `~/.config/superpowers/worktrees/` 之下：** 这是 Superpowers 创建的 worktree —— 我们负责清理。
+**worktree path が `.worktrees/`、`worktrees/`、または `~/.config/superpowers/worktrees/` 配下の場合:** Superpowers が作成した worktree と判断し、cleanup 対象にする。
 
 ```bash
 MAIN_ROOT=$(git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel)
 cd "$MAIN_ROOT"
 git worktree remove "$WORKTREE_PATH"
-git worktree prune  # 自愈：清理任何过期的注册记录
+git worktree prune
 ```
 
-**否则：** 这个工作区由宿主环境（harness）管理。**不要**移除它。如果你的平台提供了工作区退出工具，用它。否则原样保留工作区。
+**それ以外の場合:** harness や外部 tool が管理している worktree と判断し、削除しない。platform に worktree 終了用の手段があればそれを使う。なければそのまま残す。
 
-## 快速参考
+## Quick Reference
 
-| 选项 | 合并 | 推送 | 保留工作树 | 清理分支 |
-|------|------|------|-----------|---------|
-| 1. 本地合并 | ✓ | - | - | ✓ |
-| 2. 创建 PR | - | ✓ | ✓ | - |
-| 3. 保持现状 | - | - | ✓ | - |
-| 4. 丢弃 | - | - | - | ✓（强制） |
+| Option | Merge | Push | Worktree を残す | Branch cleanup |
+| --- | --- | --- | --- | --- |
+| 1. ローカル merge | yes | no | no | yes |
+| 2. PR 作成 | no | yes | yes | no |
+| 3. 現状維持 | no | no | yes | no |
+| 4. 破棄 | no | no | no | yes, force |
 
-## 常见错误
+## よくある失敗
 
-**跳过测试验证**
+**テスト検証を省略する**
 
-- **问题：** 合并损坏的代码、创建失败的 PR
-- **修复：** 在提供选项前始终验证测试
+- 問題: 壊れた code を merge したり、失敗する PR を作成したりする
+- 対応: 選択肢を提示する前に必ず test を実行する
 
-**开放式问题**
+**自由回答の質問にする**
 
-- **问题：** "接下来该做什么？" → 含糊不清
-- **修复：** 准确展示 4 个结构化选项（分离 HEAD 时是 3 个）
+- 問題: 「次にどうしますか」だけでは曖昧
+- 対応: 通常時は 4 択、detached HEAD では 3 択を正確に提示する
 
-**为选项 2 清理 worktree**
+**Option 2 で worktree を cleanup する**
 
-- **问题：** 删掉用户 PR 迭代还需要的 worktree
-- **修复：** 只在选项 1 和 4 时清理
+- 問題: PR feedback 対応に必要な worktree を消してしまう
+- 対応: cleanup は Option 1 と Option 4 のみに限定する
 
-**先删分支再删 worktree**
+**branch を先に消してから worktree を消そうとする**
 
-- **问题：** `git branch -d` 失败，因为 worktree 还引用着该分支
-- **修复：** 先合并，再删 worktree，最后删分支
+- 問題: branch が worktree に参照されていて `git branch -d` が失敗する
+- 対応: merge、worktree cleanup、branch 削除の順で進める
 
-**在 worktree 内部跑 `git worktree remove`**
+**削除対象 worktree の中で `git worktree remove` を実行する**
 
-- **问题：** 当 CWD 在被删除的 worktree 内时，命令静默失败
-- **修复：** 跑 `git worktree remove` 前先 `cd` 到主仓库根目录
+- 問題: CWD が削除対象内にあると command が失敗しやすい
+- 対応: 実行前に main repository root へ `cd` する
 
-**清理 harness 拥有的 worktree**
+**harness 管理の worktree を削除する**
 
-- **问题：** 移除 harness 创建的 worktree 会造成幻影状态
-- **修复：** 只清理 `.worktrees/`、`worktrees/` 或 `~/.config/superpowers/worktrees/` 下的 worktree
+- 問題: 外部環境が保持している作業状態を壊す
+- 対応: Superpowers が作成したと判断できる path だけ cleanup する
 
-**丢弃时不确认**
+**破棄時に確認を取らない**
 
-- **问题：** 意外删除工作成果
-- **修复：** 要求输入 'discard' 确认
+- 問題: 作業成果を意図せず削除する
+- 対応: `discard` の明示入力を要求する
 
-## 红线
+## Red Lines
 
-**绝不：**
+**絶対にしないこと:**
 
-- 在测试失败时继续
-- 合并前不验证合并结果上的测试
-- 不确认就删除工作成果
-- 未经明确请求就强制推送
-- 在确认合并成功之前移除 worktree
-- 清理不是你创建的 worktree（按来源判断）
-- 在 worktree 内部跑 `git worktree remove`
+- テスト失敗のまま進める
+- merge 後の状態で test を検証しない
+- 確認なしに成果物を削除する
+- 明示依頼なしに force push する
+- merge 成功を確認する前に worktree を削除する
+- 自分が作成したと判断できない worktree を削除する
+- 削除対象 worktree の中で `git worktree remove` を実行する
 
-**始终：**
+**必ずすること:**
 
-- 在提供选项前验证测试
-- 展示菜单前检测环境
-- 准确展示 4 个选项（分离 HEAD 时是 3 个）
-- 选项 4 要求输入确认
-- 只在选项 1 和 4 时清理 worktree
-- 移除 worktree 前 `cd` 到主仓库根目录
-- 移除后跑 `git worktree prune`
+- 選択肢を提示する前に test を検証する
+- menu を出す前に環境を確認する
+- 通常時は 4 択、detached HEAD では 3 択を正確に提示する
+- Option 4 では明示確認を取る
+- cleanup は Option 1 と Option 4 のみに限定する
+- worktree remove 前に main repository root へ移動する
+- remove 後に `git worktree prune` を実行する
 
-## 集成
+## Integration
 
-**被以下技能调用：**
+**この skill を呼び出す skill:**
 
-- **subagent-driven-development**（步骤 7）- 所有任务完成后
-- **executing-plans**（步骤 5）- 所有批次完成后
+- **subagent-driven-development** - 全 task 完了後
+- **executing-plans** - 全 batch 完了後
 
-**配合使用：**
+**併用する skill:**
 
-- **using-git-worktrees** - 清理由该技能创建的工作树
+- **using-git-worktrees** - この skill が作成した worktree の cleanup 方針と合わせる

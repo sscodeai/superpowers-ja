@@ -3,162 +3,166 @@ name: brainstorming
 description: "創造的な作業の前に必ず使用する。機能作成、component 構築、機能追加、振る舞い変更では、実装前にユーザー意図、要求、設計を探索する。"
 ---
 
-# 头脑风暴：将想法转化为设计
+# Brainstorming: アイデアを設計へ変換する
 
-通过自然的协作对话，帮助将想法转化为完整的设计和规格说明。
+自然な協業対話を通じて、アイデアを実装可能な design と specification に育てる。
 
-首先了解当前项目的上下文，然后逐一提问来完善想法。一旦你理解了要构建的内容，就展示设计方案并获得用户批准。
+まず現在の project context を理解し、質問を一つずつ行って idea を具体化する。何を作るべきか理解できたら、設計案を提示し、ユーザーの承認を得る。
 
 <HARD-GATE>
-在你展示设计方案并获得用户批准之前，不要调用任何实现技能、编写任何代码、搭建任何项目或采取任何实现行动。这适用于所有项目，无论看起来多简单。
+設計案を提示し、ユーザーの承認を得るまで、実装 skill を呼び出さない。code を書かない。project を scaffold しない。実装作業を始めない。これは、どれほど簡単に見える project にも適用する。
 </HARD-GATE>
 
-## 反模式："这个太简单了，不需要设计"
+## Anti-pattern: 「これは簡単なので設計はいらない」
 
-每个项目都要经过这个流程。一个待办事项列表、一个单函数工具、一个配置变更——全都需要。"简单"的项目恰恰是未经检验的假设造成最多浪费的地方。设计可以很简短（对于真正简单的项目几句话就够了），但你必须展示出来并获得批准。
+すべての project でこの process を通る。Todo list、単一関数の tool、設定変更も例外ではない。「簡単」な project ほど、未検証の前提で手戻りが起きやすい。設計は短くてよい。実際に単純なら数文で足りる。ただし、必ず提示し、承認を得る。
 
-## 检查清单
+## Checklist
 
-你必须为以下每个条目创建任务，并按顺序完成：
+次の各項目を task として作成し、順番に完了する。
 
-1. **探索项目上下文** — 检查文件、文档、最近的 commit
-2. **提供视觉伴侣**（如果主题涉及视觉问题）— 这是一条独立的消息，不要与澄清问题合并。参见下方的"视觉伴侣"部分。
-3. **提出澄清问题** — 每次一个，了解目的/约束/成功标准
-4. **提出 2-3 种方案** — 附带权衡分析和你的推荐
-5. **展示设计** — 按复杂度分节展示，每节展示后获得用户批准
-6. **编写设计文档** — 保存到 `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` 并 commit
-7. **规格自检** — 快速内联检查占位符、矛盾、模糊性、范围（详见下方）
-8. **用户审查书面规格** — 在继续之前请用户审查规格文件
-9. **过渡到实现** — 调用 writing-plans 技能创建实现计划
+1. **project context を探索する** — file、document、最近の commit を確認する
+2. **visual companion を提案する**（視覚的な論点がある場合）— これは独立した message とし、clarifying question と混ぜない。下の「Visual Companion」を参照する
+3. **clarifying question を行う** — 一度に一つだけ。目的、制約、成功条件を確認する
+4. **2-3 個の approach を提示する** — trade-off と推奨案を含める
+5. **design を提示する** — 複雑さに応じて section 分けし、各 section ごとに承認を得る
+6. **design document を書く** — `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` に保存し、commit する
+7. **spec self-check を行う** — placeholder、矛盾、曖昧さ、scope を inline で確認し修正する
+8. **書面 spec をユーザーに review してもらう** — 続行前に spec file の review を依頼する
+9. **implementation へ移行する** — `writing-plans` skill を呼び出し、実装計画を作る
 
-## 流程图
+## Flow
 
 ```dot
 digraph brainstorming {
-    "探索项目上下文" [shape=box];
-    "有视觉相关问题?" [shape=diamond];
-    "提供视觉伴侣\n（独立消息，不含其他内容）" [shape=box];
-    "提出澄清问题" [shape=box];
-    "提出 2-3 种方案" [shape=box];
-    "分节展示设计" [shape=box];
-    "用户批准设计?" [shape=diamond];
-    "编写设计文档" [shape=box];
-    "规格自检\n（内联修复）" [shape=box];
-    "用户审查规格?" [shape=diamond];
-    "调用 writing-plans 技能" [shape=doublecircle];
+    "project context を探索" [shape=box];
+    "視覚的な論点がある?" [shape=diamond];
+    "visual companion を提案\n（独立 message）" [shape=box];
+    "clarifying question" [shape=box];
+    "2-3 個の approach を提示" [shape=box];
+    "design を section ごとに提示" [shape=box];
+    "ユーザーが design を承認?" [shape=diamond];
+    "design document を作成" [shape=box];
+    "spec self-check\n（inline 修正）" [shape=box];
+    "ユーザーが spec を承認?" [shape=diamond];
+    "writing-plans skill を呼び出す" [shape=doublecircle];
 
-    "探索项目上下文" -> "有视觉相关问题?";
-    "有视觉相关问题?" -> "提供视觉伴侣\n（独立消息，不含其他内容）" [label="是"];
-    "有视觉相关问题?" -> "提出澄清问题" [label="否"];
-    "提供视觉伴侣\n（独立消息，不含其他内容）" -> "提出澄清问题";
-    "提出澄清问题" -> "提出 2-3 种方案";
-    "提出 2-3 种方案" -> "分节展示设计";
-    "分节展示设计" -> "用户批准设计?";
-    "用户批准设计?" -> "分节展示设计" [label="否，修改"];
-    "用户批准设计?" -> "编写设计文档" [label="是"];
-    "编写设计文档" -> "规格自检\n（内联修复）";
-    "规格自检\n（内联修复）" -> "用户审查规格?";
-    "用户审查规格?" -> "编写设计文档" [label="要求修改"];
-    "用户审查规格?" -> "调用 writing-plans 技能" [label="批准"];
+    "project context を探索" -> "視覚的な論点がある?";
+    "視覚的な論点がある?" -> "visual companion を提案\n（独立 message）" [label="yes"];
+    "視覚的な論点がある?" -> "clarifying question" [label="no"];
+    "visual companion を提案\n（独立 message）" -> "clarifying question";
+    "clarifying question" -> "2-3 個の approach を提示";
+    "2-3 個の approach を提示" -> "design を section ごとに提示";
+    "design を section ごとに提示" -> "ユーザーが design を承認?";
+    "ユーザーが design を承認?" -> "design を section ごとに提示" [label="no, revise"];
+    "ユーザーが design を承認?" -> "design document を作成" [label="yes"];
+    "design document を作成" -> "spec self-check\n（inline 修正）";
+    "spec self-check\n（inline 修正）" -> "ユーザーが spec を承認?";
+    "ユーザーが spec を承認?" -> "design document を作成" [label="revise"];
+    "ユーザーが spec を承認?" -> "writing-plans skill を呼び出す" [label="approved"];
 }
 ```
 
-**终止状态是调用 writing-plans。** 不要调用 frontend-design、mcp-builder 或任何其他实现技能。头脑风暴之后你唯一要调用的技能是 writing-plans。
+**終了状態は `writing-plans` の呼び出し。** `frontend-design`、`mcp-builder`、その他の実装 skill は呼び出さない。brainstorming の後に呼び出す唯一の skill は `writing-plans`。
 
-## 流程详述
+## Process Details
 
-**理解想法：**
+**idea を理解する:**
 
-- 首先查看当前项目状态（文件、文档、最近的 commit）
-- 在提出详细问题之前，先评估范围：如果需求描述了多个独立子系统（例如"构建一个包含聊天、文件存储、计费和分析的平台"），立即指出这一点。不要花时间用问题去细化一个需要先拆分的项目。
-- 如果项目规模过大，单个规格说明无法覆盖，帮助用户分解为子项目：有哪些独立的部分，它们之间有什么关系，应该按什么顺序构建？然后通过正常的设计流程进行第一个子项目的头脑风暴。每个子项目都有自己的规格 → 计划 → 实现周期。
-- 对于范围适当的项目，每次提一个问题来完善想法
-- 尽量使用选择题，开放式问题也可以
-- 每条消息只提一个问题——如果一个主题需要更多探索，拆分成多个问题
-- 重点理解：目的、约束、成功标准
+- まず現在の project 状態を確認する（file、document、最近の commit）
+- 詳細な質問を始める前に scope を見積もる。要求が複数の独立 subsystem を含む場合（例: chat、file storage、billing、analytics を含む platform）、すぐに指摘する。質問で巨大 project を細かく詰めようとしない。
+- project が大きすぎて単一 spec で扱えない場合は、subproject に分解する。独立部分、相互関係、構築順序を整理し、最初の subproject から通常の design process に入る。各 subproject は独自の spec → plan → implementation cycle を持つ。
+- scope が適切な場合は、一度に一つの質問で idea を具体化する
+- 可能な限り選択式の質問を使う。必要なら open question も使う
+- 一つの message で一つの質問だけ行う。追加探索が必要なら複数 message に分ける
+- 目的、制約、成功条件を重点的に理解する
 
-**探索方案：**
+**approach を探索する:**
 
-- 提出 2-3 种不同的方案及其权衡
-- 以对话的方式展示选项，附上你的推荐和理由
-- 先展示你推荐的方案并解释原因
+- 2-3 個の異なる approach と trade-off を提示する
+- 会話的に option を示し、自分の推奨案と理由を添える
+- 推奨案を最初に示し、その理由を説明する
 
-**展示设计：**
+**design を提示する:**
 
-- 一旦你认为理解了要构建的内容，就展示设计
-- 每个部分的篇幅与其复杂度匹配：简单的几句话，复杂的最多 200-300 字
-- 每个部分展示后询问是否正确
-- 涵盖：架构、组件、数据流、错误处理、测试
-- 随时准备回头澄清不明确的地方
+- 何を作るべきか理解できたら design を提示する
+- 各 section の長さは複雑さに合わせる。単純なら数文、複雑なら 200-300 words 程度まで
+- 各 section の後で、内容が合っているか確認する
+- architecture、component、data flow、error handling、testing を扱う
+- 不明点が出たら、いつでも戻って確認する
 
-**面向隔离和清晰的设计：**
+**分離性と明確さを意識した design:**
 
-- 将系统拆分为更小的单元，每个单元有一个明确的职责，通过定义良好的接口通信，可以独立理解和测试
-- 对于每个单元，你应该能回答：它做什么，如何使用，它依赖什么？
-- 别人能否不看内部实现就理解一个单元的功能？你能否在不影响调用者的情况下修改内部实现？如果不能，边界需要调整。
-- 更小、边界清晰的单元也更便于你工作——你对能一次放入上下文的代码推理得更好，文件越专注你的编辑越可靠。当文件变大时，这通常意味着它承担了过多职责。
+- system を小さな unit に分ける。各 unit は明確な責務を持ち、定義された interface で通信し、単独で理解・test できるようにする
+- 各 unit について「何をするか」「どう使うか」「何に依存するか」を答えられるようにする
+- 内部実装を読まなくても unit の役割を理解できるか。呼び出し側に影響せず内部を変更できるか。できないなら boundary を見直す
+- 小さく境界が明確な unit は agent にとっても扱いやすい。context に収まる code ほど推論しやすく、file が focused であるほど編集の信頼性も上がる。file が大きくなるときは、多くの場合、責務が増えすぎている
 
-**在现有代码库中工作：**
+**既存 codebase で作業する場合:**
 
-- 在提出更改之前先探索现有结构。遵循现有模式。
-- 如果现有代码存在影响当前工作的问题（例如文件过大、边界不清、职责纠缠），在设计中包含有针对性的改进——就像一个优秀的开发者在工作中改进经手的代码一样。
-- 不要提议无关的重构。专注于服务当前目标的事情。
+- 変更を提案する前に既存構造を探索し、既存 pattern に従う
+- 現在の作業に影響する問題（巨大 file、境界不明、責務の絡まりなど）がある場合は、対象を絞った改善を design に含める。優れた developer が触れた範囲を少し良くするのと同じ
+- 無関係な refactor は提案しない。現在の目的に必要なことへ集中する
 
-## 设计之后
+## Design の後
 
-**文档：**
+**Document:**
 
-- 将验证通过的设计（规格说明）写入 `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
-  - （用户对规格位置的偏好优先于此默认值）
-- 如果可用，使用 elements-of-style:writing-clearly-and-concisely 技能
-- 将设计文档 commit 到 git
+- 検証済みの design（spec）を `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` に保存する
+  - spec 保存場所についてユーザーの希望がある場合は、それを優先する
+- 利用可能なら `elements-of-style:writing-clearly-and-concisely` skill を使う
+- design document を git commit する
 
-**规格自检：**
-编写规格文档后，以全新的视角审视它：
+**Spec self-check:**
 
-1. **占位符扫描：** 有没有"待定"、"TODO"、未完成的章节或模糊的需求？修复它们。
-2. **内部一致性：** 各章节之间有矛盾吗？架构和功能描述匹配吗？
-3. **范围检查：** 这是否聚焦到可以用一个实现计划覆盖，还是需要进一步拆分？
-4. **模糊性检查：** 有没有需求可以被两种方式理解？如果有，选择一种并明确写出来。
+spec document を書いた後、新しい視点で確認する。
 
-发现问题就直接内联修复。无需重新审查——修好继续推进。
+1. **placeholder scan:** 「TBD」「TODO」、未完成 section、曖昧な requirement がないか。見つけたら修正する
+2. **internal consistency:** section 間に矛盾がないか。architecture と機能説明が一致しているか
+3. **scope check:** 一つの implementation plan で扱える範囲か。さらに分割すべきか
+4. **ambiguity check:** 2 通りに解釈できる requirement がないか。ある場合は一つを選んで明記する
 
-**用户审查关卡：**
-规格自检完成后，请用户在继续之前审查书面规格：
+問題を見つけたら inline で修正する。再 review を待つ必要はない。修正して続行する。
 
-> "规格已编写并 commit 到 `<path>`。请审查一下，如果在我们开始编写实现计划之前你想做任何修改，请告诉我。"
+**User review gate:**
 
-等待用户回复。如果他们要求修改，做出修改并重新运行规格自检。只有在用户批准后才继续。
+self-check 後、続行前にユーザーへ書面 spec の review を依頼する。
 
-**实现：**
+> 「spec を作成し、`<path>` に commit しました。実装計画に進む前に review してください。変更したい点があれば教えてください。」
 
-- 调用 writing-plans 技能创建详细的实现计划
-- 不要调用任何其他技能。writing-plans 是下一步。
+ユーザーの返答を待つ。修正依頼があれば対応し、spec self-check を再実行する。ユーザーが承認してから次へ進む。
 
-## 核心原则
+**Implementation:**
 
-- **每次一个问题** — 不要同时抛出多个问题
-- **优先选择题** — 在可能的情况下比开放式问题更容易回答
-- **严格遵循 YAGNI** — 从所有设计中移除不必要的功能
-- **探索替代方案** — 在做决定之前始终提出 2-3 种方案
-- **增量验证** — 展示设计，获得批准后再继续
-- **保持灵活** — 有不明确的地方就回头澄清
+- `writing-plans` skill を呼び出し、詳細な implementation plan を作る
+- 他の skill は呼び出さない。次は `writing-plans` のみ
 
-## 视觉伴侣
+## Core Principles
 
-一个基于浏览器的伴侣工具，用于在头脑风暴过程中展示原型、图表和视觉选项。它是一个工具——不是一种模式。接受伴侣意味着它可用于适合视觉呈现的问题；并不意味着每个问题都要通过浏览器。
+- **一度に一つの質問** — 複数の質問を同時に投げない
+- **選択式を優先** — 可能な場合、open question より答えやすい
+- **YAGNI を厳守** — 不要な機能を design から外す
+- **代替案を探索** — 決定前に必ず 2-3 個の approach を出す
+- **incremental validation** — design を示し、承認を得てから進む
+- **柔軟に戻る** — 不明点があれば戻って確認する
 
-**提供伴侣：** 当你预计后续问题会涉及视觉内容（原型、布局、图表）时，提供一次以获得同意：
-> "我们接下来讨论的一些内容，如果能在浏览器中展示给你看可能会更直观。我可以在讨论过程中为你制作原型、图表、对比图和其他视觉材料。这个功能还比较新，可能会消耗较多 token。要试试吗？（需要打开一个本地 URL）"
+## Visual Companion
 
-**此提议必须是一条独立的消息。** 不要将它与澄清问题、上下文摘要或任何其他内容合并。消息中应该只包含上述提议，没有其他内容。等待用户回复后再继续。如果他们拒绝，继续纯文本的头脑风暴。
+brainstorming 中に prototype、diagram、visual option を表示する browser-based companion tool。これは tool であり、mode ではない。companion の利用に同意された場合でも、すべての質問を browser で扱うわけではない。
 
-**逐问题决策：** 即使用户接受了，也要对每个问题单独决定是使用浏览器还是终端。判断标准：**用户看到它是否比读到它更容易理解？**
+**companion を提案する:** 後続の質問に visual content（prototype、layout、diagram）が含まれそうな場合、一度だけ同意を取る。
 
-- **使用浏览器** 展示本身就是视觉的内容——原型、线框图、布局对比、架构图、并排视觉设计
-- **使用终端** 展示文本内容——需求问题、概念选择、权衡列表、A/B/C/D 文字选项、范围决策
+> 「この後の相談内容は、browser 上で見える形にすると判断しやすいものがありそうです。必要に応じて prototype、diagram、比較画面などを作れます。この機能はまだ新しく、token を多めに使う可能性があります。試しますか。（local URL を開く必要があります）」
 
-关于 UI 主题的问题不一定是视觉问题。"在这个上下文中个性化是什么意思？"是一个概念问题——使用终端。"哪种向导布局更好？"是一个视觉问题——使用浏览器。
+**この提案は独立した message にする。** clarifying question、context summary、その他の内容と混ぜない。message には上記の提案だけを書く。ユーザーの返答を待ってから続行する。拒否された場合は text-only の brainstorming を続ける。
 
-如果他们同意使用伴侣，在继续之前阅读详细指南：
+**質問ごとに判断する:** ユーザーが同意しても、各質問で browser を使うか terminal で済ませるか判断する。基準は、**読むより見る方が理解しやすいか**。
+
+- **browser を使う:** prototype、wireframe、layout 比較、architecture diagram、並列 visual design など、内容自体が視覚的なもの
+- **terminal を使う:** requirement question、conceptual option、trade-off list、A/B/C/D の text option、scope decision など
+
+UI topic でも、すべてが visual question ではない。「この文脈で personalization とは何か」は conceptual question なので terminal を使う。「どの wizard layout が良いか」は visual question なので browser を使う。
+
+ユーザーが companion 利用に同意した場合、続行前に詳細 guide を読む。
+
 `skills/brainstorming/visual-companion.md`

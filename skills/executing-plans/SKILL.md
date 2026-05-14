@@ -3,173 +3,186 @@ name: executing-plans
 description: レビュー checkpoint を含む実装計画を、別 session で段階的に実行する場合に使用する。
 ---
 
-# 执行计划
+# 実装計画の実行
 
-## 概述
+## 概要
 
-加载计划，批判性审查，执行所有任务，完成后报告。
+計画を読み込み、批判的に確認し、task を順番に実行し、完了時に結果を報告する。
 
-**开始时宣布：** "我正在使用 executing-plans 技能来实现此计划。"
+**開始時の宣言:** 「executing-plans skill を使って、この計画を実行します。」
 
-**注意：** 告诉你的人类伙伴，Superpowers 在有子代理支持时效果好得多。如果在支持子代理的平台上运行（如 Claude Code 或 Codex），其工作质量会显著提高。如果子代理可用，请使用 superpowers:subagent-driven-development 而非此技能。
+**注意:** Subagent を使える platform（Claude Code、Codex など）では、Superpowers は subagent と組み合わせると効果が高い。利用可能な場合は、この skill だけで進めず、`superpowers:subagent-driven-development` の利用を優先する。
 
-## 流程
+## 手順
 
-### 步骤 1：加载并审查计划
+### Step 1: 計画を読み込み、批判的に確認する
 
-1. 读取计划文件
-2. 批判性审查——识别计划中的任何问题或疑虑
-3. 如果有疑虑：在开始之前向你的人类伙伴提出
-4. 如果没有疑虑：创建 TodoWrite 并继续
+1. 計画 file を読む
+2. 計画を批判的に review し、問題や懸念を洗い出す
+3. 懸念がある場合は、実装前に人間の担当者へ確認する
+4. 懸念がない場合は TodoWrite を作成し、実行へ進む
 
-**审查时重点检查：**
-- 步骤之间是否有依赖遗漏？（A 依赖 B，但 B 排在 A 之后）
-- 验证条件是否明确？（"确认可用"不算，"运行 `npm test` 全部通过"才算）
-- 是否有隐含的环境假设？（Node 版本、数据库连接、API Key）
+**review で確認する観点:**
 
-**审查示例：**
+- task 間の依存関係に抜けがないか（A が B に依存するのに B が後ろにある、など）
+- 検証条件が具体的か（「動作確認」ではなく「`npm test` が全件通る」まで書かれているか）
+- 暗黙の環境前提がないか（Node version、DB 接続、API key など）
+
+**review 例:**
+
+```text
+計画 file: docs/plan.md
+task 数: 5
+
+review 結果:
+- task 3（DB migration 追加）は task 2（data model 作成）の後で、順序は妥当
+- task 4 の検証条件が「動作確認」のみで曖昧。具体的な test command が必要
+- Python version の前提が計画にない
+
+確認事項:
+「計画は概ね実行可能です。2 点だけ確認したいです。
+1. task 4 の検証条件を `pytest tests/test_api.py` 全件通過にしてよいですか。
+2. Python version は 3.12 前提でよいですか。」
 ```
-计划文件：docs/plan.md
-任务清单：5 个任务
 
-审查发现：
-- 任务 3（添加数据库迁移）应在任务 2（编写数据模型）之后，顺序正确 ✓
-- 任务 4 的验证条件写的是"确认功能正常"→ 需澄清：具体跑什么测试？
-- 计划未提及 Python 版本要求 → 需确认
+### Step 2: task を実行する
 
-向伙伴提出：
-"计划整体可执行。有两个问题：(1) 任务 4 的验证条件不够具体，建议改为
-'运行 pytest tests/test_api.py 全部通过'；(2) 需要确认 Python 版本要求。"
-```
+各 task について次を行う。
 
-### 步骤 2：执行任务
+1. **In progress にする** — TodoWrite を更新する
+2. **目的を理解する** — task 説明と完了条件を読み直す
+3. **実装する** — 計画に書かれた手順に従う
+4. **検証する** — 指定された test / check を実行する
+5. **commit する** — task 完了ごとに commit し、message に task 番号を入れる
+6. **Done にする** — TodoWrite を更新する
 
-对于每个任务：
+**task ごとの進め方:**
 
-1. **标记为进行中** — 更新 TodoWrite
-2. **理解目标** — 重读任务描述，明确完成标准
-3. **执行实现** — 严格按照计划步骤执行（计划已有小步骤）
-4. **运行验证** — 按要求运行测试或检查
-5. **提交变更** — 每完成一个任务提交一次，commit message 引用任务编号
-6. **标记为已完成** — 更新 TodoWrite
+```text
+--- task 2/5: user validation を追加 ---
+[in_progress に更新]
 
-**每个任务的节奏：**
-```
---- 任务 2/5：添加用户验证 ---
-[标记进行中]
+目的: /api/users に入力 validation を追加する
+完了条件: validation test が全件通り、不正入力は 400 を返す
 
-目标：为 /api/users 添加输入验证
-完成标准：所有验证测试通过，无效输入返回 400
+[実装]
+- validateUser() middleware を追加
+- email format、password strength、username length の 3 rule を追加
 
-[实现]
-- 添加 validateUser() 中间件
-- 编写 3 个验证规则（email 格式、密码强度、用户名长度）
-
-[验证]
+[検証]
 $ npm test -- --grep "validation"
-  ✓ 拒绝无效 email (12ms)
-  ✓ 拒绝弱密码 (8ms)
-  ✓ 拒绝过长用户名 (5ms)
+  ✓ rejects invalid email (12ms)
+  ✓ rejects weak password (8ms)
+  ✓ rejects long username (5ms)
   3 passing
 
-[提交]
+[commit]
 $ git add src/middleware/validate.js tests/validation.test.js
-$ git commit -m "feat: 添加用户输入验证（任务 2/5）"
+$ git commit -m "feat: add user input validation (task 2/5)"
 
-[标记完成]
---- 任务 2/5 完成 ---
+[done に更新]
+--- task 2/5 完了 ---
 ```
 
-**批量审查检查点：**
-- 每完成 3 个任务后，暂停回顾：整体方向还对吗？有没有偏离计划？
-- 如果发现前面的实现有问题，先修复再继续，不要带着问题往下走
+**batch review checkpoint:**
 
-### 步骤 3：处理常见异常
+- 3 task 完了ごとに一度止まり、全体方針が計画からずれていないか確認する
+- 前の実装に問題が見つかった場合は、先に修正してから次へ進む
 
-**测试失败：**
-1. 读错误信息，定位失败原因
-2. 区分：是实现 bug？还是测试本身有问题？还是计划描述有误？
-3. 实现 bug → 修复并重跑
-4. 测试有问题 → 修复测试，向伙伴说明
-5. 计划有误 → 停下来，向伙伴报告并建议修正
+### Step 3: よくある例外を処理する
 
-**依赖缺失：**
-```
-任务 3 需要 Redis 连接，但计划中没有提及 Redis 配置。
-→ 停止执行
-→ 向伙伴报告："任务 3 需要 Redis，计划中未包含配置步骤。
-   建议：在任务 3 前插入 '配置 Redis 连接' 步骤。"
-```
+**テスト失敗:**
 
-**指令不清：**
-- 不要猜测意图，不要"合理推断"
-- 列出你的理解和困惑，让伙伴澄清
-- 等待回复后再继续
+1. error message を読み、失敗原因を特定する
+2. 実装 bug、test 側の問題、計画の問題のどれかを切り分ける
+3. 実装 bug の場合は修正して再実行する
+4. test 側の問題の場合は test を修正し、理由を説明する
+5. 計画の問題の場合は停止し、人間の担当者へ報告して修正案を出す
 
-### 步骤 4：完成开发
+**依存関係の不足:**
 
-所有任务完成并验证后：
-- 宣布："我正在使用 finishing-a-development-branch 技能来完成此工作。"
-- **必需子技能：** 使用 superpowers:finishing-a-development-branch
-- 按照该技能的指引验证测试、展示选项、执行选择
-
-**完成报告模板：**
-```
-## 执行报告
-
-**计划：** docs/plan.md
-**分支：** feature/user-validation
-**任务：** 5/5 已完成
-
-### 完成的任务
-1. ✅ 初始化项目结构
-2. ✅ 添加用户验证
-3. ✅ 添加数据库迁移
-4. ✅ 实现 API 端点
-5. ✅ 添加集成测试
-
-### 验证结果
-- 单元测试：23/23 通过
-- 集成测试：8/8 通过
-- lint 检查：0 个警告
-
-### 偏离计划的地方
-- 任务 3：Redis 配置从 env 改为 config.yaml（经伙伴同意）
-
-### 下一步
-按 finishing-a-development-branch 技能处理合并/PR
+```text
+task 3 には Redis 接続が必要ですが、計画に Redis 設定が含まれていません。
+ここで停止します。
+提案: task 3 の前に「Redis 接続設定を追加する」task を挿入してください。
 ```
 
-## 何时停下来求助
+**指示が曖昧:**
 
-**在以下情况立即停止执行：**
-- 遇到阻塞（缺少依赖、测试失败、指令不清）
-- 计划有严重缺陷导致无法开始
-- 你不理解某条指令
-- 验证反复失败（同一测试失败 2 次以上）
+- 意図を推測しない
+- 理解していることと不明点を列挙する
+- 回答を待ってから続行する
 
-**不确定时就问，不要猜测。**
+### Step 4: 開発を完了する
 
-## 何时回到之前的步骤
+全 task が完了し、検証も通ったら:
 
-**回到审查（步骤 1）当：**
-- 伙伴根据你的反馈更新了计划
-- 根本性的方案需要重新考虑
+- 「finishing-a-development-branch skill を使って、この作業の完了処理を進めます」と宣言する
+- **必須 subskill:** `superpowers:finishing-a-development-branch`
+- その skill の指示に従って、再検証、選択肢提示、merge / PR / 保持 / 破棄を行う
 
-**不要硬闯阻塞** — 停下来问。
+**完了報告 template:**
 
-## 注意事项
-- 先批判性审查计划
-- 严格按照计划步骤执行
-- 不要跳过验证
-- 每个任务单独提交，commit message 引用任务编号
-- 计划要求时引用相应技能
-- 遇到阻塞时停下来，不要猜测
-- 未经用户明确同意，绝不在 main/master 分支上开始实现
+```markdown
+## 実行報告
 
-## 集成
+**計画:** docs/plan.md
+**branch:** feature/user-validation
+**task:** 5/5 completed
 
-**必需的工作流技能：**
-- **superpowers:using-git-worktrees** - 必需：开始前建立隔离的工作空间
-- **superpowers:writing-plans** - 创建此技能要执行的计划
-- **superpowers:finishing-a-development-branch** - 所有任务完成后收尾开发
+### 完了した task
+1. ✅ project structure を初期化
+2. ✅ user validation を追加
+3. ✅ database migration を追加
+4. ✅ API endpoint を実装
+5. ✅ integration test を追加
+
+### 検証結果
+- unit test: 23/23 passed
+- integration test: 8/8 passed
+- lint: 0 warnings
+
+### 計画との差分
+- task 3: Redis 設定を env ではなく config.yaml へ変更（事前確認済み）
+
+### 次の処理
+finishing-a-development-branch skill に従って merge / PR を判断します
+```
+
+## 停止して確認する条件
+
+**次の場合はすぐに停止する。**
+
+- 依存不足、test failure、曖昧な指示などの blocker がある
+- 計画に重大な欠陥があり、開始できない
+- 指示の意味が理解できない
+- 同じ test が 2 回以上連続で失敗する
+
+不確実な場合は推測せず、確認する。
+
+## 前の手順へ戻る条件
+
+**Step 1 の review に戻る条件:**
+
+- 人間の担当者が計画を更新した
+- 根本的な approach を再検討する必要がある
+
+blocker を抱えたまま強行しない。
+
+## 注意事項
+
+- 実装前に計画を批判的に review する
+- 計画の手順に沿って実行する
+- 検証を省略しない
+- task ごとに commit し、commit message に task 番号を入れる
+- 計画が要求する skill を使う
+- blocker があれば止まり、推測で進めない
+- ユーザーの明示同意なしに main / master branch で実装を始めない
+
+## Integration
+
+**必須 workflow skill:**
+
+- **superpowers:using-git-worktrees** - 開始前に隔離された worktree を作る
+- **superpowers:writing-plans** - この skill で実行する計画を作る
+- **superpowers:finishing-a-development-branch** - 全 task 完了後に開発 branch を完了させる
