@@ -123,6 +123,8 @@ npx superpowers-ja --uninstall
 - 個人情報、監査ログ、障害対応、運用引き継ぎを実装前に確認する
 - 日本語と英語の技術用語を自然に混在させる
 
+今後の日本語化優先順位は [ROADMAP.md](ROADMAP.md) に整理しています。
+
 ## License
 
 MIT
