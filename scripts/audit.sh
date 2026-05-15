@@ -159,11 +159,15 @@ else
     using-git-worktrees using-superpowers verification-before-completion \
     writing-plans writing-skills)
 
-  # 日本語化に伴う節分け / 日本現場向け追記を許容する skill
-  #   executing-plans: 日本 SI 向け「実行報告」section（完了 task / 検証 / 差分 / 次処理）を追加
-  declare -A SKILL_DRIFT_ALLOWANCE=(
-    [executing-plans]=8
-  )
+  # 日本語化に伴う節分け / 日本現場向け追記を許容する skill。
+  # macOS default bash 3.2 does not support associative arrays, so use a case helper.
+  skill_drift_allowance() {
+    case "$1" in
+      # 日本 SI 向け「実行報告」section（完了 task / 検証 / 差分 / 次処理）を追加
+      executing-plans) echo 8 ;;
+      *) echo 3 ;;
+    esac
+  }
 
   for s in "${SKILLS[@]}"; do
     up=$(git show upstream/main:skills/$s/SKILL.md 2>/dev/null | grep -cE '^#{1,4} ' || echo 0)
@@ -171,7 +175,7 @@ else
     diff=$((up - our))
     abs=${diff#-}
     # デフォルトは 3、skill 個別に override 可能
-    allowance=${SKILL_DRIFT_ALLOWANCE[$s]:-3}
+    allowance=$(skill_drift_allowance "$s")
     if [ "$abs" -le "$allowance" ]; then
       ok
     else
