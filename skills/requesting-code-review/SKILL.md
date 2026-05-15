@@ -3,101 +3,111 @@ name: requesting-code-review
 description: task 完了時、重要機能の実装後、merge 前に使用し、成果物が要求を満たしているか検証する。
 ---
 
-# 请求代码审查
+# Requesting Code Review
 
-派遣代码审查子代理，在问题扩散之前发现它们。审查者获得的是精心组织的评估上下文——绝不是你的会话历史。这样可以让审查者专注于工作成果而非你的思考过程，同时保留你自己的上下文以便继续工作。
+code review subagent を dispatch し、問題が後続作業へ広がる前に見つける。reviewer には、整理された evaluation context だけを渡す。あなたの session history は渡さない。これにより reviewer は思考過程ではなく成果物へ集中でき、あなた自身の context も保てる。
 
-**核心原则：** 早审查，勤审查。
+**Core principle:** 早く review し、頻繁に review する。
 
-## 何时请求审查
+## When To Request Review
 
-**必须审查：**
-- 子代理驱动开发中每个任务完成后
-- 完成重要功能后
-- 合并到 main 之前
+**必ず review する:**
 
-**可选但有价值：**
-- 卡住时（换个视角）
-- 重构之前（建立基线）
-- 修复复杂 bug 之后
+- subagent-driven development で各 task が完了した後
+- important feature 完了後
+- main へ merge する前
 
-## 如何请求
+**任意だが価値が高い:**
 
-**1. 获取 git SHA：**
+- stuck しているとき（別視点を得る）
+- refactor 前（baseline を作る）
+- complex bug を修正した後
+
+## How To Request
+
+**1. git SHA を取得する。**
+
 ```bash
-BASE_SHA=$(git rev-parse HEAD~1)  # 或 origin/main
+BASE_SHA=$(git rev-parse HEAD~1)  # または origin/main
 HEAD_SHA=$(git rev-parse HEAD)
 ```
 
-**2. 派遣代码审查子代理：**
+**2. code review subagent を dispatch する。**
 
-使用 Task 工具，指定 `general-purpose` 类型，填写 `code-reviewer.md` 中的模板
+Task tool を使い、`general-purpose` type を指定し、`code-reviewer.md` の template を埋める。
 
-**占位符说明：**
-- `{DESCRIPTION}` - 你刚完成的内容简要说明
-- `{PLAN_OR_REQUIREMENTS}` - 预期功能
-- `{BASE_SHA}` - 起始提交
-- `{HEAD_SHA}` - 结束提交
+**placeholder:**
 
-**3. 处理反馈：**
-- Critical 问题立即修复
-- Important 问题在继续之前修复
-- Minor 问题记录下来稍后处理
-- 如果审查者有误，用技术理由反驳
+- `{DESCRIPTION}` - 完了した内容の短い説明
+- `{PLAN_OR_REQUIREMENTS}` - 期待される機能、計画、受入条件
+- `{BASE_SHA}` - start commit
+- `{HEAD_SHA}` - end commit
 
-## 示例
+**3. feedback を処理する。**
 
-```
-[刚完成任务 2：添加验证功能]
+- Critical issue はすぐ修正する
+- Important issue は続行前に修正する
+- Minor issue は記録し、必要に応じて後で対応する
+- reviewer が間違っている場合は、technical reason で反論する
 
-你：让我在继续之前请求代码审查。
+## Example
+
+```text
+[task 2: validation feature を追加した直後]
+
+あなた: 続行前に code review を依頼します。
 
 BASE_SHA=$(git log --oneline | grep "Task 1" | head -1 | awk '{print $1}')
 HEAD_SHA=$(git rev-parse HEAD)
 
-[派遣代码审查子代理]
-  DESCRIPTION: 添加了 verifyIndex() 和 repairIndex()，支持 4 种问题类型
-  PLAN_OR_REQUIREMENTS: docs/superpowers/plans/deployment-plan.md 中的任务 2
+[code review subagent を dispatch]
+  DESCRIPTION: verifyIndex() と repairIndex() を追加し、4 種類の issue type に対応
+  PLAN_OR_REQUIREMENTS: docs/superpowers/plans/deployment-plan.md の task 2
   BASE_SHA: a7981ec
   HEAD_SHA: 3df7661
 
-[子代理返回]:
-  优点：架构清晰，测试真实
-  问题：
-    Important：缺少进度指示器
-    Minor：报告间隔使用了魔法数字 (100)
-  评估：可以继续
+[subagent result]:
+  良い点: architecture が明確で、test は real behavior を見ている
+  issue:
+    Important: progress indicator がない
+    Minor: report interval に magic number (100) がある
+  assessment: continue possible
 
-你：[修复进度指示器]
-[继续任务 3]
+あなた: [progress indicator を修正]
+[task 3 へ進む]
 ```
 
-## 与工作流的集成
+## Workflow Integration
 
-**子代理驱动开发：**
-- 每个任务完成后审查
-- 在问题叠加之前发现它们
-- 修复后再进入下一个任务
+**Subagent-driven development:**
 
-**执行计划：**
-- 每个任务完成后或在自然 checkpoint 审查
-- 获取反馈，应用，继续
+- 各 task 完了後に review する
+- issue が積み重なる前に見つける
+- 修正してから次の task へ進む
 
-**临时开发：**
-- 合并前审查
-- 卡住时审查
+**Executing plans:**
 
-## 红线
+- 各 task 完了後、または自然な checkpoint で review する
+- feedback を受け、反映し、続行する
 
-**绝不要：**
-- 因为"很简单"就跳过审查
-- 忽略 Critical 问题
-- 带着未修复的 Important 问题继续推进
-- 对合理的技术反馈进行争辩
+**Ad hoc development:**
 
-**如果审查者有误：**
-- 用技术理由反驳
-- 展示证明其可行的代码/测试
-- 要求澄清
+- merge 前に review する
+- stuck したときに review する
 
-参见模板：requesting-code-review/code-reviewer.md
+## Red Lines
+
+**絶対にしないこと:**
+
+- 「simple だから」と review を skip する
+- Critical issue を無視する
+- unresolved Important issue を抱えたまま進む
+- 妥当な technical feedback に感情的に反論する
+
+**reviewer が間違っている場合:**
+
+- technical reason で反論する
+- 実際に動くことを示す code / test を提示する
+- clarification を求める
+
+template: `requesting-code-review/code-reviewer.md`

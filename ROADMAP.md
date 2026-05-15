@@ -22,7 +22,7 @@ Phase 1 の後、review 周辺と計画 / 並列実行系の skill を整理し�
 
 | Priority | Skill | 理由 | Status |
 | --- | --- | --- | --- |
-| P2 | `requesting-code-review` | PR / MR 前の第三者 review を促す | Todo |
+| P2 | `requesting-code-review` | PR / MR 前の第三者 review を促す | Done |
 | P2 | `receiving-code-review` | 指摘対応の姿勢、再検証、説明責任を整える | Todo |
 | P2 | `using-git-worktrees` | 複数作業や agent 並列実行時の安全性に関わる | Todo |
 | P2 | `writing-plans` | 実装計画の品質を底上げする | Todo |
