@@ -1,26 +1,29 @@
-# 纵深防御校验
+# Defense-In-Depth Validation
 
-## 概述
+## Overview
 
-当你修复了一个由无效数据引起的 bug 时，在一个地方加校验似乎就够了。但这个单点检查可能会被不同的代码路径、重构或 mock 绕过。
+invalid data が原因の bug を直すとき、一箇所に validation を追加すれば十分に見える。しかし single check は、別 code path、refactor、mock によって bypass されることがある。
 
-**核心原则：** 在数据经过的每一层都做校验。让这个 bug 在结构上不可能发生。
+**Core principle:** data が通るすべての layer で validation する。この bug が構造的に起きないようにする。
 
-## 为什么需要多层校验
+## Why Multiple Validation Layers Matter
 
-单层校验："我们修了这个 bug"
-多层校验："我们让这个 bug 不可能再发生"
+single-layer validation: 「この bug を直した」
 
-不同层级能捕获不同问题：
-- 入口校验捕获大多数 bug
-- 业务逻辑校验捕获边界情况
-- 环境守卫防止特定上下文的危险操作
-- 调试日志在其他层级失效时提供帮助
+multi-layer validation: 「この bug が再発できない構造にした」
 
-## 四个层级
+layer ごとに捕まえる問題が違う。
 
-### 第 1 层：入口校验
-**目的：** 在 API 边界拒绝明显无效的输入
+- entry validation は大半の bug を捕まえる
+- business logic validation は edge case を捕まえる
+- environment guard は特定 context の dangerous operation を防ぐ
+- debug logging は他 layer が効かなかったときに助けになる
+
+## Four Layers
+
+### Layer 1: Entry Validation
+
+**Purpose:** API boundary で明らかに invalid な input を拒否する。
 
 ```typescript
 function createProject(name: string, workingDirectory: string) {
@@ -33,28 +36,30 @@ function createProject(name: string, workingDirectory: string) {
   if (!statSync(workingDirectory).isDirectory()) {
     throw new Error(`workingDirectory is not a directory: ${workingDirectory}`);
   }
-  // ... 继续处理
+  // ... continue
 }
 ```
 
-### 第 2 层：业务逻辑校验
-**目的：** 确保数据对当前操作是合理的
+### Layer 2: Business Logic Validation
+
+**Purpose:** data が current operation に対して妥当であることを保証する。
 
 ```typescript
 function initializeWorkspace(projectDir: string, sessionId: string) {
   if (!projectDir) {
     throw new Error('projectDir required for workspace initialization');
   }
-  // ... 继续处理
+  // ... continue
 }
 ```
 
-### 第 3 层：环境守卫
-**目的：** 防止在特定环境中执行危险操作
+### Layer 3: Environment Guard
+
+**Purpose:** 特定 environment で dangerous operation が実行されることを防ぐ。
 
 ```typescript
 async function gitInit(directory: string) {
-  // 在测试中，拒绝在临时目录之外执行 git init
+  // test 中は temp directory 外で git init することを拒否する
   if (process.env.NODE_ENV === 'test') {
     const normalized = normalize(resolve(directory));
     const tmpDir = normalize(resolve(tmpdir()));
@@ -65,12 +70,13 @@ async function gitInit(directory: string) {
       );
     }
   }
-  // ... 继续处理
+  // ... continue
 }
 ```
 
-### 第 4 层：调试埋点
-**目的：** 记录上下文信息以便事后分析
+### Layer 4: Debug Instrumentation
+
+**Purpose:** 後続調査のため context information を記録する。
 
 ```typescript
 async function gitInit(directory: string) {
@@ -80,43 +86,46 @@ async function gitInit(directory: string) {
     cwd: process.cwd(),
     stack,
   });
-  // ... 继续处理
+  // ... continue
 }
 ```
 
-## 应用模式
+## Application Pattern
 
-当你发现一个 bug 时：
+bug を見つけたら:
 
-1. **追踪数据流** —— 错误值从哪里产生的？在哪里被使用？
-2. **标注所有检查点** —— 列出数据经过的每一个节点
-3. **在每一层添加校验** —— 入口、业务逻辑、环境、调试
-4. **测试每一层** —— 尝试绕过第 1 层，验证第 2 层能否捕获
+1. **data flow を trace する** — wrong value はどこで生まれ、どこで使われたか
+2. **checkpoint をすべて mark する** — data が通る node をすべて列挙する
+3. **各 layer に validation を追加する** — entry、business logic、environment、debug
+4. **各 layer を test する** — layer 1 を bypass して、layer 2 が捕まえるか確認する
 
-## 实际案例
+## Real Case
 
-Bug：空的 `projectDir` 导致 `git init` 在源代码目录执行
+Bug: empty `projectDir` により `git init` が source directory で実行された。
 
-**数据流：**
-1. 测试准备 → 空字符串
+**Data flow:**
+
+1. test setup → empty string
 2. `Project.create(name, '')`
 3. `WorkspaceManager.createWorkspace('')`
-4. `git init` 在 `process.cwd()` 中执行
+4. `git init` が `process.cwd()` で実行
 
-**添加的四层防御：**
-- 第 1 层：`Project.create()` 校验非空/存在/可写
-- 第 2 层：`WorkspaceManager` 校验 projectDir 非空
-- 第 3 层：`WorktreeManager` 在测试中拒绝在 tmpdir 之外执行 git init
-- 第 4 层：git init 前记录堆栈跟踪
+**added four layers:**
 
-**结果：** 全部 1847 个测试通过，bug 不可能再复现
+- Layer 1: `Project.create()` が non-empty / exists / writable を validate
+- Layer 2: `WorkspaceManager` が non-empty projectDir を validate
+- Layer 3: `WorktreeManager` が test 中に tmpdir 外の git init を拒否
+- Layer 4: git init 前に stack trace を log
 
-## 关键洞察
+**Result:** 1847 tests all pass。bug は再発できない構造になった。
 
-四个层级缺一不可。在测试过程中，每一层都捕获了其他层遗漏的 bug：
-- 不同的代码路径绕过了入口校验
-- mock 绕过了业务逻辑检查
-- 不同平台的边界情况需要环境守卫
-- 调试日志发现了结构性误用
+## Key Insight
 
-**不要止步于一个校验点。** 在每一层都添加检查。
+四つの layer はどれも必要である。test 中、それぞれの layer が別 layer の漏れを捕まえた。
+
+- different code path が entry validation を bypass した
+- mock が business logic check を bypass した
+- platform-specific edge case に environment guard が必要だった
+- debug log が structural misuse を発見した
+
+**一つの validation point で止めない。** すべての layer に check を入れる。

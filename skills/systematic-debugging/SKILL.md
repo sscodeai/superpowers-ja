@@ -3,294 +3,303 @@ name: systematic-debugging
 description: bug、test failure、異常動作に遭遇した場合、修正案を出す前に使用する。
 ---
 
-# 系统化调试
+# Systematic Debugging
 
-## 概述
+## Overview
 
-随意修复既浪费时间又会引入新 bug。草率的补丁只会掩盖深层问题。
+思いつきの修正は時間を浪費し、新しい bug を生む。急いで当てた patch は、深い問題を隠すだけである。
 
-**核心原则：** 在尝试修复之前，务必先找到根本原因。只修症状就是失败。
+**Core principle:** 修正を試す前に、必ず root cause を見つける。symptom だけを直すのは失敗である。
 
-**敷衍走流程等于违背调试的精神。**
+**形だけ process をなぞることは、debugging の精神に反する。**
 
-## 铁律
+## Iron Law
 
+```text
+root cause investigation なしに fix proposal を出さない
 ```
-不做根因调查，不许提修复方案
-```
 
-如果你还没完成第一阶段，就不能提出修复方案。
+Phase 1 を完了していないなら、fix proposal を出してはいけない。
 
-## 何时使用
+## When To Use
 
-用于任何技术问题：
-- 测试失败
-- 生产环境 bug
-- 异常行为
-- 性能问题
-- 构建失败
-- 集成问题
+あらゆる technical issue に使う。
 
-**尤其在以下情况必须使用：**
-- 时间紧迫（紧急情况最容易让人猜测式修复）
-- 觉得"一个小修改"就能搞定
-- 已经尝试了多种修复
-- 上一次修复没有生效
-- 你没有完全理解问题
+- test failure
+- production bug
+- abnormal behavior
+- performance issue
+- build failure
+- integration issue
 
-**以下情况也不要跳过：**
-- 问题看起来很简单（简单的 bug 也有根本原因）
-- 你很赶时间（越急越容易返工）
-- 领导要求立刻修好（系统化调试比反复尝试更快）
+**特に次の場合は必ず使う。**
 
-## 四个阶段
+- time pressure がある（緊急時ほど guessing fix に流れやすい）
+- 「小さな変更で直る」と感じている
+- すでに複数の fix を試した
+- 前回の fix が効かなかった
+- 問題を完全には理解していない
 
-你必须完成每个阶段后才能进入下一个。
+**次の場合も skip しない。**
 
-### 第一阶段：根因调查
+- 問題が単純に見える（simple bug にも root cause はある）
+- 急いでいる（急ぐほど手戻りが増える）
+- 上司や関係者が即時修正を求めている（systematic debugging は trial-and-error より速い）
 
-**在尝试任何修复之前：**
+## Four Phases
 
-1. **仔细阅读错误信息**
-   - 不要跳过错误或警告
-   - 它们往往直接包含解决方案
-   - 完整阅读堆栈跟踪
-   - 记下行号、文件路径、错误码
+各 phase を完了してから次へ進む。
 
-2. **稳定复现**
-   - 你能可靠地触发它吗？
-   - 具体的复现步骤是什么？
-   - 每次都能复现吗？
-   - 如果无法复现 → 收集更多数据，不要猜测
+### Phase 1: Root Cause Investigation
 
-3. **检查近期变更**
-   - 什么变更可能导致了这个问题？
-   - git diff、最近的提交
-   - 新依赖、配置变更
-   - 环境差异
+**fix を試す前に行う。**
 
-4. **在多组件系统中收集证据**
+1. **error message を注意深く読む**
+   - error や warning を飛ばさない
+   - 解決の手がかりがその中にあることが多い
+   - stack trace を最後まで読む
+   - line number、file path、error code を記録する
 
-   **当系统有多个组件时（CI → 构建 → 签名，API → 服务 → 数据库）：**
+2. **安定して再現する**
+   - reliable に trigger できるか
+   - exact reproduction steps は何か
+   - 毎回再現するか
+   - 再現できない場合は、guess せず追加 data を集める
 
-   **在提出修复方案之前，先添加诊断埋点：**
+3. **recent changes を確認する**
+   - どの変更が原因になり得るか
+   - git diff、recent commits
+   - new dependency、configuration change
+   - environment difference
+
+4. **multi-component system では evidence を集める**
+
+   **system が複数 component を持つ場合（CI → build → signing、API → service → database など）:**
+
+   **fix proposal の前に diagnostic instrumentation を入れる。**
+
+   ```text
+   component boundary ごとに:
+     - component に入る data を記録する
+     - component から出る data を記録する
+     - environment / config の伝播を検証する
+     - 各 layer の state を確認する
+
+   一度実行して evidence を集め、break point を特定する
+   evidence を分析し、faulty component を見つける
+   その component を深掘りする
    ```
-   对每个组件边界：
-     - 记录进入组件的数据
-     - 记录离开组件的数据
-     - 验证环境/配置的传递
-     - 检查每一层的状态
 
-   执行一次以收集证据，确定断裂点在哪里
-   然后分析证据，定位故障组件
-   然后针对该组件深入调查
-   ```
+   **example（multi-layer system）:**
 
-   **示例（多层系统）：**
    ```bash
-   # 第 1 层：工作流
+   # layer 1: workflow
    echo "=== Secrets available in workflow: ==="
    echo "IDENTITY: ${IDENTITY:+SET}${IDENTITY:-UNSET}"
 
-   # 第 2 层：构建脚本
+   # layer 2: build script
    echo "=== Env vars in build script: ==="
    env | grep IDENTITY || echo "IDENTITY not in environment"
 
-   # 第 3 层：签名脚本
+   # layer 3: signing script
    echo "=== Keychain state: ==="
    security list-keychains
    security find-identity -v
 
-   # 第 4 层：实际签名
+   # layer 4: actual signing
    codesign --sign "$IDENTITY" --verbose=4 "$APP"
    ```
 
-   **由此可以看出：** 哪一层出了问题（secrets → workflow ✓, workflow → build ✗）
+   **分かること:** どの layer で壊れているか（secrets → workflow pass、workflow → build fail など）
 
-5. **跟踪数据流**
+5. **data flow を trace する**
 
-   **当错误发生在调用栈深处时：**
+   **error が call stack の深い位置で起きている場合:**
 
-   参见本目录下的 `root-cause-tracing.md`，了解完整的反向追踪技术。
+   full backtracking technique は同 directory の `root-cause-tracing.md` を参照する。
 
-   **简要版本：**
-   - 错误值从哪里产生的？
-   - 谁用错误值调用了这里？
-   - 持续向上追踪直到找到源头
-   - 在源头修复，而不是在症状处修复
+   **short version:**
+   - wrong value はどこで生まれたか
+   - 誰がその wrong value でここを呼んだか
+   - source まで上流へ trace し続ける
+   - symptom の場所ではなく source で直す
 
-### 第二阶段：模式分析
+### Phase 2: Pattern Analysis
 
-**先找到模式，再修复：**
+**pattern を見つけてから fix する。**
 
-1. **找到可正常工作的示例**
-   - 在同一代码库中找到类似的正常代码
-   - 有什么正常的代码与出问题的代码相似？
+1. **working example を探す**
+   - 同じ codebase 内で似た正常 code を探す
+   - 正常な code と壊れている code は何が似ているか
 
-2. **与参考实现对比**
-   - 如果是实现某个模式，完整阅读参考实现
-   - 不要略读——逐行阅读
-   - 在应用之前彻底理解该模式
+2. **reference implementation と比較する**
+   - pattern を実装している場合、reference implementation を完全に読む
+   - skim しない。line by line で読む
+   - 適用前に pattern を理解しきる
 
-3. **识别差异**
-   - 正常代码和出问题的代码之间有什么不同？
-   - 列出每一个差异，无论多小
-   - 不要假设"那不可能有影响"
+3. **difference を特定する**
+   - 正常 code と壊れている code の違いは何か
+   - 小さく見えるものも含め、すべて列挙する
+   - 「これは影響しないはず」と仮定しない
 
-4. **理解依赖关系**
-   - 这个功能需要哪些其他组件？
-   - 需要哪些设置、配置、环境？
-   - 它有哪些隐含假设？
+4. **dependency を理解する**
+   - この機能はどの component に依存するか
+   - どの setting、config、environment が必要か
+   - どんな implicit assumption があるか
 
-### 第三阶段：假设与验证
+### Phase 3: Hypothesis And Verification
 
-**科学方法：**
+**scientific method:**
 
-1. **提出单一假设**
-   - 清晰地陈述："我认为 X 是根本原因，因为 Y"
-   - 写下来
-   - 要具体，不要含糊
+1. **single hypothesis を立てる**
+   - 「root cause は X だと思う。理由は Y」と明確に述べる
+   - 書き出す
+   - 具体的にする。曖昧にしない
 
-2. **最小化测试**
-   - 做出最小的改动来验证假设
-   - 每次只改一个变量
-   - 不要同时修复多个问题
+2. **minimal test を行う**
+   - hypothesis を検証する最小変更をする
+   - 一度に一つの variable だけ変える
+   - 複数 issue を同時に fix しない
 
-3. **继续之前先验证**
-   - 生效了？是 → 进入第四阶段
-   - 没生效？提出新假设
-   - 不要在上面叠加更多修复
+3. **続行前に検証する**
+   - 効いたか。yes → Phase 4 へ
+   - 効かなかったか。new hypothesis を立てる
+   - 上からさらに fix を重ねない
 
-4. **当你不确定时**
-   - 说"我不理解 X"
-   - 不要假装自己知道
-   - 寻求帮助
-   - 做更多调研
+4. **不確実な場合**
+   - 「X を理解できていない」と言う
+   - 分かったふりをしない
+   - help を求める
+   - 追加調査する
 
-### 第四阶段：实施
+### Phase 4: Implementation
 
-**修复根本原因，而非症状：**
+**root cause を修正する。symptom ではない。**
 
-1. **创建失败的测试用例**
-   - 最简化的复现
-   - 尽可能用自动化测试
-   - 没有测试框架就写一次性测试脚本
-   - 修复前必须先有测试
-   - 使用 `superpowers:test-driven-development` 技能来编写规范的失败测试
+1. **failing test case を作る**
+   - 最小 reproduction
+   - 可能な限り automated test
+   - test framework がなければ one-off test script
+   - fix 前に必ず test がある
+   - proper failing test の作成には `superpowers:test-driven-development` skill を使う
 
-2. **实施单一修复**
-   - 修复已定位的根本原因
-   - 每次只改一处
-   - 不做"顺便改改"的优化
-   - 不捆绑重构
+2. **single fix を実装する**
+   - 特定済みの root cause を修正する
+   - 一度に一箇所だけ変える
+   - 「ついでに」の最適化をしない
+   - refactor を bundle しない
 
-3. **验证修复**
-   - 测试现在通过了吗？
-   - 其他测试没有被破坏吧？
-   - 问题真的解决了吗？
+3. **fix を検証する**
+   - test は今 pass するか
+   - 他の test は壊れていないか
+   - 問題は本当に解消したか
 
-4. **如果修复不起作用**
-   - 停下来
-   - 数一数：你已经尝试了几次修复？
-   - 少于 3 次：回到第一阶段，用新信息重新分析
-   - **3 次或以上：停下来质疑架构（见下方第 5 步）**
-   - 没有经过架构讨论，不要尝试第 4 次修复
+4. **fix が効かない場合**
+   - 停止する
+   - 何回 fix を試したか数える
+   - 3 回未満: Phase 1 に戻り、新情報で再分析する
+   - **3 回以上: architecture を疑う（次の step 5）**
+   - architecture discussion なしに 4 回目の fix を試さない
 
-5. **如果 3 次以上修复都失败了：质疑架构**
+5. **3 回以上 fix が失敗した場合: architecture を疑う**
 
-   **以下模式表明存在架构问题：**
-   - 每次修复都暴露出新的共享状态/耦合/其他位置的问题
-   - 修复需要"大规模重构"才能实现
-   - 每次修复都在其他地方产生新的症状
+   **次の pattern は architecture issue を示す。**
+   - 各 fix が別の shared state / coupling / location の問題を露出させる
+   - fix に large refactor が必要になる
+   - fix するたびに別の symptom が出る
 
-   **停下来质疑根本性问题：**
-   - 这个模式从根本上合理吗？
-   - 我们是不是在"惯性驱动"下坚持了错误方案？
-   - 应该重构架构还是继续修补症状？
+   **根本的な問いを立てる。**
+   - この pattern は根本的に妥当か
+   - inertia-driven で間違った approach に固執していないか
+   - architecture を見直すべきか、symptom patch を続けるべきか
 
-   **在尝试更多修复之前，和你的搭档讨论**
+   **さらに fix を試す前に、人間の担当者と議論する。**
 
-   这不是假设失败——这是架构有误。
+   これは hypothesis failure ではない。architecture が間違っている。
 
-## 红线——停下来，按流程走
+## Red Lines - Stop And Follow The Process
 
-如果你发现自己在想：
-- "先临时修一下，以后再排查"
-- "试着改改 X 看看行不行"
-- "一次性改多个地方，跑测试看看"
-- "跳过测试，我手动验证"
-- "大概是 X 的问题，让我修一下"
-- "我不完全理解，但这应该能行"
-- "模式说的是 X，但我换个方式用"
-- "主要问题有这些：[未经调查就列出修复方案]"
-- 没有追踪数据流就提出解决方案
-- **"再试一次修复"（已经尝试了 2 次以上）**
-- **每次修复都暴露出不同地方的新问题**
+次の考えが浮かんだら停止する。
 
-**以上这些都意味着：停下来。回到第一阶段。**
+- 「先に temporary fix して、後で調べる」
+- 「X を変えて試してみよう」
+- 「複数箇所を一度に変えて test してみよう」
+- 「test は skip して manual verify する」
+- 「たぶん X だから直す」
+- 「完全には理解していないが、これで行けるはず」
+- 「pattern は X と言っているが、別の使い方をする」
+- 「主な問題はこれらです: [調査前の fix list]」
+- data flow を trace せず solution を出す
+- **「もう一回だけ fix を試す」（すでに 2 回以上試している）**
+- **fix のたびに別の場所で新しい問題が出る**
 
-**如果 3 次以上修复都失败了：** 质疑架构（见第四阶段第 5 步）
+**これらはすべて、停止して Phase 1 へ戻る合図である。**
 
-## 搭档发出的信号——说明你的方法不对
+**3 回以上 fix が失敗した場合:** architecture を疑う（Phase 4 step 5）。
 
-**留意这些提醒：**
-- "难道不是这样吗？"——你在没有验证的情况下做了假设
-- "它能告诉我们……吗？"——你应该先收集证据
-- "别猜了"——你在没有理解的情况下提出修复
-- "深入想想"——要质疑根本性问题，而不只是症状
-- "我们卡住了？"（沮丧的语气）——你的方法没有奏效
+## 人間の担当者からの Signal - Approach が間違っている
 
-**当你看到这些信号时：** 停下来。回到第一阶段。
+**次の言葉に注意する。**
 
-## 常见借口
+- 「本当にそうですか」— 検証なしに assumption を置いている
+- 「それで何が分かりますか」— 先に evidence を集めるべき
+- 「guess しないで」— 理解せずに fix を提案している
+- 「深く考えて」— symptom ではなく fundamental issue を問うべき
+- 「詰まっていますか」（frustrated tone）— approach が機能していない
 
-| 借口 | 现实 |
-|------|------|
-| "问题很简单，不需要走流程" | 简单问题也有根本原因。对于简单 bug，流程很快就能走完。 |
-| "紧急情况，没时间走流程" | 系统化调试比反复猜测式修复更快。 |
-| "先试一下，再排查" | 第一次修复就定下了基调。从一开始就做对。 |
-| "确认修复有效后再写测试" | 没有测试的修复留不住。先写测试才能证明修复有效。 |
-| "一次修多个问题省时间" | 无法隔离哪个生效了。还会引入新 bug。 |
-| "参考实现太长了，我自己改改" | 一知半解必然出 bug。完整阅读。 |
-| "我看出问题了，让我修一下" | 看到症状 ≠ 理解根因。 |
-| "再试一次"（在 2 次以上失败后） | 3 次以上失败 = 架构问题。质疑模式，不要继续修。 |
+**この signal を見たら:** 停止する。Phase 1 に戻る。
 
-## 速查表
+## Common Excuses
 
-| 阶段 | 关键活动 | 通过标准 |
-|------|---------|---------|
-| **1. 根因** | 阅读错误、复现、检查变更、收集证据 | 理解了什么出了问题以及为什么 |
-| **2. 模式** | 找到正常示例、对比 | 识别出差异 |
-| **3. 假设** | 提出理论、最小化验证 | 假设被验证或产生新假设 |
-| **4. 实施** | 创建测试、修复、验证 | bug 已修复，测试通过 |
+| Excuse | Reality |
+| --- | --- |
+| 「simple issue なので process は不要」 | simple issue にも root cause はある。simple bug なら process はすぐ終わる。 |
+| 「緊急なので process の時間がない」 | systematic debugging は guessing fix の反復より速い。 |
+| 「先に試してから調べる」 | 最初の fix が流れを決める。最初から正しく進める。 |
+| 「fix が効くと確認してから test を書く」 | test なしの fix は残らない。先に test を書くことで fix の有効性を証明する。 |
+| 「複数 issue を一度に直す方が早い」 | 何が効いたか isolate できない。new bug も入る。 |
+| 「reference が長いので自分で調整する」 | 半端な理解は必ず bug を生む。完全に読む。 |
+| 「問題が見えたので直す」 | symptom が見えたことと root cause を理解したことは違う。 |
+| 「もう一回試す」（2 回以上失敗後） | 3 回以上の失敗 = architecture issue。pattern を疑い、fix を重ねない。 |
 
-## 当流程显示"找不到根因"
+## Quick Reference
 
-如果系统化排查后发现问题确实是环境相关、时序相关或外部因素导致的：
+| Phase | Key Activity | Pass Criteria |
+| --- | --- | --- |
+| **1. Root cause** | error を読む、reproduce、change 確認、evidence 収集 | 何が、なぜ壊れたか理解している |
+| **2. Pattern** | working example を探す、compare | difference を特定した |
+| **3. Hypothesis** | theory を立て、minimal verification | hypothesis が検証された、または new hypothesis が生まれた |
+| **4. Implementation** | test 作成、fix、verify | bug が直り、test が pass した |
 
-1. 你已经完成了流程
-2. 记录你排查了什么
-3. 实施适当的处理措施（重试、超时、错误提示）
-4. 添加监控/日志以便后续排查
+## When The Process Shows "No Root Cause"
 
-**但是：** 95% 的"找不到根因"其实是排查不充分。
+systematic investigation の結果、問題が environment、timing、external factor によるものだと本当に分かった場合:
 
-## 辅助技术
+1. process は完了している
+2. 調べた内容を記録する
+3. 適切な handling を実装する（retry、timeout、error message）
+4. 後続調査のため monitoring / logging を追加する
 
-以下技术是系统化调试的组成部分，可在本目录中找到：
+**ただし:** 「root cause が見つからない」の 95% は調査不足である。
 
-- **`root-cause-tracing.md`** - 沿调用栈反向追踪 bug，找到最初的触发点
-- **`defense-in-depth.md`** - 找到根因后，在多个层级添加校验
-- **`condition-based-waiting.md`** - 用条件轮询替代硬编码等待时间
+## Supporting Techniques
 
-**相关技能：**
-- **superpowers:test-driven-development** - 用于创建失败测试用例（第四阶段，第 1 步）
-- **superpowers:verification-before-completion** - 在宣称成功之前验证修复确实有效
+次の techniques は systematic debugging の一部であり、この directory にある。
 
-## 实际效果
+- **`root-cause-tracing.md`** - call stack を逆に辿り、bug の最初の trigger を見つける
+- **`defense-in-depth.md`** - root cause 発見後、複数 layer に validation を追加する
+- **`condition-based-waiting.md`** - hard-coded wait の代わりに condition polling を使う
 
-调试实践中的数据：
-- 系统化方法：15-30 分钟修复
-- 随意修复方法：2-3 小时反复折腾
-- 一次修复成功率：95% vs 40%
-- 引入新 bug：几乎为零 vs 经常发生
+**Related skills:**
+
+- **superpowers:test-driven-development** - failing test case を作る（Phase 4 step 1）
+- **superpowers:verification-before-completion** - 成功宣言前に fix が本当に有効か検証する
+
+## Practical Impact
+
+debugging practice の観測値:
+
+- systematic approach: 15-30 分で fix
+- ad hoc approach: 2-3 時間の trial-and-error
+- first-fix success rate: 95% vs 40%
+- introduced new bug: almost zero vs frequent

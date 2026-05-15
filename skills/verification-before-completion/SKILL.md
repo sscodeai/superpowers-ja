@@ -3,137 +3,145 @@ name: verification-before-completion
 description: 完了、修正済み、テスト通過を宣言する前、commit や PR 作成前に使用する。検証コマンドを実行し、証拠に基づいて述べる。
 ---
 
-# 完成前验证
+# Verification Before Completion
 
-## 概述
+## Overview
 
-在没有验证的情况下宣称工作完成，这不是高效，而是不诚实。
+検証なしに「完了」と言うのは、効率的ではない。不誠実である。
 
-**核心原则：** 始终用证据支撑结论。
+**Core principle:** conclusion は常に evidence で支える。
 
-**对这条规则敷衍了事，就等于违背了它的精神。**
+**この rule を形だけ扱うことは、rule の精神に反する。**
 
-## 铁律
+## Iron Law
 
-```
-没有新鲜的验证证据，不许宣称完成
-```
-
-如果你在这条消息中没有运行验证命令，就不能声称测试通过。
-
-## 门控函数
-
-```
-在宣称任何状态或表达满意之前：
-
-1. 确定：什么命令能证明这个结论？
-2. 运行：执行完整命令（重新运行，完整执行）
-3. 阅读：完整输出，检查退出码，统计失败数
-4. 验证：输出是否支持这个结论？
-   - 如果否：用证据说明实际状态
-   - 如果是：带证据陈述结论
-5. 只有这时：才能做出结论
-
-跳过任何一步 = 说谎，不是验证
+```text
+fresh verification evidence なしに completion を宣言しない
 ```
 
-## 常见失败模式
+この message の中で verification command を実行していないなら、test が通ったとは言えない。
 
-| 结论 | 需要 | 不够格 |
-|------|------|--------|
-| 测试通过 | 测试命令输出：0 failures | 之前的运行结果、"应该会通过" |
-| Linter 无报错 | Linter 输出：0 errors | 部分检查、推断 |
-| 构建成功 | 构建命令：exit 0 | linter 通过、日志看起来没问题 |
-| Bug 已修复 | 测试原始症状：通过 | 代码改了，假设已修复 |
-| 回归测试有效 | 红-绿循环已验证 | 测试只通过了一次 |
-| 代理已完成 | VCS diff 显示变更 | 代理报告"成功" |
-| 需求已满足 | 逐项核对清单 | 测试通过 |
+## Gate Function
 
-## 红线——停下来
+```text
+状態を宣言する、または満足を表明する前に:
 
-- 使用"应该"、"大概"、"似乎"
-- 验证前就表达满意（"太好了！"、"完美！"、"搞定！"等）
-- 即将提交/推送/创建 PR 却没有验证
-- 信任代理的成功报告
-- 依赖部分验证
-- 想着"就这一次"
-- 累了想赶紧收工
-- **任何暗示成功但实际未运行验证的措辞**
+1. Determine: どの command がこの conclusion を証明するか
+2. Run: full command を実行する（再実行、完全実行）
+3. Read: output を最後まで読み、exit code と failure count を確認する
+4. Verify: output は conclusion を支えているか
+   - no: evidence に基づいて実際の状態を述べる
+   - yes: evidence とともに conclusion を述べる
+5. Only then: conclusion を出す
 
-## 防止合理化
-
-| 借口 | 现实 |
-|------|------|
-| "应该能行了" | 运行验证命令 |
-| "我有信心" | 信心 ≠ 证据 |
-| "就这一次" | 没有例外 |
-| "Linter 通过了" | Linter ≠ 编译器 |
-| "代理说成功了" | 独立验证 |
-| "我累了" | 疲劳 ≠ 借口 |
-| "部分检查就够了" | 部分检查什么也证明不了 |
-| "换个说法这条规则就不适用了" | 精神大于字面 |
-
-## 关键模式
-
-**测试：**
-```
-✅ [运行测试命令] [看到：34/34 pass] "全部测试通过"
-❌ "应该能通过了" / "看起来对了"
+どれか一つでも skip したら、それは verification ではなく lying である
 ```
 
-**回归测试（TDD 红-绿）：**
+## Common Failure Modes
+
+| Conclusion | Required | Not enough |
+| --- | --- | --- |
+| test passed | test command output: 0 failures | previous run、「通るはず」 |
+| linter clean | linter output: 0 errors | partial check、inference |
+| build succeeded | build command: exit 0 | linter passed、log が良さそう |
+| bug fixed | original symptom test: pass | code を変えた、fix したはず |
+| regression test valid | red-green cycle verified | test が一度 pass しただけ |
+| agent completed | VCS diff shows changes | agent の「成功」report |
+| requirement satisfied | item-by-item checklist | tests passed |
+
+## Red Lines - Stop
+
+- 「should」「probably」「seems」を使っている
+- verification 前に満足を表明している（「素晴らしい」「完璧」「完了」など）
+- commit / push / PR 作成直前なのに verification していない
+- agent の success report を信じている
+- partial verification に依存している
+- 「今回だけ」と考えている
+- 疲れて終わらせたい
+- **success を暗示するが、実際には verification を実行していない表現**
+
+## Prevent Rationalization
+
+| Excuse | Reality |
+| --- | --- |
+| 「通るはず」 | verification command を実行する |
+| 「自信がある」 | confidence は evidence ではない |
+| 「今回だけ」 | exception はない |
+| 「linter は通った」 | linter は compiler ではない |
+| 「agent が成功と言った」 | independent verification |
+| 「疲れた」 | fatigue は excuse ではない |
+| 「partial check で十分」 | partial check は何も証明しない |
+| 「別表現なら rule は適用されない」 | spirit は literal wording より上位 |
+
+## Key Patterns
+
+**Tests:**
+
+```text
+✅ [test command を実行] [34/34 pass を確認] "all tests passed"
+❌ "通るはず" / "見た感じ正しい"
 ```
-✅ 编写 → 运行（通过）→ 回退修复 → 运行（必须失败）→ 恢复 → 运行（通过）
-❌ "我写了回归测试"（没有经过红-绿验证）
+
+**Regression test (TDD red-green):**
+
+```text
+✅ write → run (pass) → revert fix → run (must fail) → restore → run (pass)
+❌ "regression test を書いた"（red-green verification なし）
 ```
 
-**构建：**
-```
-✅ [运行构建] [看到：exit 0] "构建通过"
-❌ "Linter 通过了"（linter 不检查编译）
-```
+**Build:**
 
-**需求：**
-```
-✅ 重读计划 → 创建核对清单 → 逐项验证 → 报告缺口或完成
-❌ "测试通过了，阶段完成"
+```text
+✅ [build を実行] [exit 0 を確認] "build passed"
+❌ "linter passed"（linter は compile を確認しない）
 ```
 
-**代理委派：**
+**Requirements:**
+
+```text
+✅ plan を読み直す → checklist を作る → item-by-item verify → gap または completion を報告
+❌ "tests passed なので phase completed"
 ```
-✅ 代理报告成功 → 检查 VCS diff → 验证变更 → 报告实际状态
-❌ 信任代理报告
+
+**Agent delegation:**
+
+```text
+✅ agent success report → VCS diff を確認 → changes を verify → actual state を報告
+❌ agent report を信じる
 ```
 
-## 为什么这很重要
+## Why This Matters
 
-来自 24 次失败记录：
-- 搭档说"我不信你"——信任被破坏
-- 未定义的函数被交付——会直接崩溃
-- 遗漏需求被交付——功能不完整
-- 虚假完成浪费的时间 → 返工 → 重做
-- 违反原则："诚实是核心价值。如果你说谎，就会被替换。"
+24 件の failure record から:
 
-## 何时使用
+- 人間の担当者が「信じられない」と言う — trust が壊れる
+- undefined function が delivery される — 直接 crash する
+- missing requirement が delivery される — feature が incomplete
+- false completion が時間を浪費する → rework → redo
+- principle violation: 「honesty is core value. If you lie, you will be replaced.」
 
-**以下情况之前必须使用：**
-- 任何形式的成功/完成声明
-- 任何满意的表达
-- 任何关于工作状态的正面陈述
-- 提交、创建 PR、标记任务完成
-- 进入下一个任务
-- 委派给代理
+## When To Use
 
-**本规则适用于：**
-- 准确措辞
-- 同义词和换一种说法
-- 暗示成功
-- 任何传达完成/正确性的沟通
+**次の前に必ず使う。**
 
-## 底线
+- success / completion statement のあらゆる形
+- 満足の表明
+- work status についての positive statement
+- commit、PR 作成、task complete marking
+- next task へ進む
+- agent へ delegate する
 
-**验证没有捷径。**
+**この rule は次に適用される。**
 
-运行命令。阅读输出。然后才能宣称结果。
+- exact wording
+- synonym や言い換え
+- success の暗示
+- done / correct を伝えるあらゆる communication
 
-这没有商量余地。
+## Bottom Line
+
+**verification に shortcut はない。**
+
+command を実行する。output を読む。それから result を述べる。
+
+これは交渉不可。
