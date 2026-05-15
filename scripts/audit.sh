@@ -159,13 +159,20 @@ else
     using-git-worktrees using-superpowers verification-before-completion \
     writing-plans writing-skills)
 
+  # 日本語化に伴う節分け / 日本現場向け追記を許容する skill
+  #   executing-plans: 日本 SI 向け「実行報告」section（完了 task / 検証 / 差分 / 次処理）を追加
+  declare -A SKILL_DRIFT_ALLOWANCE=(
+    [executing-plans]=8
+  )
+
   for s in "${SKILLS[@]}"; do
     up=$(git show upstream/main:skills/$s/SKILL.md 2>/dev/null | grep -cE '^#{1,4} ' || echo 0)
     our=$(grep -cE '^#{1,4} ' "skills/$s/SKILL.md" 2>/dev/null || echo 0)
     diff=$((up - our))
     abs=${diff#-}
-    # 允许 3 个 header 差异（翻译造成的合并/拆分小幅波动）
-    if [ "$abs" -le "3" ]; then
+    # デフォルトは 3、skill 個別に override 可能
+    allowance=${SKILL_DRIFT_ALLOWANCE[$s]:-3}
+    if [ "$abs" -le "$allowance" ]; then
       ok
     else
       warn "Skill 结构漂移: ${s} (上游 H=${up}, 我们 H=${our}) -- 可能 v5.1.0 没跟，或主动扩写"

@@ -25,7 +25,7 @@
 
 ### 既知の制限
 
-- 上流由来の長文 skill と参考資料には、まだ移植元の中文表現が残る箇所があります。次は `brainstorming`、`using-superpowers`、`test-driven-development`、`systematic-debugging`、`verification-before-completion` の順で日本語化します。詳細は [ROADMAP.md](ROADMAP.md) を参照してください。
+- 上流由来の長文 skill と参考資料には、まだ移植元の中文表現が残る箇所があります。日本語化の優先順位と進捗は [ROADMAP.md](ROADMAP.md) を参照してください。
 - 日本向け original skill は 4 つです。今後、日本の SI / 受託開発で頻出する障害報告書、基本設計書、受入テスト仕様書などへの対応を予定しています。
 
 ### 検証
