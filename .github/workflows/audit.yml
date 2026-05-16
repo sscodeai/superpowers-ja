@@ -27,3 +27,26 @@ jobs:
 
       - name: Run audit
         run: bash scripts/audit.sh
+
+  macos-bash-compat:
+    name: macOS bash 3.2 互換 quick audit
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/obra/superpowers.git
+          git fetch upstream main --depth=50
+
+      - name: Verify macOS bash version
+        run: bash --version
+
+      - name: Run quick audit with macOS bash
+        run: bash scripts/audit.sh --quick
