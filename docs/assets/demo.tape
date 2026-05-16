@@ -27,13 +27,13 @@ Sleep 200ms
 Type "  Detected: Claude Code"
 Enter
 Sleep 200ms
-Type "  Installing 21 skills to .claude/skills/ ..."
+Type "  Installing 22 skills to .claude/skills/ ..."
 Enter
 Sleep 500ms
 Type "  ✓ 14 translated skills installed"
 Enter
 Sleep 200ms
-Type "  ✓ 7 Japanese-specific skills installed"
+Type "  ✓ 8 Japanese-specific skills installed"
 Enter
 Sleep 300ms
 Type "  Done! Your AI assistant now has superpowers."

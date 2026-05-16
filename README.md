@@ -8,7 +8,7 @@ Upstream の [obra/superpowers](https://github.com/obra/superpowers) をベー�
 
 | 項目 | 内容 |
 | --- | --- |
-| Skills | 21 個: upstream 系 14 個 + 日本向け 5 個 + 追加ワークフロー 2 個 |
+| Skills | 22 個: upstream 系 14 個 + 日本向け 6 個 + 追加ワークフロー 2 個 |
 | 対応ツール | Claude Code / Cursor / Codex / Gemini CLI / OpenCode / Kiro / Windsurf / Aider / Trae / VS Code Copilot など |
 | 日本向け要素 | Backlog / Redmine / Jira、GitHub / GitLab / Bitbucket、稟議・承認・証跡、丁寧だが曖昧にしないレビュー、日英混在ドキュメント |
 | インストール | `npx superpowers-ja` でプロジェクト内の AI 開発ツールを自動検出 |
@@ -37,12 +37,13 @@ AI: 実装前に確認します。
 
 ## 日本向け Skills
 
-下記 5 つは日本の IT 開発現場向けに追加した skill です。レビュー、報告、文書化など、日本語で証跡を残す場面を補強します。
+下記 6 つは日本の IT 開発現場向けに追加した skill です。レビュー、報告、文書化など、日本語で証跡を残す場面を補強します。
 
 | Skill | 用途 | 呼び出し |
 | --- | --- | --- |
 | `japanese-code-review` | 日本のチームで使いやすいレビュー表現、指摘レベル、承認前チェック | `/japanese-code-review` |
 | `japanese-incident-report` | 障害初報、続報、最終報告、原因分析、再発防止策の整理 | `/japanese-incident-report` |
+| `japanese-acceptance-test-spec` | 顧客検収、UAT、受入条件、証跡付きテスト仕様の整理 | `/japanese-acceptance-test-spec` |
 | `japanese-git-workflow` | GitHub / GitLab / Bitbucket / Backlog / Redmine / Jira を前提にしたブランチ、PR/MR、CI 運用 | `/japanese-git-workflow` |
 | `japanese-documentation` | 仕様書、設計書、README、API 仕様の日英混在ルールと日本語表現 | `/japanese-documentation` |
 | `japanese-commit-conventions` | Conventional Commits を日本語チームで運用するための commit / changelog 規約 | `/japanese-commit-conventions` |
