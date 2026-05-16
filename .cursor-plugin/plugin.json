@@ -1,8 +1,8 @@
 {
   "name": "superpowers-ja",
   "displayName": "Superpowers JA",
-  "description": "Superpowers 日本語・日本 IT 開発版。20 個の skills で計画、TDD、デバッグ、レビュー、検証を支援します。",
-  "version": "0.1.0",
+  "description": "Superpowers 日本語・日本 IT 開発版。22 個の skills で計画、TDD、デバッグ、レビュー、検証を支援します。",
+  "version": "0.3.0",
   "author": {
     "name": "sscodeai",
     "url": "https://github.com/sscodeai/superpowers-ja"
@@ -10,7 +10,15 @@
   "homepage": "https://github.com/sscodeai/superpowers-ja",
   "repository": "https://github.com/sscodeai/superpowers-ja",
   "license": "MIT",
-  "keywords": ["skills", "tdd", "debugging", "japanese", "日本語", "japan", "workflows"],
+  "keywords": [
+    "skills",
+    "tdd",
+    "debugging",
+    "japanese",
+    "日本語",
+    "japan",
+    "workflows"
+  ],
   "skills": "./skills/",
   "hooks": "./hooks/hooks-cursor.json"
 }

@@ -2,7 +2,7 @@
 
 本ドキュメントは `sscodeai/superpowers-ja` 日本語 fork 自身のリリース履歴を記録します。上流 `obra/superpowers` の変更履歴については上流リポジトリを参照してください。
 
-## Unreleased
+## v0.3.0 (2026-05-17)
 
 ### 追加
 

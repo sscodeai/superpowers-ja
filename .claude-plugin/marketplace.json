@@ -1,6 +1,6 @@
 {
   "name": "superpowers-ja",
-  "description": "Superpowers 日本語・日本 IT 開発版。20 個の skills で AI coding agents の作業品質を上げます。",
+  "description": "Superpowers 日本語・日本 IT 開発版。22 個の skills で AI coding agents の作業品質を上げます。",
   "owner": {
     "name": "sscodeai",
     "url": "https://github.com/sscodeai/superpowers-ja"
@@ -9,7 +9,7 @@
     {
       "name": "superpowers-ja",
       "description": "Superpowers 日本語・日本 IT 開発版。計画、TDD、デバッグ、コードレビュー、検証、日本向け開発ワークフローを AI coding agents に追加します。",
-      "version": "0.1.0",
+      "version": "0.3.0",
       "source": "./",
       "author": {
         "name": "sscodeai",

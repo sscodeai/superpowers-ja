@@ -67,7 +67,7 @@ OpenCode を再起動するたびに自動更新されます。プラグイン�
 
 ```json
 {
-  "plugin": ["superpowers@git+https://github.com/sscodeai/superpowers-ja.git#v0.1.0"]
+  "plugin": ["superpowers@git+https://github.com/sscodeai/superpowers-ja.git#vX.Y.Z"]
 }
 ```
 
