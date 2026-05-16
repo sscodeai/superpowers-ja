@@ -36,6 +36,16 @@ Phase 1 の後、review 周辺と計画 / 並列実行系の skill を整理し�
 | P0 | `japanese-incident-report` | 障害初報、続報、最終報告、再発防止策は日本の運用現場で頻出する | Done |
 | P1 | `japanese-acceptance-test-spec` | 受入条件、検収、証跡、QA 観点を日本語で揃えやすくする | Planned |
 
+## Phase 4: Eval transcript による品質管理
+
+日本向け original skill は、実案件に近い scenario で出力品質を確認します。自動採点ではなく、prompt、期待動作、実際の出力、判定理由を transcript として残します。
+
+| Priority | Item | 理由 | Status |
+| --- | --- | --- | --- |
+| P0 | `evals/transcripts` の運用ルール | skill の品質判断を後から追えるようにする | Done |
+| P0 | `japanese-incident-report` の初回 transcript | 最初の original skill eval としてテンプレート化する | Done |
+| P1 | `japanese-acceptance-test-spec` の transcript | 次の original skill 追加時に eval を同時作成する | Planned |
+
 ## Done Criteria
 
 各 skill の日本語化では、単純翻訳ではなく次を満たします。
@@ -45,3 +55,4 @@ Phase 1 の後、review 周辺と計画 / 並列実行系の skill を整理し�
 - AI の行動を変える強い文言は、意味を崩さずに移植する
 - `node bin/superpowers-ja.js --help` と `bash scripts/audit.sh --quick` を通す
 - 変更した skill が `npm pack --dry-run --json` の package に含まれることを確認する
+- original skill を追加または大きく更新した場合は、`evals/transcripts/` に eval transcript を追加する
