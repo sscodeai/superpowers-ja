@@ -27,6 +27,15 @@ Phase 1 の後、review 周辺と計画 / 並列実行系の skill を整理し�
 | P2 | `using-git-worktrees` | 複数作業や agent 並列実行時の安全性に関わる | Done |
 | P2 | `writing-plans` | 実装計画の品質を底上げする | Done |
 
+## Phase 3: 日本向け original skill の拡充
+
+上流 skill の翻訳だけでなく、日本の SI / 受託開発 / 自社サービス運用で頻出する成果物を original skill として追加します。
+
+| Priority | Skill | 理由 | Status |
+| --- | --- | --- | --- |
+| P0 | `japanese-incident-report` | 障害初報、続報、最終報告、再発防止策は日本の運用現場で頻出する | Done |
+| P1 | `japanese-acceptance-test-spec` | 受入条件、検収、証跡、QA 観点を日本語で揃えやすくする | Planned |
+
 ## Done Criteria
 
 各 skill の日本語化では、単純翻訳ではなく次を満たします。

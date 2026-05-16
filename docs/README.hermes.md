@@ -9,7 +9,7 @@ cd /your/project
 npx superpowers-ja --tool hermes
 ```
 
-インストールスクリプトが 20 個の skills を `.hermes/skills/` にコピーし、`HERMES.md` ブートストラップファイル（ツールマッピングと skills 一覧を含む）を自動生成します。
+インストールスクリプトが skills を `.hermes/skills/` にコピーし、`HERMES.md` ブートストラップファイル（ツールマッピングと skills 一覧を含む）を自動生成します。
 
 プロジェクトにすでに `.hermes` ディレクトリまたは `HERMES.md` がある場合は自動検出されます：
 
