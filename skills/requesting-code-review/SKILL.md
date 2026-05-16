@@ -5,7 +5,7 @@ description: task 完了時、重要機能の実装後、merge 前に使用し�
 
 # Requesting Code Review
 
-code review subagent を dispatch し、問題が後続作業へ広がる前に見つける。reviewer には、整理された evaluation context だけを渡す。あなたの session history は渡さない。これにより reviewer は思考過程ではなく成果物へ集中でき、あなた自身の context も保てる。
+code review subagent を dispatch し、問題が後続作業へ広がる前に見つける。reviewer には、評価のために精緻に組み立てた context だけを渡す。あなたの session history は渡さない。これにより reviewer は思考過程ではなく成果物へ集中でき、あなた自身の context も保てる。
 
 **Core principle:** 早く review し、頻繁に review する。
 
@@ -67,7 +67,7 @@ HEAD_SHA=$(git rev-parse HEAD)
   HEAD_SHA: 3df7661
 
 [subagent result]:
-  良い点: architecture が明確で、test は real behavior を見ている
+  良い点: architecture が明確で、test は real behavior を検証している
   issue:
     Important: progress indicator がない
     Minor: report interval に magic number (100) がある
@@ -95,7 +95,7 @@ HEAD_SHA=$(git rev-parse HEAD)
 - merge 前に review する
 - stuck したときに review する
 
-## Red Lines
+## Red Flags
 
 **絶対にしないこと:**
 

@@ -31,31 +31,31 @@ Task tool（general-purpose）:
 
     ## Check Items
 
-    **Plan alignment:**
+    **計画との整合性:**
     - implementation は plan / requirement と一致しているか
     - deviation は妥当な改善か、問題のある逸脱か
     - plan にある機能はすべて入っているか
 
-    **Code quality:**
+    **コード品質:**
     - separation of concerns は明確か
     - error handling は十分か
     - type safety が必要な箇所にあるか
     - DRY だが premature abstraction ではないか
     - edge case を扱っているか
 
-    **Architecture:**
+    **アーキテクチャ:**
     - design decision は妥当か
     - scalability と performance は妥当か
     - security risk はないか
     - surrounding code と clean に integrate しているか
 
-    **Tests:**
+    **テスト:**
     - test は mock ではなく real behavior を検証しているか
     - edge case を cover しているか
     - integration test が必要な場所にあるか
     - all tests pass しているか
 
-    **Production readiness:**
+    **本番投入の準備:**
     - schema change がある場合、migration strategy はあるか
     - backward compatibility を考慮しているか
     - documentation は十分か
