@@ -1,26 +1,26 @@
-# 代码质量审查者提示词模板
+# コード品質 reviewer prompt template
 
-分派代码质量审查子智能体时使用此模板。
+コード品質 review サブエージェントを起動するときに使用します。
 
-**目的：** 验证实现是否构建良好（整洁、有测试、可维护）
+**目的:** 実装が良い作りになっているかを確認する（明瞭、test 済み、保守可能）。
 
-**仅在规格合规性审查通过后才分派。**
+**仕様適合 review が通った後にだけ起動してください。**
 
-```
+```text
 Task tool (superpowers:code-reviewer):
-  使用模板 requesting-code-review/code-reviewer.md
+  requesting-code-review/code-reviewer.md template を使用する
 
-  WHAT_WAS_IMPLEMENTED: [来自实现者的报告]
-  PLAN_OR_REQUIREMENTS: [plan-file] 中的任务 N
-  BASE_SHA: [任务开始前的提交]
-  HEAD_SHA: [当前提交]
-  DESCRIPTION: [任务摘要]
+  WHAT_WAS_IMPLEMENTED: [実装者 report]
+  PLAN_OR_REQUIREMENTS: [plan-file] の task N
+  BASE_SHA: [task 開始前の commit]
+  HEAD_SHA: [現在の commit]
+  DESCRIPTION: [task summary]
 ```
 
-**除标准代码质量关注点外，审查者还应检查：**
-- 每个文件是否有单一明确的职责和定义清晰的接口？
-- 各单元是否拆分得足以独立理解和测试？
-- 实现是否遵循了计划中的文件结构？
-- 本次实现是否创建了已经很大的新文件，或显著增大了现有文件？（不要标记已有的文件大小问题——聚焦于本次变更带来的影响。）
+**通常の code quality 観点に加えて、次も確認します。**
+- 各 file は単一で明確な責務と、定義された interface を持っているか
+- 各 unit は独立して理解・test できる粒度に分かれているか
+- 実装は計画で定義された file structure に従っているか
+- 今回の実装で大きすぎる新規 file を作ったり、既存 file を大きくしすぎたりしていないか。既存の file size 問題だけを指摘せず、今回の変更で増えた影響に集中する。
 
-**代码审查者返回：** 优点、问题（关键/重要/次要）、评估结论
+**code reviewer の返答:** Strengths、Issues（Critical / Important / Minor）、最終判断

@@ -9,6 +9,9 @@
 - `japanese-incident-report` を追加
   - 日本の IT 開発・運用現場向けの障害初報、続報、最終報告、原因分析、再発防止策を支援
   - 顧客向け / 社内向けの文体、JST 時系列、影響範囲、暫定対応、恒久対応、検証証跡を整理
+- `subagent-driven-development` を日本語化
+  - main skill と 3 つのサブエージェント prompt template を日本語化
+  - 上流の continuous execution 方針を反映し、同一 session での計画実行を明確化
 
 ## v0.1.0 (2026-05)
 
