@@ -3,74 +3,76 @@ name: writing-plans
 description: 仕様や要求があり、多段階 task として実装する必要がある場合、コードを書く前に使用する。
 ---
 
-# 编写计划
+# Writing Plans
 
-## 概述
+## Overview
 
-编写全面的实现计划，假设工程师对我们的代码库零上下文，且品味存疑。记录他们需要知道的一切：每个任务要修改哪些文件、代码、测试、可能需要查阅的文档、如何测试。将整个计划拆成小步骤任务。DRY。YAGNI。TDD。频繁 commit。
+comprehensive implementation plan を書く。実装者はこの codebase の context をほぼ持たず、testing design も得意ではないと仮定する。必要な情報をすべて記録する。各 task が変更する file、code、test、参照すべき document、test 方法を明記する。全体を小さな step task に分解する。DRY。YAGNI。TDD。frequent commit。
 
-假设他们是有经验的开发者，但对我们的工具链和问题领域几乎一无所知。假设他们不太擅长测试设计。
+実装者は経験ある developer だが、この toolchain と domain にはほぼ初見だと仮定する。test design は過信しない。
 
-**开始时宣布：** "我正在使用 writing-plans 技能创建实现计划。"
+**開始時の宣言:** 「writing-plans skill を使って implementation plan を作成します。」
 
-**上下文：** 此技能应在专用 worktree 中运行（由 brainstorming 技能创建）。
+**Context:** この skill は dedicated worktree 内で実行する（brainstorming skill によって作成済み）。
 
-**计划保存位置：** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
-- （用户对计划位置的偏好优先于此默认值）
+**plan 保存先:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
 
-## 范围检查
+- plan location についてユーザーの希望がある場合は、それを優先する
 
-如果规格涵盖了多个独立子系统，它应该在头脑风暴阶段就被拆分为子项目规格。如果没有，建议将其拆分为独立的计划——每个子系统一个。每个计划应该能独立产出可工作、可测试的软件。
+## Scope Check
 
-## 文件结构
+spec が複数の independent subsystem を含む場合、本来は brainstorming phase で subproject spec に分けるべきである。まだ分かれていない場合は、独立した plan へ分割することを提案する。各 plan は、単独で working, testable software を生める必要がある。
 
-在定义任务之前，先列出将要创建或修改的文件以及每个文件的职责。这是锁定分解决策的地方。
+## File Structure
 
-- 设计边界清晰、接口定义良好的单元。每个文件应有一个明确的职责。
-- 你对能一次放入上下文的代码推理得最好，文件越专注你的编辑越可靠。优先选择小而专注的文件，而非承担过多功能的大文件。
-- 一起变更的文件应放在一起。按职责拆分，而非按技术层级拆分。
-- 在现有代码库中，遵循已有模式。如果代码库使用大文件，不要单方面重构——但如果你正在修改的文件已经变得难以管理，在计划中包含拆分是合理的。
+task を定義する前に、作成または変更する file と、それぞれの responsibility を列挙する。ここで decomposition decision を固定する。
 
-此结构决定了任务分解。每个任务应产出独立的、有意义的变更。
+- boundary が明確で interface が定義された unit を設計する。各 file は一つの明確な responsibility を持つ
+- agent は context に収まる code ほど推論しやすく、file が focused であるほど編集が reliable になる。多機能な巨大 file より、小さく focused な file を優先する
+- 一緒に変更される file は近くに置く。technical layer ではなく responsibility で分ける
+- 既存 codebase では existing pattern に従う。codebase が大きな file を使っている場合、勝手に大規模 refactor しない。ただし、変更対象 file が管理困難になっているなら、plan に分割を含めるのは妥当
 
-## 小步骤任务粒度
+この structure が task decomposition を決める。各 task は独立した meaningful change を生むべきである。
 
-**每步是一个操作（2-5 分钟）：**
-- "编写失败的测试" - 一步
-- "运行它确认失败" - 一步
-- "实现最少代码让测试通过" - 一步
-- "运行测试确认通过" - 一步
-- "Commit" - 一步
+## Small-Step Task Granularity
 
-## 计划文档头部
+**各 step は一つの operation（2-5 分）にする。**
 
-**每个计划必须以此头部开始：**
+- "failing test を書く" - one step
+- "実行して failure を確認する" - one step
+- "test を通す最小 code を実装する" - one step
+- "test を実行して pass を確認する" - one step
+- "commit" - one step
+
+## Plan Document Header
+
+**各 plan は必ずこの header で始める。**
 
 ```markdown
-# [功能名称] 实现计划
+# [Feature Name] Implementation Plan
 
-> **面向 AI 代理的工作者：** 必需子技能：使用 superpowers:subagent-driven-development（推荐）或 superpowers:executing-plans 逐任务实现此计划。步骤使用复选框（`- [ ]`）语法来跟踪进度。
+> **AI agent worker 向け:** 必須 subskill: `superpowers:subagent-driven-development`（推奨）または `superpowers:executing-plans` を使って、この plan を task ごとに実装する。進捗 tracking には checkbox（`- [ ]`）syntax を使う。
 
-**目标：** [一句话描述要构建什么]
+**Goal:** [何を build するかを一文で説明]
 
-**架构：** [2-3 句话描述方案]
+**Architecture:** [approach を 2-3 文で説明]
 
-**技术栈：** [关键技术/库]
+**Tech Stack:** [key technology / library]
 
 ---
 ```
 
-## 任务结构
+## Task Structure
 
 ````markdown
-### 任务 N：[组件名称]
+### Task N: [Component Name]
 
-**文件：**
-- 创建：`exact/path/to/file.py`
-- 修改：`exact/path/to/existing.py:123-145`
-- 测试：`tests/exact/path/to/test.py`
+**Files:**
+- Create: `exact/path/to/file.py`
+- Modify: `exact/path/to/existing.py:123-145`
+- Test: `tests/exact/path/to/test.py`
 
-- [ ] **步骤 1：编写失败的测试**
+- [ ] **Step 1: failing test を書く**
 
 ```python
 def test_specific_behavior():
@@ -78,24 +80,24 @@ def test_specific_behavior():
     assert result == expected
 ```
 
-- [ ] **步骤 2：运行测试验证失败**
+- [ ] **Step 2: test を実行して failure を確認する**
 
-运行：`pytest tests/path/test.py::test_name -v`
-预期：FAIL，报错 "function not defined"
+Run: `pytest tests/path/test.py::test_name -v`
+Expected: FAIL, error "function not defined"
 
-- [ ] **步骤 3：编写最少实现代码**
+- [ ] **Step 3: 最小 implementation code を書く**
 
 ```python
 def function(input):
     return expected
 ```
 
-- [ ] **步骤 4：运行测试验证通过**
+- [ ] **Step 4: test を実行して pass を確認する**
 
-运行：`pytest tests/path/test.py::test_name -v`
-预期：PASS
+Run: `pytest tests/path/test.py::test_name -v`
+Expected: PASS
 
-- [ ] **步骤 5：Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
 git add tests/path/test.py src/path/file.py
@@ -103,50 +105,56 @@ git commit -m "feat: add specific feature"
 ```
 ````
 
-## 禁止占位符
+## No Placeholders
 
-每个步骤都必须包含工程师需要的实际内容。以下是**计划缺陷**——绝不要写出来：
-- "待定"、"TODO"、"后续实现"、"补充细节"
-- "添加适当的错误处理" / "添加验证" / "处理边界情况"
-- "为上述代码编写测试"（没有实际测试代码）
-- "类似任务 N"（重复代码——工程师可能不按顺序阅读任务）
-- 只描述做什么而不展示怎么做的步骤（代码步骤必须有代码块）
-- 引用了未在任何任务中定义的类型、函数或方法
+各 step は、実装者が必要とする actual content を含まなければならない。次は**plan defect**であり、絶対に書かない。
 
-## 注意事项
-- 始终使用精确的文件路径
-- 每个步骤都包含完整代码——如果步骤涉及代码变更，就展示代码
-- 精确的命令和预期输出
-- DRY、YAGNI、TDD、频繁 commit
+- "TBD"、"TODO"、"later"、"add details"
+- "適切な error handling を追加" / "validation を追加" / "edge case を処理"
+- "上記 code の test を書く"（actual test code がない）
+- "Task N と同様"（実装者は task を順番に読まないかもしれない）
+- 何をするかだけ説明し、どうするかを示さない step（code step には code block が必要）
+- どの task でも定義されていない type、function、method を参照する
 
-## 自检
+## Notes
 
-编写完整计划后，以全新视角审视规格并对照检查计划。这是你自己执行的检查清单——不是子代理调度。
+- 常に exact file path を使う
+- 各 step に complete code を含める。code change を伴う step なら code を示す
+- exact command と expected output を書く
+- DRY、YAGNI、TDD、frequent commit
 
-**1. 规格覆盖度：** 浏览规格中的每个章节/需求。你能指出实现它的任务吗？列出所有遗漏。
+## Self-Check
 
-**2. 占位符扫描：** 搜索计划中的红旗——上方"禁止占位符"章节中的任何模式。修复它们。
+complete plan を書いた後、新しい視点で spec を見直し、plan と照合する。これは自分で実行する checklist であり、subagent dispatch ではない。
 
-**3. 类型一致性：** 后续任务中使用的类型、方法签名和属性名是否与前面任务中定义的一致？任务 3 中叫 `clearLayers()` 但任务 7 中叫 `clearFullLayers()` 就是 bug。
+**1. spec coverage:** spec の各 section / requirement を確認する。それを実装する task を指せるか。漏れをすべて列挙する。
 
-如果发现问题，直接内联修复。无需重新审查——修好继续推进。如果发现规格中的需求没有对应任务，就添加任务。
+**2. placeholder scan:** plan 内の red flag を検索する。上の "No Placeholders" section の pattern があれば修正する。
 
-## 执行交接
+**3. type consistency:** later task で使う type、method signature、property name は earlier task で定義したものと一致しているか。Task 3 では `clearLayers()`、Task 7 では `clearFullLayers()` になっているなら bug。
 
-保存计划后，提供执行选项：
+問題を見つけたら inline で修正する。再 review を待つ必要はない。修正して続行する。spec requirement に対応する task がない場合は task を追加する。
 
-**"计划已完成并保存到 `docs/superpowers/plans/<filename>.md`。两种执行方式：**
+## Execution Handoff
 
-**1. 子代理驱动（推荐）** - 每个任务调度一个新的子代理，任务间进行审查，快速迭代
+plan を保存したら、execution option を提示する。
 
-**2. 内联执行** - 在当前会话中使用 executing-plans 执行任务，批量执行并设有检查点
+```text
+plan を作成し、`docs/superpowers/plans/<filename>.md` に保存しました。実行方法は二つあります。
 
-**选哪种方式？"**
+1. subagent-driven（推奨） - task ごとに新しい subagent を dispatch し、task 間で review しながら素早く進める
 
-**如果选择子代理驱动：**
-- **必需子技能：** 使用 superpowers:subagent-driven-development
-- 每个任务一个新子代理 + 两阶段审查
+2. inline execution - current session で `executing-plans` を使って task を実行し、batch ごとに checkpoint を置く
 
-**如果选择内联执行：**
-- **必需子技能：** 使用 superpowers:executing-plans
-- 批量执行并设有检查点供审查
+どちらで進めますか。
+```
+
+**subagent-driven を選ぶ場合:**
+
+- **必須 subskill:** `superpowers:subagent-driven-development`
+- task ごとに new subagent + two-stage review
+
+**inline execution を選ぶ場合:**
+
+- **必須 subskill:** `superpowers:executing-plans`
+- batch execution + review checkpoint

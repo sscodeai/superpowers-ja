@@ -1,49 +1,48 @@
-# 计划文档审查员提示模板
+# Plan Document Reviewer Prompt Template
 
-调度计划文档审查员子代理时使用此模板。
+plan document reviewer subagent を dispatch するときに、この template を使う。
 
-**用途：** 验证计划是否完整、与规格匹配，并且任务分解合理。
+**目的:** plan が complete で、spec と一致しており、task decomposition が妥当であることを検証する。
 
-**调度时机：** 完整计划编写完成后。
+**dispatch timing:** complete plan を書き終えた後。
 
-```
-Task tool（通用）:
-  description: "审查计划文档"
+```text
+Task tool（general-purpose）:
+  description: "plan document を review する"
   prompt: |
-    你是一名计划文档审查员。验证此计划是否完整并准备好进行实现。
+    あなたは plan document reviewer です。この plan が complete で、implementation に進める状態か検証してください。
 
-    **待审查计划：** [PLAN_FILE_PATH]
-    **参考规格：** [SPEC_FILE_PATH]
+    **Review target plan:** [PLAN_FILE_PATH]
+    **Reference spec:** [SPEC_FILE_PATH]
 
-    ## 检查内容
+    ## Check Items
 
-    | 类别 | 检查要点 |
-    |------|----------|
-    | 完整性 | TODO、占位符、不完整的任务、缺失的步骤 |
-    | 规格对齐 | 计划覆盖了规格需求，没有重大范围蔓延 |
-    | 任务分解 | 任务有清晰的边界，步骤可执行 |
-    | 可构建性 | 工程师能否按此计划执行而不会卡住？ |
+    | Category | What to check |
+    | --- | --- |
+    | Completeness | TODO、placeholder、不完全な task、missing step |
+    | Spec alignment | plan が spec requirement を cover し、重大な scope creep がない |
+    | Task decomposition | task boundary が明確で、step が executable |
+    | Buildability | engineer がこの plan に従って実装しても詰まらないか |
 
-    ## 校准标准
+    ## Calibration
 
-    **只标记会在实现阶段造成实际问题的事项。**
-    实现者构建了错误的东西或卡住了——这是问题。
-    措辞上的小改进、风格偏好和"锦上添花"的建议则不是。
+    **implementation phase で実害が出る issue だけを指摘してください。**
+    実装者が wrong thing を build する、または blocked になるなら issue です。
+    wording の小改善、style preference、nice-to-have suggestion は issue ではありません。
 
-    除非存在严重缺陷——规格中的需求遗漏、
-    矛盾的步骤、占位内容、或者模糊到无法执行的任务——否则应予以通过。
+    serious defect がない限り pass としてください。serious defect とは、spec requirement の漏れ、矛盾する step、placeholder content、実行不能なほど曖昧な task です。
 
-    ## 输出格式
+    ## Output Format
 
-    ## 计划审查
+    ## Plan Review
 
-    **状态：** 通过 | 发现问题
+    **Status:** Pass | Issues Found
 
-    **问题（如有）：**
-    - [任务 X，步骤 Y]：[具体问题] - [为什么这对实现很重要]
+    **Issues, if any:**
+    - [Task X, Step Y]: [specific issue] - [why this matters for implementation]
 
-    **建议（仅供参考，不阻止通过）：**
-    - [改进建议]
+    **Suggestions, non-blocking:**
+    - [improvement suggestion]
 ```
 
-**审查员返回：** 状态、问题（如有）、建议
+**reviewer returns:** status、issues if any、suggestions。
