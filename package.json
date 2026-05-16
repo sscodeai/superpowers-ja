@@ -18,7 +18,6 @@
     "skills/",
     "hooks/",
     "assets/",
-    "evals/",
     ".claude-plugin/",
     ".cursor-plugin/",
     ".codex/INSTALL.md",
