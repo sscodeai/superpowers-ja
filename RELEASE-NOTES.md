@@ -12,6 +12,9 @@
 - `japanese-acceptance-test-spec` を追加
   - 顧客検収、UAT、受入条件、証跡付き test case、判定基準を整理
   - Backlog / Redmine / Jira ticket と紐づく受入テスト仕様書の作成を支援
+- `japanese-code-review-graph` を追加
+  - `code-review-graph` 任意導入時に、影響範囲、risk、test gap を日本向け review 証跡へ整理
+  - default install には外部 dependency を追加せず、optional integration として扱う
 - `subagent-driven-development` を日本語化
   - main skill と 3 つのサブエージェント prompt template を日本語化
   - 上流の continuous execution 方針を反映し、同一 session での計画実行を明確化
@@ -19,6 +22,7 @@
   - `evals/README.md` と transcript template を追加
   - `japanese-incident-report` の顧客向け最終報告 scenario を初回 eval として記録
   - `japanese-acceptance-test-spec` の注文 CSV エクスポート scenario を eval として追加
+  - `japanese-code-review-graph` の影響範囲レビュー scenario を eval として追加
 
 ## v0.1.0 (2026-05)
 

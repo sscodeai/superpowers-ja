@@ -35,6 +35,7 @@ Phase 1 の後、review 周辺と計画 / 並列実行系の skill を整理し�
 | --- | --- | --- | --- |
 | P0 | `japanese-incident-report` | 障害初報、続報、最終報告、再発防止策は日本の運用現場で頻出する | Done |
 | P1 | `japanese-acceptance-test-spec` | 受入条件、検収、証跡、QA 観点を日本語で揃えやすくする | Done |
+| P1 | `japanese-code-review-graph` | 大規模 codebase の影響範囲、risk、test gap を日本向け review 証跡にする | Done |
 
 ## Phase 4: Eval transcript による品質管理
 
@@ -45,6 +46,7 @@ Phase 1 の後、review 周辺と計画 / 並列実行系の skill を整理し�
 | P0 | `evals/transcripts` の運用ルール | skill の品質判断を後から追えるようにする | Done |
 | P0 | `japanese-incident-report` の初回 transcript | 最初の original skill eval としてテンプレート化する | Done |
 | P1 | `japanese-acceptance-test-spec` の transcript | 次の original skill 追加時に eval を同時作成する | Done |
+| P1 | `japanese-code-review-graph` の transcript | optional integration の効果を review scenario で確認する | Done |
 
 ## Done Criteria
 
