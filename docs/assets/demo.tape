@@ -33,7 +33,10 @@ Sleep 500ms
 Type "  ✓ 14 translated skills installed"
 Enter
 Sleep 200ms
-Type "  ✓ 9 Japanese-specific skills installed"
+Type "  ✓ 7 Japanese-specific skills installed"
+Enter
+Sleep 200ms
+Type "  ✓ 2 extra workflow skills installed"
 Enter
 Sleep 300ms
 Type "  Done! Your AI assistant now has superpowers."
