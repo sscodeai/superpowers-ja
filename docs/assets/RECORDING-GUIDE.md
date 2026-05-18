@@ -1,47 +1,47 @@
-# GIF 录制指南
+# GIF 録画ガイド
 
-## 方式一：macOS 录屏（推荐，最真实）
+## 方法 1: macOS 画面収録（推奨、最も自然）
 
-### 准备
-1. 终端字体调到 18pt+，背景用深色
-2. 准备一个测试项目目录 `~/demo-project`
-3. 确保 superpowers-ja 已安装
+### 準備
+1. terminal font を 18pt 以上にし、背景は dark theme にする
+2. 検証用 project directory `~/demo-project` を用意する
+3. `superpowers-ja` が利用できる状態にしておく
 
-### 录制步骤
-1. **Cmd+Shift+5** 打开录屏，选择录制区域（只录终端窗口）
-2. 执行以下操作：
+### 録画手順
+1. **Cmd+Shift+5** で画面収録を開き、terminal window だけを録画範囲にする
+2. 次の操作を実行する:
 
 ```bash
-# 第一步：安装（3秒）
+# Step 1: install（3 秒程度）
 cd ~/demo-project
 npx superpowers-ja
 
-# 第二步：给 AI 提需求（等 AI 回复）
-claude "给用户模块加一个批量导出功能"
+# Step 2: AI に要件を渡す（応答を待つ）
+claude "ユーザー管理に一括エクスポート機能を追加して"
 ```
 
-3. 等 AI 输出日本語的头脑风暴内容（澄清问题 + 方案），录到这里就可以停了
-4. 停止录屏
+3. AI が日本語で brainstorming（確認事項 + 案）を出したところまで録画する
+4. 画面収録を停止する
 
-### 转 GIF
+### GIF 変換
 ```bash
-# mov 转 gif（用 ffmpeg）
+# mov を gif に変換（ffmpeg）
 ffmpeg -i recording.mov -vf "fps=10,scale=700:-1:flags=lanczos" -c:v gif docs/assets/demo.gif
 
-# 如果太大（>2MB），降低 fps 或尺寸
+# 2MB を超える場合は fps または size を下げる
 ffmpeg -i recording.mov -vf "fps=8,scale=600:-1:flags=lanczos" -c:v gif docs/assets/demo.gif
 ```
 
-## 方式二：VHS 脚本（模拟输入，输出需要手动编排）
+## 方法 2: VHS script（入力と出力を script で再現）
 
 ```bash
-cd /Users/yx/work/wenzhang/superpowers-ja
+cd /path/to/superpowers-ja
 vhs docs/assets/demo.tape
 ```
 
-注意：VHS 只模拟键盘输入，AI 输出需要在 tape 文件中用 Type 模拟。
+注意: VHS は keyboard 入力を再現するため、AI 出力は tape file 内の `Type` で明示的に組み立てる。
 
-## 最终效果要求
-- 时长：15-20 秒
-- 文件大小：< 2MB
-- 关键帧：能看到 AI 用日本語输出设计方案/澄清问题
+## 仕上がり基準
+- 長さ: 15-20 秒
+- ファイルサイズ: < 2MB
+- 重要 frame: AI が日本語で確認事項と設計方針を出していることが分かる

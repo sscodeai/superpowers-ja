@@ -48,6 +48,16 @@ Phase 1 の後、review 周辺と計画 / 並列実行系の skill を整理し�
 | P1 | `japanese-acceptance-test-spec` の transcript | 次の original skill 追加時に eval を同時作成する | Done |
 | P1 | `japanese-code-review-graph` の transcript | optional integration の効果を review scenario で確認する | Done |
 
+## Phase 5: 配布・保守体験の日本語化
+
+installer、audit、demo asset、CI 周辺の文言を日本語 fork として違和感なく保守できる状態にします。
+
+| Priority | Item | 理由 | Status |
+| --- | --- | --- | --- |
+| P0 | `scripts/audit.sh` の出力と README の監査説明 | CI failure 時に日本語 project として原因を追いやすくする | Done |
+| P0 | demo 録画素材の日本語化 | README / release asset で最初に見る例を日本語利用シーンに揃える | Done |
+| P1 | installer maintenance comment の整理 | 今後の fork maintenance で意図を読み取りやすくする | Done |
+
 ## Done Criteria
 
 各 skill の日本語化では、単純翻訳ではなく次を満たします。

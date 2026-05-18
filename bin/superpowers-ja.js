@@ -5,10 +5,10 @@ import { resolve, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { homedir } from 'os';
 
-// 手动递归复制：跨 Node 版本和操作系统行为一致
-// 不使用 cpSync —— 在 Windows + npx 缓存（含 junction）+ Node 16.7-18 下不稳定
+// Manual recursive copy keeps behavior consistent across Node versions and OSes.
+// Avoid cpSync: Windows + npx cache paths with junctions were unstable on Node 16.7-18.
 function copyDirSync(src, dest) {
-  // 解析 junction/symlink，避免 Windows npx 缓存路径下 readdir 返回空
+  // Resolve junctions/symlinks so Windows npx cache paths do not appear empty.
   let realSrc = src;
   try { realSrc = realpathSync(src); } catch {}
 
@@ -21,7 +21,7 @@ function copyDirSync(src, dest) {
     let stat;
     try { stat = lstatSync(srcPath); } catch { continue; }
     if (stat.isSymbolicLink()) {
-      // 取消引用后按实际类型处理
+      // Dereference and copy according to the real entry type.
       try {
         const real = realpathSync(srcPath);
         const realStat = lstatSync(real);
@@ -41,9 +41,9 @@ const PKG = JSON.parse(readFileSync(resolve(__dirname, '..', 'package.json'), 'u
 const SKILLS_SRC = resolve(__dirname, '..', 'skills');
 const PROJECT_DIR = process.cwd();
 
-// 历史遗留 agent 文件名 — 用于 --uninstall 清理已装用户机器上的残留。
-// 上游 v5.1.0 把 agents/code-reviewer.md 上升进 requesting-code-review skill，
-// agents/ 目录已删，但旧版本装过的用户机器上仍有残留文件需要清理。
+// Legacy agent filenames: --uninstall removes leftovers from older user installs.
+// Upstream v5.1.0 moved agents/code-reviewer.md into the requesting-code-review
+// skill and removed agents/, but old installs may still have the file.
 const LEGACY_AGENT_FILENAMES = ['code-reviewer.md'];
 
 const TARGETS = [
@@ -92,8 +92,8 @@ function scanSkillEntries(skillsDir) {
   return entries;
 }
 
-// 段落哨兵：v1.2.1+ 安装时把追加内容包在两条 HTML 注释之间，
-// 让アンインストール可以精确切除，无需依赖标题层级猜测段尾。
+// Section sentinels: v1.2.1+ wraps appended bootstrap content in HTML comments
+// so uninstall can remove it precisely without guessing from heading levels.
 const SENTINEL_BEGIN = '<!-- superpowers-ja:begin (do not edit between these markers) -->';
 const SENTINEL_END = '<!-- superpowers-ja:end -->';
 
@@ -175,7 +175,7 @@ function generateAntigravityBootstrap(projectDir) {
   const skillEntries = scanSkillEntries(SKILLS_SRC);
   const content = buildBootstrapContent({ skillsPath: '.antigravity/skills/', skillEntries });
 
-  // 写入 .antigravity/rules.md（不覆盖用户已有的 GEMINI.md / AGENTS.md）
+  // Write .antigravity/rules.md without touching existing GEMINI.md / AGENTS.md.
   const rulePath = resolve(projectDir, '.antigravity', 'rules.md');
   writeFileSync(rulePath, content, 'utf8');
   console.log(`  ✅ Antigravity: bootstrap rule -> ${rulePath}`);
@@ -189,8 +189,8 @@ function generateAiderBootstrap(projectDir) {
     skillEntries,
   });
 
-  // 写入 CONVENTIONS.md（Aider 原生支持自动加载此文件）
-  // 如果已有 CONVENTIONS.md，追加而不覆盖
+  // Write CONVENTIONS.md, which Aider loads natively.
+  // Append to existing files instead of overwriting them.
   const convPath = resolve(projectDir, 'CONVENTIONS.md');
   if (existsSync(convPath)) {
     const existing = readFileSync(convPath, 'utf8');
@@ -210,7 +210,7 @@ function generateGeminiBootstrap(projectDir) {
   const skillEntries = scanSkillEntries(SKILLS_SRC);
   const content = buildBootstrapContent({ skillsPath: '.gemini/skills/', skillEntries });
 
-  // 写入 GEMINI.md（如果已存在则追加）
+  // Write GEMINI.md, appending if the file already exists.
   const geminiPath = resolve(projectDir, 'GEMINI.md');
   if (existsSync(geminiPath)) {
     const existing = readFileSync(geminiPath, 'utf8');
@@ -237,7 +237,7 @@ skills が参照する Claude Code tool は、Hermes Agent では次の tool に
 - \`Bash\` → \`terminal\`
 - \`Grep\` / \`Glob\` → \`search_files\`
 - \`Skill\` → \`skill_view\`
-- \`Task\`（子智能体） → \`delegate_task\`
+- \`Task\`（sub-agent） → \`delegate_task\`
 - \`WebSearch\` → \`web_search\`
 - \`WebFetch\` → \`web_extract\`
 - \`TodoWrite\` → \`todo\``;
@@ -247,7 +247,7 @@ skills が参照する Claude Code tool は、Hermes Agent では次の tool に
     toolNotes,
   });
 
-  // 写入 HERMES.md（如果已存在则追加）
+  // Write HERMES.md, appending if the file already exists.
   const hermesPath = resolve(projectDir, 'HERMES.md');
   if (existsSync(hermesPath)) {
     const existing = readFileSync(hermesPath, 'utf8');
@@ -286,7 +286,7 @@ function generateClaudeCodeBootstrap(projectDir) {
   }
 }
 
-// 工具名称别名映射（用户输入 -> TARGETS.name）
+// Tool aliases from user input to TARGETS.name.
 const TOOL_ALIASES = {
   'claude':       'Claude Code',
   'claude-code':  'Claude Code',
@@ -490,7 +490,7 @@ function uninstallForTarget(target, srcSkillNames) {
       removed++;
     }
   }
-  // 如果目录已空（或仅剩 .DS_Store），顺手清掉，避免留下空骨架
+  // Remove the target directory if it is empty except for .DS_Store.
   try {
     if (existsSync(dest)) {
       const left = readdirSync(dest).filter(n => n !== '.DS_Store');
@@ -524,8 +524,9 @@ function uninstall() {
     }
   }
 
-  // 清理 .claude/agents 下旧版本装过的 legacy agent（v1.2.x 及之前会装 code-reviewer.md，
-  // v1.3.0 起跟随上游 v5.1.0 移除）。即使 agents/ 源目录已删，已装用户跑 --uninstall 仍应能清干净。
+  // Remove legacy .claude/agents files installed by older versions.
+  // v1.3.0 followed upstream v5.1.0 and removed the source agents/ directory,
+  // but --uninstall should still clean old installed copies.
   const agentsDest = resolve(PROJECT_DIR, '.claude', 'agents');
   if (existsSync(agentsDest)) {
     let agentsRemoved = 0;

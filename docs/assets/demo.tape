@@ -21,82 +21,79 @@ Ctrl+L
 Set TypingSpeed 0ms
 
 # Simulated install output line by line
-Type "  superpowers-ja v1.2.0"
+Type "  superpowers-ja v0.3.0 — Superpowers 日本語・日本 IT 開発版"
 Enter
 Sleep 200ms
-Type "  Detected: Claude Code"
+Type "  Source: 23 skills"
 Enter
 Sleep 200ms
-Type "  Installing 23 skills to .claude/skills/ ..."
+Type "  Target project: /Users/demo/my-project"
 Enter
 Sleep 500ms
-Type "  ✓ 14 translated skills installed"
+Type "  ✅ Claude Code: 23 skills -> .claude/skills/"
 Enter
 Sleep 200ms
-Type "  ✓ 7 Japanese-specific skills installed"
+Type "  ✅ Claude Code: bootstrap -> CLAUDE.md"
 Enter
 Sleep 200ms
-Type "  ✓ 2 extra workflow skills installed"
-Enter
-Sleep 300ms
-Type "  Done! Your AI assistant now has superpowers."
+Type "  インストール完了。AI coding tool を再起動すると有効になります。"
 Enter
 Enter
 Sleep 1.5s
 
 # Scene 2: User gives a task
 Set TypingSpeed 40ms
-Type `claude "给用户模块加一个批量导出功能"`
+Type `claude "ユーザー管理に一括エクスポート機能を追加して"`
 Enter
 Sleep 1.5s
 
 # Simulate AI brainstorming response
 Set TypingSpeed 15ms
-Type "  Using brainstorming to design this feature"
+Type "  brainstorming skill で要件と制約を整理します。"
 Enter
 Enter
 Sleep 300ms
-Type "  在开始实现之前，我需要了解几个关键问题："
+Type "  実装前に、次の点を確認したいです。"
 Enter
 Enter
 Sleep 200ms
-Type "  1. 导出格式是 CSV 还是 Excel？是否需要支持多种格式？"
+Type "  1. 出力形式は CSV / Excel のどちらですか。複数形式が必要ですか。"
 Enter
 Sleep 200ms
-Type "  2. 预计数据量多大？超过 1 万条需要考虑异步处理"
+Type "  2. 想定件数はどの程度ですか。1 万件超なら非同期処理を検討します。"
 Enter
 Sleep 200ms
-Type "  3. 有权限要求吗？比如只允许管理员导出"
+Type "  3. 権限要件はありますか。管理者のみ export 可能にしますか。"
 Enter
 Sleep 200ms
-Type "  4. 需要支持筛选条件导出吗？"
+Type "  4. 画面の検索条件を反映した export が必要ですか。"
 Enter
 Enter
 Sleep 500ms
-Type "  基于常见场景，我初步提出 2 个方案："
+Type "  よくある実装案として、まず 2 案で整理します。"
 Enter
 Enter
 Sleep 300ms
-Type "  方案 A：同步导出（适合 < 5000 条）"
+Type "  案 A: 同期 export（5,000 件未満向け）"
 Enter
-Type "    - 直接流式写入 Response，用户点击即下载"
+Type "    - Response に stream で書き込み、クリック後すぐ download"
 Enter
-Type "    - 优点：实现简单，无需额外基础设施"
+Type "    - 利点: 実装が軽く、追加 infrastructure が不要"
 Enter
-Type "    - 缺点：大数据量会超时"
+Type "    - 注意: 大量 data では timeout risk がある"
 Enter
 Enter
 Sleep 300ms
-Type "  方案 B：异步任务 + 下载链接（适合大数据量）"
+Type "  案 B: 非同期 job + download link（大量 data 向け）"
 Enter
-Type "    - 后台 Worker 生成文件，完成后通知用户下载"
+Type "    - worker が file を生成し、完了後に link を通知"
 Enter
-Type "    - 优点：不阻塞请求，支持任意数据量"
+Type "    - 利点: request を塞がず、件数増加に対応しやすい"
 Enter
-Type "    - 缺点：需要消息队列 + 对象存储"
+Type "    - 注意: queue と object storage が必要"
 Enter
 Enter
 Sleep 500ms
-Type "  请确认需求细节，我再给出详细设计。"
+Type "  上記を確認できれば、権限、監査ログ、文字コードを含めて設計します。"
 Enter
 Sleep 3s

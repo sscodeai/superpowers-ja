@@ -2,6 +2,15 @@
 
 本ドキュメントは `sscodeai/superpowers-ja` 日本語 fork 自身のリリース履歴を記録します。上流 `obra/superpowers` の変更履歴については上流リポジトリを参照してください。
 
+## Unreleased
+
+### 改善
+
+- `scripts/audit.sh` の説明、category 名、failure message を日本語 fork 向けに整理
+- README に「品質監査」section を追加し、audit category と local / CI での使い分けを明記
+- demo 録画 guide と VHS tape の sample prompt / output を日本語 scenario に更新
+- installer / version sync script の保守 comment を英語・日本語 project 向けに整理
+
 ## v0.3.0 (2026-05-17)
 
 ### 追加

@@ -138,6 +138,26 @@ npx superpowers-ja --uninstall
 
 今後の日本語化優先順位は [ROADMAP.md](ROADMAP.md) に整理しています。
 
+## 品質監査
+
+開発時は、変更範囲に応じて以下を実行してください。
+
+```bash
+bash scripts/audit.sh --quick --no-upstream
+bash scripts/audit.sh
+```
+
+`scripts/audit.sh` は次を確認します。
+
+| Category | 内容 |
+| --- | --- |
+| 静的検証 | JSON parse、`SKILL.md` frontmatter、symlink、hook 実行権限 |
+| Installer 機能 | 対応 tool への install / reinstall / uninstall |
+| Upstream alignment | 上流と同期すべき hook、brainstorm script、主要 skill 構造の drift |
+| Cross-reference integrity | README の docs link、skill 間参照、bootstrap 後の必須 path |
+
+CI では通常の audit を実行します。network や upstream remote が使えない環境では、ローカル確認として `--quick --no-upstream` を使えます。
+
 ## License
 
 MIT

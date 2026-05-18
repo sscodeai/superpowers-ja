@@ -9,7 +9,7 @@ on:
 
 jobs:
   audit:
-    name: 上游对齐 + 交叉引用 + Installer 功能 全量审计
+    name: Upstream alignment + cross references + installer audit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
