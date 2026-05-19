@@ -10,6 +10,7 @@
 - README に「品質監査」section を追加し、audit category と local / CI での使い分けを明記
 - demo 録画 guide と VHS tape の sample prompt / output を日本語 scenario に更新
 - installer / version sync script の保守 comment を英語・日本語 project 向けに整理
+- release 前の version sync、audit、package contents、eval transcript 確認を `docs/release-checklist.md` に整理
 
 ## v0.3.0 (2026-05-17)
 

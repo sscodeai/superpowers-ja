@@ -158,6 +158,8 @@ bash scripts/audit.sh
 
 CI では通常の audit を実行します。network や upstream remote が使えない環境では、ローカル確認として `--quick --no-upstream` を使えます。
 
+release 前の version sync、package 内容、eval transcript の確認は [Release Checklist](docs/release-checklist.md) にまとめています。
+
 ## License
 
 MIT
