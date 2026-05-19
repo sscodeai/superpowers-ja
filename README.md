@@ -98,24 +98,24 @@ npx superpowers-ja --tool gemini
 
 ## 対応ツール
 
-| ツール | インストール先 |
-| --- | --- |
-| Claude Code / Copilot CLI | `.claude/skills/` |
-| Cursor | `.cursor/skills/` |
-| Codex CLI | `.codex/skills/` |
-| Gemini CLI | `.gemini/skills/` |
-| OpenCode | `.opencode/skills/` |
-| Aider | `.aider/skills/` |
-| Kiro | `.kiro/steering/` |
-| Windsurf | `.windsurf/skills/` |
-| Trae | `.trae/skills/` |
-| VS Code Copilot | `.github/superpowers/` |
-| Hermes Agent | `.hermes/skills/` |
-| Antigravity | `.antigravity/skills/` |
-| OpenClaw | `skills/` |
-| DeerFlow | `skills/custom/` |
-| Qwen Code | `.qwen/skills/` |
-| Claw Code | `.claw/skills/` |
+| ツール | インストール先 | ガイド |
+| --- | --- | --- |
+| Claude Code / Copilot CLI | `.claude/skills/` | README のクイックスタートを参照 |
+| Cursor | `.cursor/skills/` | README のクイックスタートを参照 |
+| Codex CLI | `.codex/skills/` | [Codex](docs/README.codex.md) |
+| Gemini CLI | `.gemini/skills/` | [Gemini CLI](docs/README.gemini-cli.md) |
+| OpenCode | `.opencode/skills/` | [OpenCode](docs/README.opencode.md) |
+| Aider | `.aider/skills/` | [Aider](docs/README.aider.md) |
+| Kiro | `.kiro/steering/` | [Kiro](docs/README.kiro.md) |
+| Windsurf | `.windsurf/skills/` | [Windsurf](docs/README.windsurf.md) |
+| Trae | `.trae/skills/` | [Trae](docs/README.trae.md) |
+| VS Code Copilot | `.github/superpowers/` | [VS Code Copilot](docs/README.vscode.md) |
+| Hermes Agent | `.hermes/skills/` | [Hermes Agent](docs/README.hermes.md) |
+| Antigravity | `.antigravity/skills/` | [Antigravity](docs/README.antigravity.md) |
+| OpenClaw | `skills/` | [OpenClaw](docs/README.openclaw.md) |
+| DeerFlow | `skills/custom/` | [DeerFlow](docs/README.deerflow.md) |
+| Qwen Code | `.qwen/skills/` | [Qwen Code](docs/README.qwen.md) |
+| Claw Code | `.claw/skills/` | [Claw Code](docs/README.claw.md) |
 
 ## アンインストール
 
