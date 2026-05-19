@@ -29,11 +29,21 @@ PASS=0; FAIL=0; WARN=0
 declare -a FAILURES=()
 declare -a WARNINGS=()
 INSTALLER="$ROOT/bin/superpowers-ja.js"
+declare -a TMP_PATHS=()
 
 ok()   { PASS=$((PASS+1)); }
 bad()  { FAIL=$((FAIL+1)); FAILURES+=("$1"); echo "  ❌ $1"; }
 warn() { WARN=$((WARN+1)); WARNINGS+=("$1"); echo "  ⚠️  $1"; }
 hdr()  { echo ""; echo "=== $1 ==="; }
+new_tmpdir() { local p; p=$(mktemp -d); TMP_PATHS+=("$p"); echo "$p"; }
+new_tmpfile() { local p; p=$(mktemp); TMP_PATHS+=("$p"); echo "$p"; }
+cleanup_tmp_paths() {
+  local p
+  for p in "${TMP_PATHS[@]}"; do
+    rm -rf "$p"
+  done
+}
+trap cleanup_tmp_paths EXIT
 
 # upstream remote を確認する（CI では fetch が必要）
 ensure_upstream() {
@@ -98,13 +108,12 @@ hdr "Category 2: Installer 機能テスト（17 tools）"
 declare -a TOOLS=(claude cursor codex kiro deerflow trae antigravity vscode openclaw windsurf gemini aider opencode qwen hermes claw copilot)
 
 for tool in "${TOOLS[@]}"; do
-  TMP=$(mktemp -d)
+  TMP=$(new_tmpdir)
   pushd "$TMP" >/dev/null
 
   if ! node "$INSTALLER" --tool "$tool" >/dev/null 2>&1; then
     bad "Installer: $tool install failed"
     popd >/dev/null
-    rm -rf "$TMP"
     continue
   fi
 
@@ -112,7 +121,6 @@ for tool in "${TOOLS[@]}"; do
   if ! node "$INSTALLER" --tool "$tool" >/dev/null 2>&1; then
     bad "Installer: $tool second install failed (idempotency regression)"
     popd >/dev/null
-    rm -rf "$TMP"
     continue
   fi
 
@@ -123,7 +131,6 @@ for tool in "${TOOLS[@]}"; do
   fi
 
   popd >/dev/null
-  rm -rf "$TMP"
 done
 
 else
@@ -224,7 +231,7 @@ done < <(grep -rln 'superpowers:' skills/*/SKILL.md 2>/dev/null | \
          xargs -I{} grep -H 'superpowers:' {} 2>/dev/null)
 
 # 4c. .claude/skills/using-superpowers/SKILL.md must exist after install (hook dependency).
-TMP=$(mktemp -d)
+TMP=$(new_tmpdir)
 pushd "$TMP" >/dev/null
 if node "$INSTALLER" --tool claude >/dev/null 2>&1; then
   if [ -f "$TMP/.claude/skills/using-superpowers/SKILL.md" ]; then
@@ -234,17 +241,16 @@ if node "$INSTALLER" --tool claude >/dev/null 2>&1; then
   fi
 fi
 popd >/dev/null
-rm -rf "$TMP"
 
 # 4d. Manual install docs should copy skill contents, not create nested skills/skills.
-if grep -RInE 'cp -r superpowers-ja/skills[[:space:]]+[^*]' docs/*.md >/tmp/superpowers-ja-nested-skills.$$ 2>/dev/null; then
+NESTED_SKILLS_REPORT=$(new_tmpfile)
+if grep -RInE 'cp -r superpowers-ja/skills[[:space:]]+[^*]' docs/*.md >"$NESTED_SKILLS_REPORT" 2>/dev/null; then
   while IFS= read -r line; do
     bad "Manual install command may create nested skills directory: $line"
-  done < /tmp/superpowers-ja-nested-skills.$$
+  done < "$NESTED_SKILLS_REPORT"
 else
   ok
 fi
-rm -f /tmp/superpowers-ja-nested-skills.$$
 
 #==============================================================================
 echo ""
