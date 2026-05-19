@@ -100,8 +100,8 @@ npx superpowers-ja --tool gemini
 
 | ツール | インストール先 | ガイド |
 | --- | --- | --- |
-| Claude Code / Copilot CLI | `.claude/skills/` | README のクイックスタートを参照 |
-| Cursor | `.cursor/skills/` | README のクイックスタートを参照 |
+| Claude Code / Copilot CLI | `.claude/skills/` | [Claude Code](docs/README.claude.md) |
+| Cursor | `.cursor/skills/` | [Cursor](docs/README.cursor.md) |
 | Codex CLI | `.codex/skills/` | [Codex](docs/README.codex.md) |
 | Gemini CLI | `.gemini/skills/` | [Gemini CLI](docs/README.gemini-cli.md) |
 | OpenCode | `.opencode/skills/` | [OpenCode](docs/README.opencode.md) |
