@@ -15,7 +15,8 @@ npx superpowers-ja
 
 ```bash
 git clone https://github.com/sscodeai/superpowers-ja.git
-cp -r superpowers-ja/skills /your/project/.gemini/skills
+mkdir -p /your/project/.gemini/skills
+cp -r superpowers-ja/skills/* /your/project/.gemini/skills/
 ```
 
 または Gemini 拡張として（グローバル）インストール：

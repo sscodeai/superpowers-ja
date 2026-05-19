@@ -15,13 +15,15 @@ npx superpowers-ja
 
 ```bash
 git clone https://github.com/sscodeai/superpowers-ja.git
-cp -r superpowers-ja/skills /your/project/.windsurf/skills
+mkdir -p /your/project/.windsurf/skills
+cp -r superpowers-ja/skills/* /your/project/.windsurf/skills/
 ```
 
 または、グローバルインストール：
 
 ```bash
-cp -r superpowers-ja/skills ~/.windsurf/skills
+mkdir -p ~/.windsurf/skills
+cp -r superpowers-ja/skills/* ~/.windsurf/skills/
 ```
 
 ## Skill 読み込み優先度

@@ -15,7 +15,8 @@ npx superpowers-ja
 
 ```bash
 git clone https://github.com/sscodeai/superpowers-ja.git
-cp -r superpowers-ja/skills /your/project/.qwen/skills
+mkdir -p /your/project/.qwen/skills
+cp -r superpowers-ja/skills/* /your/project/.qwen/skills/
 ```
 
 または、グローバルインストール：

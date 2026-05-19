@@ -236,6 +236,16 @@ fi
 popd >/dev/null
 rm -rf "$TMP"
 
+# 4d. Manual install docs should copy skill contents, not create nested skills/skills.
+if grep -RInE 'cp -r superpowers-ja/skills[[:space:]]+[^*]' docs/*.md >/tmp/superpowers-ja-nested-skills.$$ 2>/dev/null; then
+  while IFS= read -r line; do
+    bad "Manual install command may create nested skills directory: $line"
+  done < /tmp/superpowers-ja-nested-skills.$$
+else
+  ok
+fi
+rm -f /tmp/superpowers-ja-nested-skills.$$
+
 #==============================================================================
 echo ""
 echo "=========================================="

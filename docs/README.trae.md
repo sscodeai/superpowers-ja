@@ -9,21 +9,22 @@ cd /your/project
 npx superpowers-ja
 ```
 
-インストールスクリプトが `.trae/` を自動検出し、skills を `.trae/rules/` にコピーします。
+インストールスクリプトが `.trae/` を自動検出し、skills を `.trae/skills/` にコピーします。あわせて `.trae/rules/superpowers-ja.md` に bootstrap rule を生成します。
 
 ## 手動インストール
 
 ```bash
 git clone https://github.com/sscodeai/superpowers-ja.git
-mkdir -p /your/project/.trae/rules
-cp -r superpowers-ja/skills/* /your/project/.trae/rules/
+mkdir -p /your/project/.trae/skills
+cp -r superpowers-ja/skills/* /your/project/.trae/skills/
 ```
 
 ## 仕組み
 
-Trae は `.rules` 機構で AI の振る舞いを管理します：
+Trae は `.rules` 機構で AI の振る舞いを管理します。superpowers-ja では skills 本体を `.trae/skills/` に置き、`.trae/rules/superpowers-ja.md` から参照します：
 
-- **ディレクトリ**: `.trae/rules/`
+- **Skills ディレクトリ**: `.trae/skills/`
+- **Bootstrap rule**: `.trae/rules/superpowers-ja.md`
 - **フォーマット**: Markdown + metadata（description、globs、alwaysApply、priority）
 - **ルール種別**:
   - **プロジェクトルール**（Project Rules）— 当該プロジェクトにのみ適用
@@ -32,7 +33,7 @@ Trae は `.rules` 機構で AI の振る舞いを管理します：
 
 ### Skills の適合
 
-superpowers-ja の SKILL.md は Trae の rules としてそのまま利用できます。Trae は初期化時に `.trae/rules/` 配下のすべてのルールファイルをロードします。
+superpowers-ja の SKILL.md は Trae の rules から参照できる Markdown workflow として利用します。Trae は初期化時に `.trae/rules/superpowers-ja.md` を読み込み、そこから `.trae/skills/` 配下の skills を参照します。
 
 ### 推奨設定
 

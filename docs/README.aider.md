@@ -15,7 +15,8 @@ npx superpowers-ja
 
 ```bash
 git clone https://github.com/sscodeai/superpowers-ja.git
-cp -r superpowers-ja/skills /your/project/.aider/skills
+mkdir -p /your/project/.aider/skills
+cp -r superpowers-ja/skills/* /your/project/.aider/skills/
 ```
 
 ## CONVENTIONS.md から参照する

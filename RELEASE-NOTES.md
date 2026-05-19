@@ -13,6 +13,7 @@
 - release 前の version sync、audit、package contents、eval transcript 確認を `docs/release-checklist.md` に整理
 - 対応ツール一覧に各 tool の導入ガイドリンクを追加し、Claw Code 用の install guide を追加
 - Claude Code / Cursor 用の install guide を追加し、core tool の導入手順と bootstrap 挙動を明記
+- 手動 install 手順の `skills/skills` 入れ子化 risk を修正し、audit で再発検知するように追加
 
 ## v0.3.0 (2026-05-17)
 

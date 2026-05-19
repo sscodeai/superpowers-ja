@@ -21,7 +21,8 @@ npx superpowers-ja   # 自動検出
 
 ```bash
 git clone https://github.com/sscodeai/superpowers-ja.git
-cp -r superpowers-ja/skills /your/project/.hermes/skills
+mkdir -p /your/project/.hermes/skills
+cp -r superpowers-ja/skills/* /your/project/.hermes/skills/
 ```
 
 ## HERMES.md による起動時読み込み
