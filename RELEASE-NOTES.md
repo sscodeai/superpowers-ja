@@ -2,21 +2,7 @@
 
 本ドキュメントは `sscodeai/superpowers-ja` 日本語 fork 自身のリリース履歴を記録します。上流 `obra/superpowers` の変更履歴については上流リポジトリを参照してください。
 
-## Unreleased
-
-### 改善
-
-- `scripts/audit.sh` の説明、category 名、failure message を日本語 fork 向けに整理
-- README に「品質監査」section を追加し、audit category と local / CI での使い分けを明記
-- demo 録画 guide と VHS tape の sample prompt / output を日本語 scenario に更新
-- installer / version sync script の保守 comment を英語・日本語 project 向けに整理
-- release 前の version sync、audit、package contents、eval transcript 確認を `docs/release-checklist.md` に整理
-- 対応ツール一覧に各 tool の導入ガイドリンクを追加し、Claw Code 用の install guide を追加
-- Claude Code / Cursor 用の install guide を追加し、core tool の導入手順と bootstrap 挙動を明記
-- 手動 install 手順の `skills/skills` 入れ子化 risk を修正し、audit で再発検知するように追加
-- audit script の一時ファイル / 一時ディレクトリ cleanup を trap 化し、途中失敗時の残留を減らす
-
-## v0.3.0 (2026-05-17)
+## v0.3.0 (2026-05-19)
 
 ### 追加
 
@@ -37,6 +23,18 @@
   - `japanese-incident-report` の顧客向け最終報告 scenario を初回 eval として記録
   - `japanese-acceptance-test-spec` の注文 CSV エクスポート scenario を eval として追加
   - `japanese-code-review-graph` の影響範囲レビュー scenario を eval として追加
+
+### 改善
+
+- `scripts/audit.sh` の説明、category 名、failure message を日本語 fork 向けに整理
+- README に「品質監査」section を追加し、audit category と local / CI での使い分けを明記
+- demo 録画 guide と VHS tape の sample prompt / output を日本語 scenario に更新
+- installer / version sync script の保守 comment を英語・日本語 project 向けに整理
+- release 前の version sync、audit、package contents、eval transcript 確認を `docs/release-checklist.md` に整理
+- 対応ツール一覧に各 tool の導入ガイドリンクを追加し、Claw Code 用の install guide を追加
+- Claude Code / Cursor 用の install guide を追加し、core tool の導入手順と bootstrap 挙動を明記
+- 手動 install 手順の `skills/skills` 入れ子化 risk を修正し、audit で再発検知するように追加
+- audit script の一時ファイル / 一時ディレクトリ cleanup を trap 化し、途中失敗時の残留を減らす
 
 ## v0.1.0 (2026-05)
 
