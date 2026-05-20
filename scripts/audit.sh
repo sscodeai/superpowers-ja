@@ -100,6 +100,13 @@ for f in hooks/session-start hooks/run-hook.cmd; do
   if [ -x "$f" ]; then ok; else bad "Not executable: $f"; fi
 done
 
+# 1e. CLI support commands
+if node "$INSTALLER" --list-tools | grep -q "Claude Code" && node "$INSTALLER" --list-tools | grep -q "Claw Code"; then
+  ok
+else
+  bad "CLI --list-tools output does not include expected installer targets"
+fi
+
 #==============================================================================
 if [ "$QUICK" != "1" ]; then
 hdr "Category 2: Installer 機能テスト（17 tools）"

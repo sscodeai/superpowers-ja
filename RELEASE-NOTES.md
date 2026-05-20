@@ -2,6 +2,13 @@
 
 本ドキュメントは `sscodeai/superpowers-ja` 日本語 fork 自身のリリース履歴を記録します。上流 `obra/superpowers` の変更履歴については上流リポジトリを参照してください。
 
+## Unreleased
+
+### 追加
+
+- `npx superpowers-ja --list-tools` を追加
+  - 対応 tool、alias、install 先、auto-detect marker をインストール前に確認できるようにしました
+
 ## v0.3.0 (2026-05-19)
 
 ### 追加

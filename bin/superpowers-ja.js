@@ -323,6 +323,7 @@ function showHelp() {
   Usage:
     npx superpowers-ja                   AI coding tool を自動検出してインストール
     npx superpowers-ja --tool cursor     tool を明示してインストール
+    npx superpowers-ja --list-tools      対応 tool と install 先を表示
     npx superpowers-ja --uninstall       現在のディレクトリからアンインストール
     npx superpowers-ja --force           ホームディレクトリへのインストールを許可（非推奨）
     npx superpowers-ja --help            ヘルプを表示
@@ -343,6 +344,35 @@ function showHelp() {
 
   Project: https://github.com/sscodeai/superpowers-ja
 `);
+}
+
+function aliasesForTarget(targetName) {
+  return Object.entries(TOOL_ALIASES)
+    .filter(([, name]) => name === targetName)
+    .map(([alias]) => alias)
+    .join(', ');
+}
+
+function formatDetect(detect) {
+  return (Array.isArray(detect) ? detect : [detect]).join(', ');
+}
+
+function listTools() {
+  console.log(`\n  superpowers-ja v${PKG.version} — 対応 tool 一覧\n`);
+  console.log(`  Skills: ${countDirs(SKILLS_SRC)}`);
+  console.log('  Install is project-local. Run from the project directory, not from ~/.');
+  console.log('');
+  console.log('  Tool                 Alias                         Install path              Auto-detect');
+  console.log('  -------------------  ----------------------------  ------------------------  ------------------------------');
+  for (const target of TARGETS) {
+    const name = target.name.padEnd(19);
+    const aliases = aliasesForTarget(target.name).padEnd(28);
+    const dir = target.dir.padEnd(24);
+    console.log(`  ${name}  ${aliases}  ${dir}  ${formatDetect(target.detect)}`);
+  }
+  console.log('');
+  console.log('  Example: npx superpowers-ja --tool claude');
+  console.log('');
 }
 
 function installForTarget(target) {
@@ -648,6 +678,7 @@ function install(forceToolName, force) {
 const args = process.argv.slice(2);
 const helpIdx = args.findIndex(a => a === '--help' || a === '-h');
 const versionIdx = args.findIndex(a => a === '--version' || a === '-v');
+const listToolsIdx = args.findIndex(a => a === '--list-tools' || a === '--tools');
 const toolIdx = args.findIndex(a => a === '--tool' || a === '-t');
 const uninstallIdx = args.findIndex(a => a === '--uninstall' || a === '-u');
 const forceIdx = args.findIndex(a => a === '--force' || a === '-f');
@@ -657,6 +688,8 @@ if (helpIdx !== -1) {
   showHelp();
 } else if (versionIdx !== -1) {
   console.log(PKG.version);
+} else if (listToolsIdx !== -1) {
+  listTools();
 } else if (uninstallIdx !== -1) {
   uninstall();
 } else if (toolIdx !== -1) {

@@ -94,6 +94,12 @@ npx superpowers-ja --tool codex
 npx superpowers-ja --tool gemini
 ```
 
+対応 tool、alias、install 先を事前に確認する場合:
+
+```bash
+npx superpowers-ja --list-tools
+```
+
 ユーザーのホームディレクトリ (`~`) にはインストールしないでください。プロジェクトごとの `CLAUDE.md`、`GEMINI.md`、skills ディレクトリへ bootstrap を追加する設計です。
 
 ## 対応ツール

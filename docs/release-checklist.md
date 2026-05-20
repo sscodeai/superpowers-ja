@@ -20,6 +20,7 @@ git diff -- package.json .claude-plugin/plugin.json .claude-plugin/marketplace.j
 ```bash
 node bin/superpowers-ja.js --help
 node bin/superpowers-ja.js --version
+node bin/superpowers-ja.js --list-tools
 bash scripts/audit.sh --quick --no-upstream
 ```
 
