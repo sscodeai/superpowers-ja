@@ -3,85 +3,109 @@ name: mcp-builder
 description: MCP server 構築方法論。AI assistant を外部能力へ接続する production-ready な MCP tool を体系的に設計、実装、テストする。
 ---
 
-# MCP 服务器构建
+# MCP Server を構築する
 
-系统化设计、实现、测试和部署 Model Context Protocol 服务器的方法论。
+Model Context Protocol server を設計、実装、テスト、配布するための実務 guide です。
 
-## 1. 协议核心概念
+## Core Concepts
 
-MCP 定义三种原语：
+MCP の主要 primitive:
 
-- **Tools（工具）**：AI 助手主动调用的函数，有副作用。如搜索、创建、删除操作。
-- **Resources（资源）**：AI 助手只读访问的数据源，用 URI 标识。如 `users://{id}/profile`。
-- **Prompts（提示词模板）**：预定义交互模板，引导用户触发工作流。
+- **Tools:** AI assistant が能動的に呼ぶ function。検索、作成、削除など副作用を持つ操作。
+- **Resources:** assistant が read-only で読む data source。URI で識別する。
+- **Prompts:** user interaction を誘導する reusable template。
 
-**选择原则：** 执行操作 → Tool | 读取数据 → Resource | 引导交互 → Prompt
+選択基準:
+- 操作する、変更する、外部 API を叩く -> Tool
+- 読むだけ、参照するだけ -> Resource
+- 定型 workflow を始める -> Prompt
 
-## 2. 项目结构规范
+## Project Structure
 
-### TypeScript
-```
+TypeScript:
+
+```text
 my-mcp-server/
-├── src/
-│   ├── index.ts          # 入口，注册 tools/resources
-│   ├── tools/             # 按功能拆分
-│   ├── resources/
-│   └── lib/               # 客户端封装、校验逻辑
-├── tests/
-├── package.json
-└── tsconfig.json
+  src/
+    index.ts
+    tools/
+    resources/
+    lib/
+  tests/
+  package.json
+  tsconfig.json
 ```
 
-关键依赖：`@modelcontextprotocol/sdk` + `zod`
+Python:
 
-### Python
-```
+```text
 my-mcp-server/
-├── src/my_mcp_server/
-│   ├── server.py
-│   ├── tools/
-│   └── lib/
-├── tests/
-└── pyproject.toml
+  src/my_mcp_server/
+    server.py
+    tools/
+    lib/
+  tests/
+  pyproject.toml
 ```
 
-关键依赖：`mcp` + `pydantic`
+推奨:
+- registration と business logic を分ける
+- external client wrapper を `lib/` に置く
+- schema validation を handler の入口に置く
+- test は pure function と MCP protocol integration の両方を持つ
 
-## 3. Tool 设计原则
+## Tool Design
 
-### 命名
-- `snake_case` 格式，动词开头：`search_users`、`create_issue`、`delete_file`
-- 名称自解释，AI 助手靠名称选工具，模糊命名导致误调用
+### Naming
 
-### 参数
-- 每个参数有类型约束和 `.describe()` 描述
-- 可选参数给默认值，减少 AI 决策负担
-- 用枚举代替布尔开关
+- `snake_case`
+- 動詞から始める: `search_issues`, `create_ticket`, `delete_file`
+- 名前だけで用途が分かる
+- 複数 service を扱う場合は service 名を含める
+
+曖昧な名前は tool selection を悪化させます。
+
+### Parameters
+
+- schema で型を制約する
+- 各 parameter に description を書く
+- optional parameter には default を用意する
+- boolean が曖昧なら enum を使う
+- destructive operation には confirmation parameter を要求する
 
 ```typescript
 server.tool("search_issues", {
-  query: z.string().describe("搜索关键词"),
-  status: z.enum(["open", "closed", "all"]).default("open").describe("状态筛选"),
-  limit: z.number().min(1).max(100).default(20).describe("返回上限"),
-}, async ({ query, status, limit }) => { /* ... */ });
+  query: z.string().describe("Search keywords"),
+  status: z.enum(["open", "closed", "all"]).default("open"),
+  limit: z.number().min(1).max(100).default(20),
+}, async ({ query, status, limit }) => {
+  return searchIssues({ query, status, limit });
+});
 ```
 
-### 描述
-说明**用途 + 返回内容 + 限制**，这是 AI 选择工具的关键依据：
+### Description
+
+Tool description は assistant の routing metadata です。用途、返す内容、制限を短く書きます。
 
 ```typescript
-server.tool("search_users",
-  "根据姓名或邮箱搜索用户。返回 ID、姓名、邮箱列表。模糊匹配，最多 50 条。",
-  schema, handler);
+server.tool(
+  "search_users",
+  "Search users by name or email. Returns id, name, and email. Fuzzy match, max 50 results.",
+  schema,
+  handler
+);
 ```
 
-### 输出
-- 结构化数据 → JSON，人类可读内容 → Markdown
-- 始终用 `content: [{ type: "text", text: "..." }]` 格式返回
+### Output
 
-## 4. 输入验证和错误处理
+- structured data は JSON
+- user-facing explanation は Markdown
+- error は `isError: true`
+- 次に取れる action を含める
 
-用 Zod/Pydantic 做 Schema 级校验，业务级校验放 handler 开头：
+## Validation and Errors
+
+Zod / Pydantic で schema-level validation を行い、business-level validation は handler 冒頭に置きます。
 
 ```typescript
 server.tool("get_user", { id: z.string() }, async ({ id }) => {
@@ -89,167 +113,218 @@ server.tool("get_user", { id: z.string() }, async ({ id }) => {
     const user = await db.getUser(id);
     if (!user) {
       return {
-        content: [{ type: "text", text: `用户 ${id} 不存在，请检查 ID。` }],
+        content: [{ type: "text", text: `User ${id} was not found. Check the id and retry.` }],
         isError: true,
       };
     }
     return { content: [{ type: "text", text: JSON.stringify(user, null, 2) }] };
   } catch (err) {
     return {
-      content: [{ type: "text", text: `查询失败：${err.message}` }],
+      content: [{ type: "text", text: `Query failed: ${err.message}` }],
       isError: true,
     };
   }
 });
 ```
 
-**错误处理四原则：**
-1. 永远不让服务器崩溃 — try/catch 包裹所有外部调用
-2. 返回可操作的错误信息 — 告诉 AI 问题是什么、能做什么
-3. 使用 `isError: true` — 让 AI 知道调用失败
-4. 区分错误类型 — 参数错误、权限不足、资源不存在、服务不可用
+Error handling rules:
 
-## 5. 资源管理和生命周期
+- external call は必ず timeout と try/catch を持つ
+- server process を落とさない
+- `isError: true` を返す
+- user / assistant が次に何を確認すべきかを書く
+- permission、not found、validation、service unavailable を区別する
+
+## Resources and Lifecycle
 
 ```typescript
-// 资源注册
 server.resource("user-profile", "users://{userId}/profile", async (uri) => {
   const profile = await db.getProfile(extractId(uri));
-  return { contents: [{ uri: uri.href, mimeType: "application/json", text: JSON.stringify(profile) }] };
+  return {
+    contents: [{
+      uri: uri.href,
+      mimeType: "application/json",
+      text: JSON.stringify(profile),
+    }],
+  };
 });
-
-// 生命周期：先初始化 → 再 connect → 监听关闭信号
-const db = await Database.connect(config.dbUrl);
-await server.connect(new StdioServerTransport());
-process.on("SIGINT", async () => { await db.disconnect(); await server.close(); process.exit(0); });
 ```
 
-关键点：使用连接池、所有外部调用设超时、优雅关闭清理资源。
+Lifecycle:
 
-## 6. 测试策略
+1. config を読む
+2. external clients / pools を初期化する
+3. tools / resources を登録する
+4. transport に connect する
+5. SIGINT / SIGTERM で close する
 
-### 单元测试 — 业务逻辑与 MCP 注册分离
+外部 call には timeout を設定し、connection pool や file handle は graceful shutdown で閉じます。
+
+## Testing
+
+### Unit Test
+
+MCP registration から business logic を分け、pure function を test します。
+
 ```typescript
-// tools/search.ts 导出纯函数
-export async function searchUsers(query: string, limit: number) { /* ... */ }
+export async function searchUsers(query: string, limit: number) {
+  // business logic
+}
 
-// search.test.ts 独立测试
-test("返回匹配结果", async () => {
+test("returns matching users", async () => {
   const results = await searchUsers("alice", 10);
   expect(results[0].name).toContain("Alice");
 });
 ```
 
-### 集成测试 — 用 SDK Client 做端到端验证
+### Integration Test
+
+SDK client から tool を呼び、protocol-level behavior を確認します。
+
 ```typescript
 const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
 await server.connect(serverTransport);
+
 const client = new Client({ name: "test", version: "1.0.0" });
 await client.connect(clientTransport);
+
 const result = await client.callTool("search_users", { query: "test" });
 expect(result.isError).toBeFalsy();
 ```
 
-### MCP Inspector — 交互式调试
+### Inspector
+
 ```bash
 npx @modelcontextprotocol/inspector node dist/index.js
 ```
 
-在浏览器中查看所有 tools/resources，手动调用并查看结果。
+Inspector で tools / resources の表示、manual call、error output を確認します。
 
-**测试要点：** 每个 Tool 覆盖正常 + 异常路径、边界值、外部服务失败模拟。
+Test coverage:
+- happy path
+- validation error
+- not found
+- permission failure
+- external timeout
+- boundary values
 
-## 7. 安全考虑
+## Security
 
-**权限控制：**
-- 最小权限原则，读写 Tool 分离
-- 危险操作要求确认参数（如 `confirm: true`）
+Permission:
+- read tool と write tool を分ける
+- least privilege
+- destructive operation は `confirm: true` などを要求する
 
-**输入安全：**
-- SQL 注入 → 参数化查询，绝不拼接
-- 路径遍历 → 校验路径，禁止 `../`
-- 命令注入 → 用 `execFile` 而非 `exec`
+Input:
+- SQL は parameterized query
+- path は normalize し、allowed root 外を拒否する
+- shell は `exec` より `execFile`
+- URL / host allowlist を検討する
 
-**敏感数据：**
-- 密钥通过环境变量传入，不硬编码
-- 日志不打印完整敏感信息
-- 返回数据做脱敏处理
+Secrets:
+- API key は environment variable
+- log に secret を出さない
+- response は必要に応じて redaction する
 
-**沙箱：** 文件操作限制目录、网络请求限制白名单、设置资源配额。
+Sandbox:
+- file operation は root directory を制限する
+- network と resource usage に制限を置く
+- large output は pagination / limit を持つ
 
-## 8. 部署和分发
+## Deployment
 
-### npm 发布
+npm:
+
 ```json
-{ "bin": { "mcp-server-myservice": "dist/index.js" }, "files": ["dist"] }
+{
+  "bin": {
+    "mcp-server-myservice": "dist/index.js"
+  },
+  "files": ["dist", "README.md"]
+}
 ```
 
-用户配置：
+Client config:
+
 ```json
-{ "mcpServers": { "myservice": { "command": "npx", "args": ["@yourorg/mcp-server-myservice"], "env": { "API_KEY": "xxx" } } } }
+{
+  "mcpServers": {
+    "myservice": {
+      "command": "npx",
+      "args": ["@yourorg/mcp-server-myservice"],
+      "env": { "API_KEY": "..." }
+    }
+  }
+}
 ```
 
-### pip 发布
+Python:
+
 ```toml
 [project.scripts]
 mcp-server-myservice = "my_mcp_server.server:main"
 ```
 
-### Docker — 适用于复杂依赖或隔离场景
-```dockerfile
-FROM node:20-slim
-WORKDIR /app
-COPY package*.json ./ && RUN npm ci --production
-COPY dist ./dist
-ENTRYPOINT ["node", "dist/index.js"]
-```
+Docker is useful when dependencies are heavy or isolation matters.
 
-## 9. 调试技巧
+## Debugging
 
-**关键：MCP 用 stdio 通信，不能用 `console.log`，会破坏协议流。**
+MCP stdio transport では `console.log` / stdout debug を使わないでください。protocol stream を壊します。
 
 ```typescript
-// 错误
+// Bad
 console.log("debug");
-// 正确
-console.error("[DEBUG]", info);
-// 更好
-server.sendLoggingMessage({ level: "info", data: "处理中" });
+
+// OK
+console.error("[debug]", info);
+
+// Better when supported
+server.sendLoggingMessage({ level: "info", data: "processing" });
 ```
 
-**常见问题：**
+Common issues:
 
-| 症状 | 原因 | 解决 |
-|------|------|------|
-| 启动无响应 | transport 未连接 | 检查 `server.connect()` |
-| Tool 不出现 | 注册在 connect 之后 | 先注册再 connect |
-| AI 不调用 Tool | 描述不清晰 | 改善名称和描述 |
-| 参数总错 | Schema 不明确 | 添加 `.describe()` |
-| 调用超时 | 外部服务慢 | 加超时和缓存 |
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| Server hangs | transport not connected | check `server.connect()` |
+| Tool missing | registered after connect | register before connect |
+| Tool not selected | unclear name / description | improve metadata |
+| Bad arguments | weak schema | add descriptions and enums |
+| Timeout | slow external service | add timeout and cache |
+| Broken protocol | stdout logging | log to stderr |
 
-**调试流程：** Inspector 验证基本功能 → 手动调用确认输入输出 → 连接真实 AI 客户端观察调用模式 → 根据实际行为调整设计。
+Debug flow:
 
-## 10. 构建检查清单
+1. Run unit tests
+2. Run integration tests
+3. Inspect with MCP Inspector
+4. Connect from real client
+5. Observe actual tool selection and revise descriptions
 
-### 设计
-- [ ] 明确 Tools vs Resources vs Prompts 分工
-- [ ] Tool 命名 `动词_名词`，描述说明用途和返回内容
-- [ ] 参数简洁，可选参数有合理默认值
+## Build Checklist
 
-### 实现
-- [ ] 输入用 Zod/Pydantic 校验
-- [ ] 外部调用有 try/catch 和超时
-- [ ] 错误返回 `isError: true` 并附可操作信息
-- [ ] 不用 `console.log`（用 stderr 或 SDK 日志）
-- [ ] 敏感数据走环境变量
+Design:
+- [ ] Tools / Resources / Prompts are separated correctly
+- [ ] Tool names are verb-first and specific
+- [ ] Descriptions say purpose, output, and limits
+- [ ] Parameters have types, descriptions, and defaults
 
-### 测试
-- [ ] 核心逻辑有单元测试
-- [ ] 有集成测试验证 MCP 协议交互
-- [ ] 用 MCP Inspector 手动验证过
-- [ ] 用真实 AI 客户端测试过
+Implementation:
+- [ ] Zod / Pydantic validates input
+- [ ] external calls have timeout and try/catch
+- [ ] errors return `isError: true`
+- [ ] no stdout debug on stdio transport
+- [ ] secrets come from environment variables
 
-### 部署
-- [ ] README 含安装和配置说明
-- [ ] 提供客户端配置 JSON 示例
-- [ ] 遵循 semver，无硬编码密钥
+Testing:
+- [ ] core logic has unit tests
+- [ ] MCP protocol has integration tests
+- [ ] Inspector manual calls work
+- [ ] real client tested tool discovery and calls
+
+Release:
+- [ ] install instructions are documented
+- [ ] client config JSON is provided
+- [ ] package includes built files only
+- [ ] semver is followed
+- [ ] no hardcoded secrets or local paths

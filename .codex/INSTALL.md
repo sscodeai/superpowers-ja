@@ -1,44 +1,55 @@
 # Install Superpowers-JA for Codex
 
-Use Codex native skill discovery by cloning this repository and linking its `skills` directory.
+Use Codex native skill discovery with a project-local install.
 
 ## Prerequisites
 
-- Git
+- Node.js 20+
 
 ## Install
+
+Run from the project where you want to use superpowers-ja:
+
+```bash
+cd /path/to/your/project
+npx superpowers-ja --tool codex
+```
+
+This creates `.codex/skills/` in the current project and copies all superpowers-ja skills there.
+
+Do not run this from your home directory (`~`) unless you intentionally want a home-level install.
+
+## Verify
+
+```bash
+test -f .codex/skills/using-superpowers/SKILL.md
+ls .codex/skills
+```
+
+Restart Codex after installation.
+
+## Update
+
+```bash
+cd /path/to/your/project
+npx superpowers-ja --tool codex
+```
+
+Re-running the installer refreshes the project-local skills.
+
+## Uninstall
+
+```bash
+cd /path/to/your/project
+npx superpowers-ja --uninstall
+```
+
+## Advanced: User-Level Install
+
+If you deliberately want one checkout shared across projects, use Codex user-level skill discovery with a symlink or junction. This affects every project for that user, so project-local install is recommended for team work.
 
 ```bash
 git clone https://github.com/sscodeai/superpowers-ja.git ~/.codex/superpowers-ja
 mkdir -p ~/.agents/skills
 ln -s ~/.codex/superpowers-ja/skills ~/.agents/skills/superpowers-ja
-```
-
-Windows PowerShell:
-
-```powershell
-New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.agents\skills"
-cmd /c mklink /J "$env:USERPROFILE\.agents\skills\superpowers-ja" "$env:USERPROFILE\.codex\superpowers-ja\skills"
-```
-
-Restart Codex after installation.
-
-## Verify
-
-```bash
-ls -la ~/.agents/skills/superpowers-ja
-```
-
-## Update
-
-```bash
-cd ~/.codex/superpowers-ja
-git pull
-```
-
-## Uninstall
-
-```bash
-rm ~/.agents/skills/superpowers-ja
-rm -rf ~/.codex/superpowers-ja
 ```
