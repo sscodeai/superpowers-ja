@@ -33,17 +33,17 @@ Kiro は **Steering** で AI の振る舞いルールを管理します：
 
 superpowers-ja の SKILL.md フォーマットは Kiro Steering と互換（どちらも Markdown + YAML frontmatter）です。インストール後、Kiro が自動的に skills を認識・ロードします。
 
-### 推奨設定
+### 自動生成される bootstrap
 
-`.kiro/steering/` に `superpowers.md` を作成：
+`npx superpowers-ja --tool kiro` は `.kiro/steering/superpowers-ja.md` を自動生成します。手動インストールする場合だけ、同等の steering file を作成してください：
 
 ```markdown
 ---
-description: superpowers skills framework をロードする
+description: superpowers-ja skills framework をロードする
 alwaysApply: true
 ---
 
-.kiro/steering/ 配下の superpowers skills をワークフロー指針として利用してください。
+.kiro/steering/ 配下の superpowers-ja skills をワークフロー指針として利用してください。
 新しいタスクは brainstorming skill から始めることを推奨します。
 ```
 

@@ -29,7 +29,7 @@ use skill tool to load superpowers/brainstorming
 
 ```json
 {
-  "plugin": ["superpowers@git+https://github.com/sscodeai/superpowers-ja.git#v1.4.0"]
+  "plugin": ["superpowers@git+https://github.com/sscodeai/superpowers-ja.git#vX.Y.Z"]
 }
 ```
 

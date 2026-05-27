@@ -171,6 +171,25 @@ ${skillTable}
   console.log(`  ✅ Trae: bootstrap rule -> ${rulePath}`);
 }
 
+function generateKiroBootstrap(projectDir) {
+  const skillEntries = scanSkillEntries(SKILLS_SRC);
+  const content = buildBootstrapContent({
+    title: 'Superpowers-JA 日本語・日本 IT 開発版',
+    skillsPath: '.kiro/steering/',
+    skillEntries,
+  });
+  const rule = `---
+description: superpowers-ja skills framework をロードする
+alwaysApply: true
+---
+
+${content}`;
+
+  const rulePath = resolve(projectDir, '.kiro', 'steering', 'superpowers-ja.md');
+  writeFileSync(rulePath, rule, 'utf8');
+  console.log(`  ✅ Kiro: bootstrap steering -> ${rulePath}`);
+}
+
 function generateAntigravityBootstrap(projectDir) {
   const skillEntries = scanSkillEntries(SKILLS_SRC);
   const content = buildBootstrapContent({ skillsPath: '.antigravity/skills/', skillEntries });
@@ -396,6 +415,10 @@ function installForTarget(target) {
     generateTraeBootstrapRule(PROJECT_DIR);
   }
 
+  if (target.name === 'Kiro') {
+    generateKiroBootstrap(PROJECT_DIR);
+  }
+
   if (target.name === 'Antigravity') {
     generateAntigravityBootstrap(PROJECT_DIR);
   }
@@ -428,6 +451,7 @@ function isHomeDir(p) {
 // Bootstrap files removed or cleaned during uninstall.
 const BOOTSTRAP_DELETE = [
   '.trae/rules/superpowers-ja.md',
+  '.kiro/steering/superpowers-ja.md',
   '.antigravity/rules.md',
 ];
 const BOOTSTRAP_CLEAN_SECTION = [
