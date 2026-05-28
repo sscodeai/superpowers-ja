@@ -4,7 +4,12 @@
 
 ## Unreleased
 
-現時点で予定中の変更はありません。次の release では writing-skills の上流 v5.1.0 追従を予定しています。
+### 追加
+
+- `writing-skills` を上流 v5.1.0 へ追従（adapted 同期）
+  - Claude Search Optimization (CSO) 詳細、Iron Law、Bulletproofing、Skill Creation Checklist、Real-World Impact、Anti-Pattern の理由付け等を取り込み
+  - `scripts/audit.sh` の structure drift 警告（upstream H=75 / ours H=27）を解消
+  - 日本 SI / 受託開発 / SaaS 現場の合理化例・受入条件・証跡 keyword を CSO と rationalization table に織り込み
 
 ## v0.3.0 (2026-05-19)
 

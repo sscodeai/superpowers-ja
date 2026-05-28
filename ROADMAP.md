@@ -64,7 +64,7 @@ installer、audit、demo asset、CI 周辺の文言を日本語 fork として�
 
 | Priority | Item | 理由 | Status |
 | --- | --- | --- | --- |
-| P0 | `writing-skills` を上流 v5.1.0 へ追従 | audit が drift 警告を出している唯一の skill。CSO / Anti-Pattern / Implementation / Real-World Impact 等の新 section を日本語 adapted で取り込む | Todo |
+| P0 | `writing-skills` を上流 v5.1.0 へ追従 | audit が drift 警告を出している唯一の skill。CSO / Anti-Pattern / Implementation / Real-World Impact 等の新 section を日本語 adapted で取り込む | Done |
 | P1 | 残り skill の上流差分一括 audit | `scripts/audit.sh` を拡張するか、補助 script で他 skill の見出し差分も検知できるようにする | Todo |
 | P2 | 上流 sync workflow の整備 | 上流 main の skill 更新を定期 fetch して差分を report する仕組み (GitHub Actions など) | Todo |
 
