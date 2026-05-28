@@ -4,15 +4,14 @@
 
 ## Unreleased
 
-### 追加
-
-- `npx superpowers-ja --list-tools` を追加
-  - 対応 tool、alias、install 先、auto-detect marker をインストール前に確認できるようにしました
+現時点で予定中の変更はありません。次の release では writing-skills の上流 v5.1.0 追従を予定しています。
 
 ## v0.3.0 (2026-05-19)
 
 ### 追加
 
+- `npx superpowers-ja --list-tools` を追加
+  - 対応 tool、alias、install 先、auto-detect marker をインストール前に確認できるようにしました
 - `japanese-incident-report` を追加
   - 日本の IT 開発・運用現場向けの障害初報、続報、最終報告、原因分析、再発防止策を支援
   - 顧客向け / 社内向けの文体、JST 時系列、影響範囲、暫定対応、恒久対応、検証証跡を整理

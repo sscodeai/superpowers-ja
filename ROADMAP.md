@@ -58,6 +58,16 @@ installer、audit、demo asset、CI 周辺の文言を日本語 fork として�
 | P0 | demo 録画素材の日本語化 | README / release asset で最初に見る例を日本語利用シーンに揃える | Done |
 | P1 | installer maintenance comment の整理 | 今後の fork maintenance で意図を読み取りやすくする | Done |
 
+## Phase 6: 上流 v5.x 追従
+
+上流 `obra/superpowers` が v5 系で更新した skill 内容に追従し、`scripts/audit.sh` の Skill structure drift 警告を解消します。直訳ではなく日本の現場向けに adapted 化することを基本方針とします。
+
+| Priority | Item | 理由 | Status |
+| --- | --- | --- | --- |
+| P0 | `writing-skills` を上流 v5.1.0 へ追従 | audit が drift 警告を出している唯一の skill。CSO / Anti-Pattern / Implementation / Real-World Impact 等の新 section を日本語 adapted で取り込む | Todo |
+| P1 | 残り skill の上流差分一括 audit | `scripts/audit.sh` を拡張するか、補助 script で他 skill の見出し差分も検知できるようにする | Todo |
+| P2 | 上流 sync workflow の整備 | 上流 main の skill 更新を定期 fetch して差分を report する仕組み (GitHub Actions など) | Todo |
+
 ## Done Criteria
 
 各 skill の日本語化では、単純翻訳ではなく次を満たします。
