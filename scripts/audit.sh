@@ -207,6 +207,13 @@ else
   else
     bad "code-reviewer.md structure drift (upstream v5.1.0 self-contained, H=${up}; ours H=${our})"
   fi
+
+  # 3e. Summary report for all local skills, including local-only Japanese additions.
+  if node scripts/check-upstream-skill-drift.js upstream/main >/tmp/superpowers-ja-skill-drift.md 2>/dev/null; then
+    ok
+  else
+    warn "Skill drift summary could not be generated"
+  fi
 fi
 
 #==============================================================================
