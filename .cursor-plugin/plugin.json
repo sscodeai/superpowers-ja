@@ -2,7 +2,7 @@
   "name": "superpowers-ja",
   "displayName": "Superpowers JA",
   "description": "Superpowers 日本語・日本 IT 開発版。23 個の skills で計画、TDD、デバッグ、レビュー、検証を支援します。",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": {
     "name": "sscodeai",
     "url": "https://github.com/sscodeai/superpowers-ja"

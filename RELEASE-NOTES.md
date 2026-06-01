@@ -4,6 +4,10 @@
 
 ## Unreleased
 
+変更なし。
+
+## v0.3.1 (2026-06-01)
+
 ### 追加
 
 - `writing-skills` を上流 v5.1.0 へ追従（adapted 同期）
