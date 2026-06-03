@@ -21,7 +21,7 @@ Ctrl+L
 Set TypingSpeed 0ms
 
 # Simulated install output line by line
-Type "  superpowers-ja v0.3.0 — Superpowers 日本語・日本 IT 開発版"
+Type "  superpowers-ja v0.3.1 — Superpowers 日本語・日本 IT 開発版"
 Enter
 Sleep 200ms
 Type "  Source: 23 skills"
