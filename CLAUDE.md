@@ -8,6 +8,8 @@ This project is a Japanese IT development edition of `obra/superpowers`. It keep
 
 Do not submit changes upstream to `obra/superpowers` that are specific to this fork. Japan-specific skills, branding, installer behavior, and local workflow guidance belong here.
 
+Before opening an issue or PR, identify the authoring environment. Disclose your model, harness, harness version, and every installed plugin or state plainly that the report was written by hand. This is required because documentation-only reasoning, real session evidence, and Japan-specific operational evidence carry different weight.
+
 ## Contribution Rules
 
 - One change should solve one concrete problem.
@@ -16,6 +18,9 @@ Do not submit changes upstream to `obra/superpowers` that are specific to this f
 - Preserve existing upstream skill intent unless there is a clear fork-specific reason.
 - For installer or harness changes, verify that skills are discoverable and that bootstrap instructions load at session start.
 - For skill changes, include before/after behavior notes or a small manual eval transcript.
+- Search open and closed issues / PRs before proposing a duplicate.
+- Show the complete diff to a human partner before submitting a PR.
+- Target `main` unless a maintainer or issue explicitly names a release / feature branch.
 
 ## Fork Scope
 
@@ -44,3 +49,9 @@ node bin/superpowers-ja.js --version
 ```
 
 For install behavior, test in a temporary project directory with `--tool claude` or another explicit target.
+
+For new harness support, include a clean-session transcript showing that `brainstorming` auto-triggers before code is written for:
+
+```text
+Let's make a react todo list
+```

@@ -12,14 +12,18 @@ labels: bug
 
 - [ ] 既存 issue を検索し、重複でないことを確認しました
 
-## 環境情報
+## 環境情報（必須）
+<!-- 必須です。AI agent が作成した報告である可能性を前提に、
+     どの環境で発生したかを明記してください。
+     日本語の業務利用では、OS / shell / 会社標準 tool の差で再現性が変わります。 -->
 
 | 項目 | 値 |
 |------|---|
 | Superpowers-JA バージョン | |
-| ツール（Claude Code、Cursor など） | |
-| ツールバージョン | |
-| モデル | |
+| Harness / ツール（Claude Code、Cursor など） | |
+| Harness / ツールバージョン | |
+| モデル + バージョン | |
+| インストール済み plugin / extension | |
 | OS + Shell | |
 
 ## Superpowers の問題ですか、それともプラットフォーム側の問題ですか？

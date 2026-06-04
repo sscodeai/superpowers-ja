@@ -3,6 +3,20 @@
 複数の無関係な変更を含む、または人による確認がない PR は close される場合があります。
 -->
 
+> この repository では通常 `main` に向けて PR を作成します。release / feature branch が指定されている場合は、その issue または maintainer の案内に従ってください。
+
+## 提出者情報（必須）
+<!-- 必須です。AI agent が作成した PR である可能性を前提に、
+     どの環境で作成された変更かを明記してください。
+     ドキュメントから推測した変更と、実際の session / eval に基づく変更は分けて判断します。 -->
+
+| 項目 | 値 |
+|------|---|
+| モデル + バージョン | |
+| Harness / ツール + バージョン | |
+| インストール済み plugin / extension | |
+| diff 全体を確認した人 | |
+
 ## 解決したい課題
 <!--
 具体的な課題を書いてください。AI agent の挙動改善であれば、次を含めると判断しやすくなります。
@@ -48,9 +62,34 @@ Superpowers core library は、幅広い利用者に価値がある汎用的な 
 
 ## 検証環境
 
-| Tool (Claude Code, Cursor など) | Tool version | Model | Model version / ID |
-| --- | --- | --- | --- |
-|  |  |  |  |
+| Harness / Tool | Tool version | Model | Model version / ID | Installed plugins |
+| --- | --- | --- | --- | --- |
+|  |  |  |  |  |
+
+## 新しい harness 対応（該当する場合は必須）
+<!-- 新しい IDE、CLI tool、agent runner への対応を追加する場合は、
+     実際に bootstrap が session start で読み込まれることを示してください。
+
+     受入テスト:
+     1. 新しい harness で clean session を開く
+     2. 次の user message を送る
+
+        Let's make a react todo list
+
+     成功条件:
+     code を書き始める前に brainstorming skill が自動で発火すること。
+
+     単に skill files をコピーしただけ、毎 session 手動で opt-in するだけ、
+     bootstrap が読まれない統合は正式対応とは見なしません。 -->
+
+<details>
+<summary>Clean-session transcript for "Let's make a react todo list"</summary>
+
+```text
+paste the complete transcript here
+```
+
+</details>
 
 ## 評価
 - この変更につながった会話または初期 prompt は何ですか。
