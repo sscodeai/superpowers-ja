@@ -9,7 +9,7 @@ Upstream の [obra/superpowers](https://github.com/obra/superpowers) をベー�
 | 項目 | 内容 |
 | --- | --- |
 | Skills | 23 個: upstream 系 14 個 + 日本向け 7 個 + 追加ワークフロー 2 個 |
-| 対応ツール | Claude Code / Cursor / Codex / Gemini CLI / OpenCode / Kiro / Windsurf / Aider / Trae / VS Code Copilot など |
+| 対応ツール | Claude Code / Cursor / Codex / Gemini CLI / OpenCode / Kiro / Windsurf / Aider / Trae / Qoder / VS Code Copilot など |
 | 日本向け要素 | Backlog / Redmine / Jira、GitHub / GitLab / Bitbucket、稟議・承認・証跡、丁寧だが曖昧にしないレビュー、日英混在ドキュメント |
 | インストール | `npx superpowers-ja` でプロジェクト内の AI 開発ツールを自動検出 |
 
@@ -122,6 +122,7 @@ npx superpowers-ja --list-tools
 | DeerFlow | `skills/custom/` | [DeerFlow](docs/README.deerflow.md) |
 | Qwen Code | `.qwen/skills/` | [Qwen Code](docs/README.qwen.md) |
 | Claw Code | `.claw/skills/` | [Claw Code](docs/README.claw.md) |
+| Qoder | `.qoder/skills/` + `.qoder/rules/` | [Qoder](docs/README.qoder.md) |
 
 ## アンインストール
 

@@ -19,6 +19,8 @@ mkdir -p /your/project/.trae/skills
 cp -r superpowers-ja/skills/* /your/project/.trae/skills/
 ```
 
+> 手動コピーでは `.trae/rules/superpowers-ja.md` の bootstrap rule は生成されません。skills の自動参照を安定させる場合は `npx superpowers-ja --tool trae` を推奨します。
+
 ## 仕組み
 
 Trae は `.rules` 機構で AI の振る舞いを管理します。superpowers-ja では skills 本体を `.trae/skills/` に置き、`.trae/rules/superpowers-ja.md` から参照します：

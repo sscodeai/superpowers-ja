@@ -44,6 +44,7 @@ skills は Claude Code の tool 名を使う。Claude Code 以外の platform �
 - Copilot CLI: `references/copilot-tools.md`
 - Hermes Agent: `references/hermes-tools.md`
 - Codex: `references/codex-tools.md`
+- Qoder: `references/qoder-tools.md`
 - Gemini CLI: GEMINI.md に tool mapping が自動注入される
 
 # Using Skills

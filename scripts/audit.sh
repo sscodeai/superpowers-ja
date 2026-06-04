@@ -2,7 +2,7 @@
 # 品質監査スクリプト —— 4 種類のチェックで drift を防ぐ
 #
 # 1. 静的検証: JSON parse / SKILL.md frontmatter / symlink / hook 実行権限
-# 2. Installer 機能: 17 種類の tool install / uninstall / idempotency
+# 2. Installer 機能: 18 種類の tool install / uninstall / idempotency
 # 3. Upstream alignment: hooks 3 files + brainstorm scripts 3 files + 14 translated skill structure
 # 4. Cross references: README → docs/ links + skill references + bootstrap injection path
 #
@@ -109,10 +109,10 @@ fi
 
 #==============================================================================
 if [ "$QUICK" != "1" ]; then
-hdr "Category 2: Installer 機能テスト（17 tools）"
+hdr "Category 2: Installer 機能テスト（18 tools）"
 #==============================================================================
 
-declare -a TOOLS=(claude cursor codex kiro deerflow trae antigravity vscode openclaw windsurf gemini aider opencode qwen hermes claw copilot)
+declare -a TOOLS=(claude cursor codex kiro deerflow trae antigravity vscode openclaw windsurf gemini aider opencode qwen hermes claw copilot qoder)
 
 for tool in "${TOOLS[@]}"; do
   TMP=$(new_tmpdir)

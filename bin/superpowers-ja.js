@@ -63,6 +63,7 @@ const TARGETS = [
   { name: 'Qwen Code',     dir: '.qwen/skills',             detect: '.qwen' },
   { name: 'Hermes Agent',  dir: '.hermes/skills',            detect: ['.hermes', 'HERMES.md', '.hermes.md'] },
   { name: 'Claw Code',     dir: '.claw/skills',              detect: ['.claw', 'CLAW.md'] },
+  { name: 'Qoder',         dir: '.qoder/skills',             detect: '.qoder' },
 ];
 
 function countDirs(dir) {
@@ -169,6 +170,49 @@ ${skillTable}
   const rulePath = resolve(rulesDir, 'superpowers-ja.md');
   writeFileSync(rulePath, rule, 'utf8');
   console.log(`  ✅ Trae: bootstrap rule -> ${rulePath}`);
+}
+
+function generateQoderBootstrap(projectDir) {
+  const rulesDir = resolve(projectDir, '.qoder', 'rules');
+  mkdirSync(rulesDir, { recursive: true });
+
+  const skillEntries = scanSkillEntries(SKILLS_SRC);
+  const skillTable = skillEntries.map(s => `| ${s.name} | ${s.desc} |`).join('\n');
+
+  // Qoder community examples use trigger: always_on for rules that load in every chat.
+  // Keep alwaysApply as a compatibility hint if the schema evolves.
+  const rule = `---
+trigger: always_on
+alwaysApply: true
+---
+
+# Superpowers-JA 日本語・日本 IT 開発版
+
+superpowers-ja skill フレームワーク（${skillEntries.length} skills）を読み込んでいます。
+
+## 基本ルール
+
+1. **タスクを受けたら、該当する skill がないか先に確認する** — 1% でも可能性があれば確認する
+2. **設計を実装より先に行う** — 機能追加や仕様変更では、まず brainstorming skill で要求と制約を整理する
+3. **テストを実装より先に考える** — 可能な限り TDD で進める
+4. **完了宣言より先に検証する** — 完了、修正済み、テスト済みと述べる前に検証コマンドを実行し、結果を確認する
+
+## 利用可能な Skills
+
+Skills は \`.qoder/skills/\` 配下にあります。各 skill には独立した \`SKILL.md\` があります。
+
+| Skill | Trigger |
+|-------|---------|
+${skillTable}
+
+## 使い方
+
+タスクが skill に該当する場合は、対応する \`.qoder/skills/<skill-name>/SKILL.md\` を読み込み、その手順に従ってください。必要に応じて \`/<skill-name>\` で明示的に呼び出します。
+`;
+
+  const rulePath = resolve(rulesDir, 'superpowers-ja.md');
+  writeFileSync(rulePath, rule, 'utf8');
+  console.log(`  ✅ Qoder: bootstrap rule -> ${rulePath}`);
 }
 
 function generateKiroBootstrap(projectDir) {
@@ -333,6 +377,7 @@ const TOOL_ALIASES = {
   'claw':         'Claw Code',
   'claw-code':    'Claw Code',
   'clawcode':     'Claw Code',
+  'qoder':        'Qoder',
 };
 
 function showHelp() {
@@ -415,6 +460,10 @@ function installForTarget(target) {
     generateTraeBootstrapRule(PROJECT_DIR);
   }
 
+  if (target.name === 'Qoder') {
+    generateQoderBootstrap(PROJECT_DIR);
+  }
+
   if (target.name === 'Kiro') {
     generateKiroBootstrap(PROJECT_DIR);
   }
@@ -451,6 +500,7 @@ function isHomeDir(p) {
 // Bootstrap files removed or cleaned during uninstall.
 const BOOTSTRAP_DELETE = [
   '.trae/rules/superpowers-ja.md',
+  '.qoder/rules/superpowers-ja.md',
   '.kiro/steering/superpowers-ja.md',
   '.antigravity/rules.md',
 ];
