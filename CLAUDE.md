@@ -19,6 +19,7 @@ Before opening an issue or PR, identify the authoring environment. Disclose your
 - For installer or harness changes, verify that skills are discoverable and that bootstrap instructions load at session start.
 - For skill changes, include before/after behavior notes or a small manual eval transcript.
 - Search open and closed issues / PRs before proposing a duplicate.
+- If a related closed PR exists, explain what is different about your approach and why it should succeed.
 - Show the complete diff to a human partner before submitting a PR.
 - Target `main` unless a maintainer or issue explicitly names a release / feature branch.
 

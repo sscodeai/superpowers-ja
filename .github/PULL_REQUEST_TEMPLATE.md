@@ -60,6 +60,8 @@ Superpowers core library は、幅広い利用者に価値がある汎用的な 
 - [ ] open / closed の PR と Issue を確認し、重複がないことを確認しました
 - 関連: <!-- #番号, #番号, または「該当なし」 -->
 
+<!-- close 済みの関連 PR がある場合は、今回の approach が何を変えており、なぜ前回と違って採用可能なのかを説明してください。 -->
+
 ## 検証環境
 
 | Harness / Tool | Tool version | Model | Model version / ID | Installed plugins |
