@@ -4,19 +4,39 @@ Superpowers skills は Claude Code の tool 名を使います。Qoder では多
 
 | Skill 内の参照 | Qoder での読み替え |
 | --- | --- |
-| `Read` / `Write` / `Edit` | file read / write / edit tool |
-| `Bash` | shell / terminal 実行 tool |
-| `Grep` / `Glob` | code search / file search |
-| `Task` | Qoder の agent delegation |
-| `WebFetch` / `WebSearch` | web access / search tool |
-| `AskUserQuestion` | user confirmation / question |
-| `Skill` | skill 呼び出し、または `/<skill-name>` による明示呼び出し |
-| `TodoWrite` | task / todo 管理 |
-| `EnterPlanMode` / `ExitPlanMode` | Spec mode 相当 |
+| `Read` / `Write` / `Edit` | 同名または file read / write / edit tool |
+| `Bash` | 同名または shell / terminal 実行 tool |
+| `Grep` / `Glob` | 同名または code search / file search |
+| `Task` | 同名または Qoder の agent delegation |
+| `WebFetch` / `WebSearch` | 同名または web access / search tool |
+| `AskUserQuestion` | 同名または user confirmation / question |
+| `Skill` | 同名、または `/<skill-name>` による明示呼び出し |
+| `TodoWrite` | 同名または task / todo 管理 |
+| `EnterPlanMode` / `ExitPlanMode` | `EnterSpecMode` / `ExitSpecMode` 相当。Qoder では plan mode を Spec mode と呼ぶ |
 
 ## Task Agent
 
-Qoder 側に explore / plan / guide / code review などの agent がある場合、Claude Code の `Task` subagent 指示は最も近い Qoder agent に読み替えてください。
+| Claude Code agent | Qoder での読み替え |
+| --- | --- |
+| `general-purpose` | `general-purpose` |
+| `Explore` | `explore-agent` |
+| `Plan` | `plan-agent` |
+| `claude-code-guide` | `qoder-guide` |
+
+Qoder 側に `browser-agent`、`code-reviewer`、`design-agent` などの専用 agent がある場合は、task の性質に最も近い agent を選んでください。
+
+## Quest MCP Tools
+
+Qoder の Quest system が使える環境では、次のような Qoder native tools を補助的に使えます。Claude Code には直接の等価 tool がないため、skill の手順を壊さない範囲で追加の探索・検証に使います。
+
+| Tool | 用途 |
+| --- | --- |
+| `mcp__quest__search_codebase` | 意図ベースの code search |
+| `mcp__quest__search_symbol` | symbol 名と関係の検索 |
+| `mcp__quest__get_problems` | file の compile / syntax error 確認 |
+| `mcp__quest__run_preview` | local web server preview |
+| `mcp__quest__search_memory` / `mcp__quest__update_memory` | cross-session memory |
+| `mcp__quest__fetch_rules` | rule file の確認 |
 
 ## Loading
 

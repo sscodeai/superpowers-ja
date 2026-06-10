@@ -59,7 +59,9 @@ skills 内の Claude Code tool 名は、多くの場合 Qoder でも同名また
 | `Grep` / `Glob` | code search / file search |
 | `Task` | Qoder の agent delegation |
 | `TodoWrite` | task / todo 管理 |
-| `EnterPlanMode` / `ExitPlanMode` | Spec mode 相当 |
+| `EnterPlanMode` / `ExitPlanMode` | `EnterSpecMode` / `ExitSpecMode` 相当 |
+
+詳細な agent / Quest MCP tool の読み替えは [`skills/using-superpowers/references/qoder-tools.md`](../skills/using-superpowers/references/qoder-tools.md) を参照してください。
 
 日本語 project では、要件、検収条件、障害対応、運用引き継ぎの確認を先に行うよう、`brainstorming` と日本向け skills を優先してください。
 
