@@ -145,6 +145,14 @@ npx superpowers-ja --uninstall
 
 今後の日本語化優先順位は [ROADMAP.md](ROADMAP.md) に整理しています。
 
+## 関連プロジェクト
+
+| Project | 用途 |
+| --- | --- |
+| [`agency-agents-ja`](https://github.com/sscodeai/agency-agents-ja) | 日本の IT 開発、SIer、受託開発、SaaS、EC、製造業 DX 向け AI 専門家 agent library。`workflow-runner` と組み合わせて複数 role の作業を進められます。 |
+| [`sscodeai-site`](https://github.com/sscodeai/sscodeai-site) | `superpowers-ja` と `agency-agents-ja` の docs、tutorial、blog hub。 |
+| [`local-agent-toolkit`](https://github.com/jnMetaCode/local-agent-toolkit) | agent に memory、skill 管理、実行 trace を追加する local-first toolkit。`skillet` を使うと skill 単位の配布・導入を整理できます。 |
+
 ## 品質監査
 
 開発時は、変更範囲に応じて以下を実行してください。
