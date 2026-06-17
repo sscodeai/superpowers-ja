@@ -256,7 +256,19 @@ if node "$INSTALLER" --tool claude >/dev/null 2>&1; then
 fi
 popd >/dev/null
 
-# 4d. Manual install docs should copy skill contents, not create nested skills/skills.
+# 4d. Auto-detect with no known tool marker must fail without writing fallback files.
+TMP=$(new_tmpdir)
+pushd "$TMP" >/dev/null
+if node "$INSTALLER" >/tmp/superpowers-ja-no-tool.out 2>/tmp/superpowers-ja-no-tool.err; then
+  bad "Installer auto-detect should fail when no tool marker is present"
+elif [[ -d "$TMP/.claude/skills" ]]; then
+  bad "Installer auto-detect wrote .claude/skills fallback despite no tool marker"
+else
+  ok
+fi
+popd >/dev/null
+
+# 4e. Manual install docs should copy skill contents, not create nested skills/skills.
 NESTED_SKILLS_REPORT=$(new_tmpfile)
 if grep -RInE 'cp -r superpowers-ja/skills[[:space:]]+[^*]' docs/*.md >"$NESTED_SKILLS_REPORT" 2>/dev/null; then
   while IFS= read -r line; do

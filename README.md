@@ -117,7 +117,7 @@ npx superpowers-ja --list-tools
 | Trae | `.trae/skills/` | [Trae](docs/README.trae.md) |
 | VS Code Copilot | `.github/superpowers/` | [VS Code Copilot](docs/README.vscode.md) |
 | Hermes Agent | `.hermes/skills/` | [Hermes Agent](docs/README.hermes.md) |
-| Antigravity | `.antigravity/skills/` | [Antigravity](docs/README.antigravity.md) |
+| Antigravity | `.agents/skills/` | [Antigravity](docs/README.antigravity.md) |
 | OpenClaw | `skills/` | [OpenClaw](docs/README.openclaw.md) |
 | DeerFlow | `skills/custom/` | [DeerFlow](docs/README.deerflow.md) |
 | Qwen Code | `.qwen/skills/` | [Qwen Code](docs/README.qwen.md) |

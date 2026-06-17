@@ -9,14 +9,14 @@ cd /your/project
 npx superpowers-ja
 ```
 
-インストールスクリプトが `.antigravity/` を自動検出し、skills を該当ディレクトリにコピーします。
+インストールスクリプトが `.agents/` を自動検出し、skills を該当ディレクトリにコピーします。
 
 ## 手動インストール
 
 ```bash
 git clone https://github.com/sscodeai/superpowers-ja.git
-mkdir -p /your/project/.antigravity/skills
-cp -r superpowers-ja/skills/* /your/project/.antigravity/skills/
+mkdir -p /your/project/.agents/skills
+cp -r superpowers-ja/skills/* /your/project/.agents/skills/
 ```
 
 ## 仕組み
@@ -27,7 +27,7 @@ Antigravity は複数のルールファイル形式に対応しています：
 |---------|--------|------|
 | `GEMINI.md` | 最高 | Antigravity 専用ルール |
 | `AGENTS.md` | 中 | 汎用ルール（Antigravity、Cursor、Claude Code 共通） |
-| `.antigravity/rules.md` | 中 | プロジェクト単位のルールディレクトリ |
+| `.agents/rules.md` | 中 | プロジェクト単位のルールディレクトリ |
 | `CLAUDE.md` | 低 | 自動読み込みされる |
 
 ### 推奨設定方法
@@ -37,10 +37,10 @@ Antigravity は複数のルールファイル形式に対応しています：
 ```markdown
 # GEMINI.md
 
-.antigravity/ 配下の superpowers skills をワークフロー指針として利用してください。
+.agents/ 配下の superpowers skills をワークフロー指針として利用してください。
 新しいタスクは brainstorming skill から始めることを推奨します。
 
-Skills 一覧は .antigravity/ ディレクトリを参照。
+Skills 一覧は .agents/ ディレクトリを参照。
 ```
 
 **方法 2**：`AGENTS.md` から参照（複数ツール共通）：
@@ -49,7 +49,7 @@ Skills 一覧は .antigravity/ ディレクトリを参照。
 # AGENTS.md
 
 本プロジェクトは superpowers-ja skills framework を採用しています。
-Skills は .antigravity/（Antigravity）または .claude/skills/（Claude Code）配下にあります。
+Skills は .agents/（Antigravity）または .claude/skills/（Claude Code）配下にあります。
 ```
 
 ### ツール名マッピング

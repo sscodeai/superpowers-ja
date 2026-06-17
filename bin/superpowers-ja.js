@@ -53,7 +53,7 @@ const TARGETS = [
   { name: 'Kiro',          dir: '.kiro/steering',            detect: '.kiro' },
   { name: 'DeerFlow',      dir: 'skills/custom',             detect: 'deer_flow' },
   { name: 'Trae',          dir: '.trae/skills',              detect: '.trae' },
-  { name: 'Antigravity',   dir: '.antigravity/skills',       detect: '.antigravity' },
+  { name: 'Antigravity',   dir: '.agents/skills',            detect: '.agents' },
   { name: 'VS Code',       dir: '.github/superpowers',       detect: '.github/copilot-instructions.md' },
   { name: 'OpenClaw',      dir: 'skills',                     detect: '.openclaw' },
   { name: 'Windsurf',      dir: '.windsurf/skills',          detect: '.windsurf' },
@@ -236,10 +236,10 @@ ${content}`;
 
 function generateAntigravityBootstrap(projectDir) {
   const skillEntries = scanSkillEntries(SKILLS_SRC);
-  const content = buildBootstrapContent({ skillsPath: '.antigravity/skills/', skillEntries });
+  const content = buildBootstrapContent({ skillsPath: '.agents/skills/', skillEntries });
 
-  // Write .antigravity/rules.md without touching existing GEMINI.md / AGENTS.md.
-  const rulePath = resolve(projectDir, '.antigravity', 'rules.md');
+  // Write .agents/rules.md without touching existing GEMINI.md / AGENTS.md.
+  const rulePath = resolve(projectDir, '.agents', 'rules.md');
   writeFileSync(rulePath, content, 'utf8');
   console.log(`  ✅ Antigravity: bootstrap rule -> ${rulePath}`);
 }
@@ -502,7 +502,7 @@ const BOOTSTRAP_DELETE = [
   '.trae/rules/superpowers-ja.md',
   '.qoder/rules/superpowers-ja.md',
   '.kiro/steering/superpowers-ja.md',
-  '.antigravity/rules.md',
+  '.agents/rules.md',
 ];
 const BOOTSTRAP_CLEAN_SECTION = [
   'CLAUDE.md',
@@ -729,17 +729,14 @@ function install(forceToolName, force) {
 
   if (installed === 0) {
     console.log('  ⚠️  既知の AI coding tool を検出できませんでした。\n');
-    console.log('  Cursor などを使っている場合は --tool で指定してください:');
-    console.log('    npx superpowers-ja --tool cursor');
-    console.log('    npx superpowers-ja --tool claude\n');
-    console.log('  デフォルトで .claude/skills/ にインストールします（Claude Code 互換）。\n');
-
-    const dest = resolve(PROJECT_DIR, '.claude', 'skills');
-    mkdirSync(dest, { recursive: true });
-    copyDirSync(SKILLS_SRC, dest);
-    console.log(`  ✅ Default install: ${countDirs(dest)} skills -> ${dest}`);
-
-    generateClaudeCodeBootstrap(PROJECT_DIR);
+    console.log('  誤った tool に install しないよう、何も変更しませんでした。');
+    console.log('  使用中の tool を --tool で明示してください:');
+    console.log('    npx superpowers-ja --tool claude        # Claude Code / Copilot CLI');
+    console.log('    npx superpowers-ja --tool antigravity   # Google Antigravity');
+    console.log('    npx superpowers-ja --tool trae          # Trae');
+    console.log('    npx superpowers-ja --tool cursor        # Cursor\n');
+    console.log(`  利用可能な alias: ${Object.keys(TOOL_ALIASES).join(', ')}\n`);
+    process.exit(1);
   }
 
   console.log('\n  インストール完了。AI coding tool を再起動すると有効になります。\n');
