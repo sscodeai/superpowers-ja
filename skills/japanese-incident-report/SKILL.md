@@ -1,6 +1,11 @@
 ---
 name: japanese-incident-report
 description: 日本の IT 開発・運用現場向けの障害報告書、インシデント初報、続報、最終報告、原因分析、再発防止策を作成・レビューする。顧客向け、社内向け、SIer/受託開発、自社サービス運用で、影響範囲、時系列、暫定対応、恒久対応、再発防止、検証証跡を整理する必要がある場合に使用する。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [japanese, incident-response]
 ---
 
 # 日本向け障害報告・インシデント報告

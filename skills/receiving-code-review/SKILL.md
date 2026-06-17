@@ -1,6 +1,11 @@
 ---
 name: receiving-code-review
 description: コードレビュー指摘を受けた後、反映前に使用する。特に指摘が曖昧、または技術的疑問がある場合、盲目的に従わず検証する。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [code-review, verification]
 ---
 
 # Receiving Code Review

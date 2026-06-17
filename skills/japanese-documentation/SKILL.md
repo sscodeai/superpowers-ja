@@ -1,6 +1,11 @@
 ---
 name: japanese-documentation
 description: 日本語技術文書の作成参考。仕様書、基本設計、詳細設計、README、API 仕様、運用手順での日英混在、敬体/常体、表記ゆれ、受入条件、証跡の残し方。ユーザーが明示的に /japanese-documentation を指定した場合のみ使用し、自動起動しない。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [japanese, documentation]
 ---
 
 # 日本語技術ドキュメント規約

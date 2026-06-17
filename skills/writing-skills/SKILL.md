@@ -1,6 +1,11 @@
 ---
 name: writing-skills
 description: 新しい skill の作成、既存 skill の編集、または公開前の効果検証を行う場合に使用する。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [skills, authoring]
 ---
 
 # Skill を書く

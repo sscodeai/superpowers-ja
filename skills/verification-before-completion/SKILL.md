@@ -1,6 +1,11 @@
 ---
 name: verification-before-completion
 description: 完了、修正済み、テスト通過を宣言する前、commit や PR 作成前に使用する。検証コマンドを実行し、証拠に基づいて述べる。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [verification, quality]
 ---
 
 # Verification Before Completion

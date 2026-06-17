@@ -1,6 +1,11 @@
 ---
 name: finishing-a-development-branch
 description: 実装完了後、テスト通過後、作業を merge / PR / 保持 / 破棄のどれで終えるか判断する場合に使用する。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [git, release]
 ---
 
 # 開発ブランチの完了

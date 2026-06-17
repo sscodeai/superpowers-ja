@@ -1,6 +1,11 @@
 ---
 name: mcp-builder
 description: MCP server 構築方法論。AI assistant を外部能力へ接続する production-ready な MCP tool を体系的に設計、実装、テストする。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [mcp, tooling]
 ---
 
 # MCP Server を構築する

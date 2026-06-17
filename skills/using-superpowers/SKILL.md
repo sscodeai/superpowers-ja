@@ -1,6 +1,11 @@
 ---
 name: using-superpowers
 description: すべての会話開始時に使用する。skill の探し方と使い方を確立し、回答や確認質問の前に関連 skill を確認する。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [skills, bootstrap]
 ---
 
 <SUBAGENT-STOP>

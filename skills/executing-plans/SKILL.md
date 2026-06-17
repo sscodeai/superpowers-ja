@@ -1,6 +1,11 @@
 ---
 name: executing-plans
 description: レビュー checkpoint を含む実装計画を、別 session で段階的に実行する場合に使用する。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [planning, execution]
 ---
 
 # 実装計画の実行

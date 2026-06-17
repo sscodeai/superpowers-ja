@@ -1,6 +1,11 @@
 ---
 name: dispatching-parallel-agents
 description: 共有状態や順序依存がなく、独立して進められる task が 2 つ以上ある場合に使用する。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [parallel, delegation]
 ---
 
 # 並列 Agent に分配する

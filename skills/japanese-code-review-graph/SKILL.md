@@ -1,6 +1,11 @@
 ---
 name: japanese-code-review-graph
 description: code-review-graph を任意導入している repository で、PR/MR の影響範囲、依存関係、risk、test gap を日本の IT 開発現場向けに整理する。大規模 codebase、既存システム、SI/受託開発、Backlog / Redmine / Jira のレビュー証跡、リリース判定で blast radius analysis が必要な場合に使用する。code-review-graph が未導入の場合は導入を強制せず、通常の code review に fallback する。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [japanese, code-review, graph]
 ---
 
 # 日本向け Code Review Graph 活用

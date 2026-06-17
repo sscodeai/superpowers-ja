@@ -1,6 +1,11 @@
 ---
 name: japanese-acceptance-test-spec
 description: 日本の SI / 受託開発 / 自社サービス開発向けに、受入テスト仕様書、検収観点、UAT シナリオ、受入条件、証跡、判定基準を作成・レビューする。顧客検収、QA、リリース前確認、Backlog / Redmine / Jira ticket の acceptance criteria を整理する必要がある場合に使用する。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [japanese, acceptance-testing]
 ---
 
 # 日本向け受入テスト仕様

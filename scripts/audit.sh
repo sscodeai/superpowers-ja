@@ -82,11 +82,20 @@ for f in skills/*/SKILL.md; do
     continue
   fi
   fm=$(sed -n '/^---$/,/^---$/p' "$f" | head -20)
-  for field in name description; do
+  for field in name description version license; do
     if ! echo "$fm" | grep -q "^${field}:"; then
       bad "Missing frontmatter field '$field': $f"
     fi
   done
+  if ! echo "$fm" | grep -q "^metadata:"; then
+    bad "Missing frontmatter field 'metadata': $f"
+  fi
+  if ! echo "$fm" | grep -q "^[[:space:]]*hermes:"; then
+    bad "Missing frontmatter metadata.hermes: $f"
+  fi
+  if ! echo "$fm" | grep -q "^[[:space:]]*tags:"; then
+    bad "Missing frontmatter metadata.hermes.tags: $f"
+  fi
   ok
 done
 

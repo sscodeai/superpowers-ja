@@ -1,6 +1,11 @@
 ---
 name: test-driven-development
 description: 機能実装または bug 修正時、実装コードを書く前に使用する。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [testing, tdd]
 ---
 
 # Test-Driven Development (TDD)

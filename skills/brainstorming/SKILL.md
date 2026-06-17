@@ -1,6 +1,11 @@
 ---
 name: brainstorming
 description: "創造的な作業の前に必ず使用する。機能作成、component 構築、機能追加、振る舞い変更では、実装前にユーザー意図、要求、設計を探索する。"
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [design, planning]
 ---
 
 # Brainstorming: アイデアを設計へ変換する

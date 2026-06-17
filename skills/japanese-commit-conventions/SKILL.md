@@ -1,6 +1,11 @@
 ---
 name: japanese-commit-conventions
 description: 日本語チーム向け commit / changelog 規約。Conventional Commits を日本語 subject/body、Backlog/Redmine/Jira チケット、release note、commitlint と合わせて運用する参考。ユーザーが明示的に /japanese-commit-conventions を指定した場合のみ使用し、自動起動しない。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [japanese, git]
 ---
 
 # 日本語 Commit 規約

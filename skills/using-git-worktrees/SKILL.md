@@ -1,6 +1,11 @@
 ---
 name: using-git-worktrees
 description: 現在の作業ツリーから隔離した feature 開発を始める場合、または実装計画の実行前に使用する。git worktree で安全な隔離作業区を作る。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [git, worktrees]
 ---
 
 # Using Git Worktrees

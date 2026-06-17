@@ -1,6 +1,11 @@
 ---
 name: japanese-git-workflow
 description: 日本の IT 開発現場向け Git / PR / CI 運用参考。GitHub、GitLab、Bitbucket、Backlog、Redmine、Jira、ブランチ戦略、承認、証跡、リリース管理。ユーザーが明示的に /japanese-git-workflow を指定した場合のみ使用し、自動起動しない。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [japanese, git]
 ---
 
 # 日本向け Git ワークフロー

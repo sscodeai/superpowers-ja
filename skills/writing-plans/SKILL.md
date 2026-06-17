@@ -1,6 +1,11 @@
 ---
 name: writing-plans
 description: 仕様や要求があり、多段階 task として実装する必要がある場合、コードを書く前に使用する。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [planning, implementation]
 ---
 
 # Writing Plans
@@ -58,7 +63,6 @@ task を定義する前に、作成または変更する file と、それぞれ
 **Architecture:** [approach を 2-3 文で説明]
 
 **Tech Stack:** [key technology / library]
-
 ---
 ```
 

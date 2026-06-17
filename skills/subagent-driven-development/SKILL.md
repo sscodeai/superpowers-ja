@@ -1,6 +1,11 @@
 ---
 name: subagent-driven-development
 description: 現在の session で、独立 task を含む実装計画を進める場合に使用する。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [subagents, development]
 ---
 
 # サブエージェント駆動開発

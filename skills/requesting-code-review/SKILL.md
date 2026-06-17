@@ -1,6 +1,11 @@
 ---
 name: requesting-code-review
 description: task 完了時、重要機能の実装後、merge 前に使用し、成果物が要求を満たしているか検証する。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [code-review, verification]
 ---
 
 # Requesting Code Review

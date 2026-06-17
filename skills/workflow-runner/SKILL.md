@@ -1,6 +1,11 @@
 ---
 name: workflow-runner
 description: Claude Code / OpenClaw / Cursor などで YAML multi-agent workflow を直接実行する。API key は不要で、現在の会話の LLM を実行エンジンとして使う。ユーザーが .yaml workflow を渡した場合、または複数ロールでの協調作業を求めた場合に使用する。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [workflow, orchestration]
 ---
 
 # Workflow Runner

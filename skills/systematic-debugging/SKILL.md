@@ -1,6 +1,11 @@
 ---
 name: systematic-debugging
 description: bug、test failure、異常動作に遭遇した場合、修正案を出す前に使用する。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [debugging, root-cause]
 ---
 
 # Systematic Debugging

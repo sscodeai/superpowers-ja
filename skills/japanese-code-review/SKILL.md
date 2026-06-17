@@ -1,6 +1,11 @@
 ---
 name: japanese-code-review
 description: 日本の開発現場向けコードレビュー参考。丁寧だが曖昧にしない指摘、重大度ラベル、承認前チェック、SI/受託/自社開発での証跡の残し方。ユーザーが明示的に /japanese-code-review を指定した場合のみ使用し、自動起動しない。
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [japanese, code-review]
 ---
 
 # 日本向けコードレビュー規約
