@@ -85,7 +85,8 @@ namespace は flat に保ちます。supporting file を分けるのは、100 �
 ## SKILL.md 構造
 
 Frontmatter（YAML）:
-- 必須 field は `name` と `description` の 2 つ（その他の field は [agentskills.io/specification](https://agentskills.io/specification) を参照）
+- agentskills.io specification 上の必須 field は `name` と `description` の 2 つ（その他の field は [agentskills.io/specification](https://agentskills.io/specification) を参照）
+- この repository の skill は Hermes compatibility のため、`version`、`license`、`metadata.hermes.tags` も必須とする
 - frontmatter 全体で 1024 characters 以下を目安にする
 - `name` は英数字と hyphen のみ。括弧や記号は使わない
 - `description` は third person。**「いつ使うか」だけを書き、「何をするか」を書かない**
@@ -93,6 +94,7 @@ Frontmatter（YAML）:
   - 症状、状況、context を具体的に書く
   - **skill 本文の workflow を要約してはいけない**（理由は CSO section 参照）
   - できれば 500 characters 未満
+- `metadata.hermes.tags` は短い discovery keyword の non-empty array にする
 
 推奨構造:
 
@@ -100,6 +102,11 @@ Frontmatter（YAML）:
 ---
 name: skill-name
 description: [具体的な trigger / symptom / context、「... 時に使用する」]
+version: "1.0.0"
+license: MIT
+metadata:
+  hermes:
+    tags: [category, keyword]
 ---
 
 # Skill Name
@@ -570,7 +577,7 @@ step2 [label="read file"];
 
 **GREEN 段階 - 最小 skill を書く:**
 - [ ] name は英数字と hyphen のみ（括弧・記号なし）
-- [ ] YAML frontmatter に `name` と `description` を入れる（1024 chars 以下、[spec](https://agentskills.io/specification)）
+- [ ] YAML frontmatter に `name`、`description`、`version`、`license`、`metadata.hermes.tags` を入れる（1024 chars 以下、[spec](https://agentskills.io/specification)）
 - [ ] description は「Use when ... / ... 時に使用する」で始める
 - [ ] description は third person
 - [ ] error message、symptom、tool 名など検索 keyword を本文に散らす
@@ -631,7 +638,7 @@ skill の有無で behavior 差が測れる場合のみ、定量的に書きま�
 - [ ] pressure scenario で skill ありの遵守を確認した
 - [ ] 新しい抜け道を red flags / table / rule に反映した
 - [ ] supporting file は必要なものだけ
-- [ ] frontmatter が valid（`name` + `description`、1024 chars 以下）
+- [ ] frontmatter が valid（`name`、`description`、`version`、`license`、`metadata.hermes.tags`、1024 chars 以下）
 - [ ] cross-reference 先が存在する
 - [ ] discipline 系なら Iron Law / 例外なし宣言が入っている
 - [ ] 日本現場固有 skill の場合、受入条件・証跡・承認の考え方を必要に応じて補っている

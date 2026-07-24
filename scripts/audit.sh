@@ -59,6 +59,86 @@ ensure_upstream() {
   return 0
 }
 
+validate_skill_frontmatter() {
+  node --input-type=module - "$1" <<'NODE'
+import { readFileSync } from 'node:fs';
+
+const file = process.argv[2];
+const text = readFileSync(file, 'utf8');
+const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
+const errors = [];
+
+if (!match) {
+  errors.push(`No frontmatter: ${file}`);
+} else {
+  const lines = match[1].split(/\r?\n/);
+  const requiredTopFields = ['name', 'description', 'version', 'license'];
+
+  for (const field of requiredTopFields) {
+    if (!lines.some(line => new RegExp(`^${field}:\\s*\\S`).test(line))) {
+      errors.push(`Missing frontmatter field '${field}': ${file}`);
+    }
+  }
+
+  const topLevelIndex = fieldIndex(lines, 0, 'metadata', 0, lines.length);
+  if (topLevelIndex === -1) {
+    errors.push(`Missing frontmatter field 'metadata': ${file}`);
+  } else {
+    const metadataEnd = nextFieldAtIndent(lines, 0, topLevelIndex + 1, lines.length);
+    const hermesIndex = fieldIndex(lines, 2, 'hermes', topLevelIndex + 1, metadataEnd);
+
+    if (hermesIndex === -1) {
+      errors.push(`Missing frontmatter metadata.hermes: ${file}`);
+    } else {
+      const hermesEnd = nextFieldAtIndent(lines, 2, hermesIndex + 1, metadataEnd);
+      const tagsIndex = fieldIndex(lines, 4, 'tags', hermesIndex + 1, hermesEnd);
+
+      if (tagsIndex === -1) {
+        errors.push(`Missing frontmatter metadata.hermes.tags: ${file}`);
+      } else if (!hasNonEmptyTagsArray(lines, tagsIndex, hermesEnd)) {
+        errors.push(`Invalid frontmatter metadata.hermes.tags (expected non-empty array): ${file}`);
+      }
+    }
+  }
+}
+
+for (const error of errors) console.log(error);
+
+function fieldIndex(lines, indent, field, start, end) {
+  const re = new RegExp(`^ {${indent}}${field}:\\s*(?:.*)$`);
+  for (let i = start; i < end; i += 1) {
+    if (re.test(lines[i])) return i;
+  }
+  return -1;
+}
+
+function nextFieldAtIndent(lines, indent, start, end) {
+  const re = new RegExp(`^ {${indent}}[A-Za-z][A-Za-z0-9_-]*:\\s*`);
+  for (let i = start; i < end; i += 1) {
+    if (re.test(lines[i])) return i;
+  }
+  return end;
+}
+
+function hasNonEmptyTagsArray(lines, tagsIndex, end) {
+  const inlineMatch = lines[tagsIndex].match(/^ {4}tags:\s*(.*)$/);
+  if (!inlineMatch) return false;
+
+  const inlineValue = inlineMatch[1].trim();
+  if (inlineValue) {
+    const arrayMatch = inlineValue.match(/^\[(.*)\]$/);
+    return Boolean(arrayMatch && arrayMatch[1].split(',').some(item => item.trim()));
+  }
+
+  for (let i = tagsIndex + 1; i < end; i += 1) {
+    if (/^ {6}-\s+\S/.test(lines[i])) return true;
+    if (/^ {0,5}\S/.test(lines[i])) return false;
+  }
+  return false;
+}
+NODE
+}
+
 #==============================================================================
 hdr "Category 1: 静的検証"
 #==============================================================================
@@ -77,26 +157,15 @@ done < <(find . -name "*.json" \
 
 # 1b. SKILL.md frontmatter 完整性
 for f in skills/*/SKILL.md; do
-  if ! head -1 "$f" | grep -q '^---$'; then
-    bad "No frontmatter: $f"
-    continue
+  if ! errors=$(validate_skill_frontmatter "$f"); then
+    bad "Frontmatter validator failed: $f"
+  elif [ -n "$errors" ]; then
+    while IFS= read -r error; do
+      [ -n "$error" ] && bad "$error"
+    done <<< "$errors"
+  else
+    ok
   fi
-  fm=$(sed -n '/^---$/,/^---$/p' "$f" | head -20)
-  for field in name description version license; do
-    if ! echo "$fm" | grep -q "^${field}:"; then
-      bad "Missing frontmatter field '$field': $f"
-    fi
-  done
-  if ! echo "$fm" | grep -q "^metadata:"; then
-    bad "Missing frontmatter field 'metadata': $f"
-  fi
-  if ! echo "$fm" | grep -q "^[[:space:]]*hermes:"; then
-    bad "Missing frontmatter metadata.hermes: $f"
-  fi
-  if ! echo "$fm" | grep -q "^[[:space:]]*tags:"; then
-    bad "Missing frontmatter metadata.hermes.tags: $f"
-  fi
-  ok
 done
 
 # 1c. Symlink 解析
