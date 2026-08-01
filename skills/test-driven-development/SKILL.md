@@ -383,13 +383,13 @@ bug を見つけたら、その bug を再現する failing test を書く。TDD
 
 test なしで bug を直してはいけない。
 
-## Testing Anti-patterns
+## Good Tests
 
-mock や test utility を追加するときは、common pitfall を避けるため `@testing-anti-patterns.md` を読む。
+test を書く / 変更する、mock や test utility を追加するときは、test が honest であるための rule として `writing-good-tests.md` を読む。
 
-- real behavior ではなく mock behavior を test する
-- production class に test-only method を追加する
-- dependency を理解しないまま mock する
+- 捕まえる break を名指しする
+- code under test ではなく手で期待値を導出する
+- mock ではなく real behavior を test する
 
 ## Final Rule
 
